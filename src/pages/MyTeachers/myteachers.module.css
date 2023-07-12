@@ -1,0 +1,78 @@
+.mainDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    flex-direction: column;
+    margin-top: 10px;
+    position: absolute,;
+}
+
+.goUp{
+    margin-top: 15px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: gray;
+    color: white;
+    width: 150px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.filtersBack{
+    position: fixed;
+    top:250px;
+    right: 150px;
+    width: 150px;
+    height: 50px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.filtersBack:hover{
+    background-color: lightgray;
+
+}
+
+
+@media (max-width: 1200px) {
+
+    .filtersBack{
+        position: fixed;
+        top:280px;
+        right: 60px;
+        width: 100px;
+        height: 50px;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    
+}
+
+@media (max-width: 767px) {
+
+    .filtersBack{
+        position: fixed;
+        top:280px;
+        right: 10px;
+        width: 70px;
+        height: 50px;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    
+}

@@ -1,0 +1,44 @@
+.mainDiv{
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.svgImg{
+width: 150px;
+margin-right: 20px;
+}
+
+.mainExcellent{
+    margin-left: 15px;
+    margin-right: 15px;
+    text-transform: uppercase;
+}
+
+.trust{
+    margin-left: 15px; 
+}
+
+
+@media (max-width: 767px) {
+    .mainDiv{
+  flex-direction: column;
+
+    }
+
+    .svgImg{
+        margin-right: 0;
+        }
+
+    .mainExcellent{
+        margin-left: 0;
+        margin-right: 0;
+}
+
+    .trust{
+        margin-left: 0; 
+    }
+    
+  }
+  

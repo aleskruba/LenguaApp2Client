@@ -1,0 +1,199 @@
+
+.mainTeacherBox{
+
+    display: flex;
+    border-radius: 10px;
+    background-color: var(--background-color);
+    transition: transform 0.3s;
+    
+
+
+}
+
+.mainTeacherBox:hover {
+    transform: scale(1.01);
+  }
+
+.leftTopSide{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    width:  120px;
+
+}
+
+.leftSide{
+    display: flex;
+    flex-direction: column;
+}
+
+.leftImg{
+    display: flex;
+    width: 80px;
+    height: 80px;
+}
+
+.leftImg img{
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.leftBottomSide{
+    height: 60px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.leftLessons{
+    display: flex;
+    font-size: 12px;
+    color: black;
+
+}
+
+.rightSide{
+   display: flex;
+   justify-content: flex-start;
+   align-items: flex-start;
+   flex-direction: column;
+   border-radius: 5px;
+   width: 550px;
+}
+
+.rightSideTop{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.rightSideName{
+font-family: 'Montserrat', sans-serif;
+padding-top: 10px;
+color: black;
+font-size: 18px;
+font-weight:900;
+}
+
+.rightSideIcon{
+    padding-top: 10px;
+    margin-right: 20px;
+}
+
+.rightSideTeacherType{
+    font-family: 'Montserrat', sans-serif;
+    padding-top: 5px;
+    color: gray;
+    font-weight:400;
+}
+
+.rightSideLnaguagesText{
+    font-family: 'Montserrat', sans-serif;
+    padding-top: 10px;
+    color: gray;
+    font-weight:400;
+
+}
+
+.rightSideLnaguages{
+    font-family: 'Montserrat', sans-serif;
+    padding-top: 10px;
+    color: black;
+    font-weight:400;
+
+}
+
+.rightSidePresentation{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    padding-top: 5px;
+    color: black;
+    font-weight:400;
+    padding-bottom: 10px;
+}
+
+.rightSideBottom{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    width: 100%;
+    align-items: center;
+    gap:20px
+
+}
+
+.rightSidePrice{
+    color: black;
+    font-weight: 900;
+    font-weight: 15px;
+    text-align: center;
+}
+
+.rightSideButtonDiv{
+    background-color: red;
+    color: white;
+    font-weight: 900;
+    font-size: 12px;
+    border: 25px;
+    border-radius: 25px;
+    margin-right: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    text-align: center;
+}
+
+
+@media only screen and (max-width: 767px) {
+
+    .mainTeacherBox{
+             flex-direction: column;
+             margin-left: 5px;
+ 
+  
+    }
+
+    .leftSide{
+       align-items: center; 
+        justify-content: center;    
+     }
+     .leftTopSide{
+        height: 100px;
+        }
+        .leftBottomSide{
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .rightSide{
+
+            width: 420px;
+         }
+
+        .rightSideTop{
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .rightSideTeacherType{
+            padding-top: 0;
+            margin-left: 20px;
+        }
+        .rightSideLnaguagesText{
+            padding-top: 3px;
+            margin-left: 20px;
+
+        }
+        .rightSidePresentation{
+            margin-left: 20px;
+            padding-bottom: 10px;
+        }
+
+ 
+    }

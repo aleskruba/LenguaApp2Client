@@ -1,0 +1,127 @@
+.mainTeacherProfileMainBoxReviews {
+  max-width: 700px;
+  position: sticky;
+  top: 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-rows: 80px auto;
+  gap: 10px;
+}
+
+.teacherReviewsMainBox {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+  height: auto;
+}
+
+
+  .teacherReviewsnameAndImage{
+    display: flex;
+  }
+  
+  .boxName{
+    font-size: 15px;
+  }
+  
+  .teacherReviewsMainBoxDate{
+    font-size: 15px;
+  }
+  
+  .boxImg{
+    margin-left: 25px;
+    width: 50px;
+    height: 50px;
+    }
+  .imageProfile{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+
+  
+  .ReviewTitleDiv{
+    margin-right: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 5;
+  
+  }
+  .ReviewTitle{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 26px;
+  }
+  
+  .GoUpButton{
+    font-family: 'Montserrat', sans-serif;
+    width: 160px;
+    margin-left: 25px;
+    height: 50px;
+    background: #f1f1f1;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 300;
+    color: black;
+    border-radius: 10px;
+
+  }
+
+    
+  .LoadMoreButton{
+    font-family: 'Montserrat', sans-serif;
+    width: 160px;
+    height: 50px;
+    margin-left: 25px;
+    background: #f1f1f1;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 300;
+    color: black;
+    border-radius: 10px;
+  }
+
+
+  .LoadMoreButton:hover{
+    background: lightgray;
+  }
+
+  .LoadMoreButton:hover{
+    background: lightgray;
+  }
+
+  @media (max-width: 767px) {
+    .mainTeacherProfileMainBoxReviews{
+      display: grid;
+      margin-top: 30px;
+      grid-template-columns: repeat(2,1fr);
+      grid-template-rows: auto;
+      width: 400px;
+      border-radius: 10px;
+      margin-left: 10px;
+   
+      gap: 10px;
+    }
+
+    .ReviewTitleDiv{
+      margin-right: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      grid-row-start: 1;
+      grid-row-end: 2;
+      grid-column-start: 1;
+      grid-column-end: 3;
+    
+    }
+  }
+  

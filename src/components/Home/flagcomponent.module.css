@@ -1,0 +1,133 @@
+
+.mainFlagDiv{
+  display: flex;
+  justify-content: center;
+}
+
+.flag{
+  width: 45px;
+  height: 45px;
+
+}
+.flagImg{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  
+}
+
+.wrapper{
+  overflow-x: hidden;
+  max-width: 800px;
+  border-radius: 5px;
+  position: relative;
+  border: 1px solid lightgray;
+}
+.wrapper .flags{
+  display: flex;
+  list-style: none;
+  gap: 12px;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.wrapper .icon {
+  position: absolute;
+  top: 0;
+  height:100% ;
+  display: flex;
+  align-items: center;
+}
+
+.flags.dragging{
+scroll-behavior: auto;
+cursor: grab;
+}
+
+.icon:first-child {
+  left:5px;
+  background: linear-gradient(90deg, white 70%,transparent);
+}
+
+.icon:last-child {
+  right:0;
+  background: linear-gradient(-90deg, white 70%,transparent);
+}
+
+.icon{
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  font-size: 25px;
+  text-align: center;
+  line-height: 55px;
+  border-radius: 50%;
+  color: black;
+}
+
+.icon:hover{
+   color: gray;
+}
+
+.flags{
+width: 90%;
+margin-left: 50px;
+margin-right: 50px;
+
+}
+
+.flags .flagBox{
+  cursor: pointer;
+  padding: 13px 13px;
+  border-radius: 5px;
+  width: 150px;
+
+}
+
+.flags.dragging .flagBox{
+user-select: none;
+}
+
+
+.flagBox{
+  display: flex;
+}
+
+.flagBoxLeft {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to left, white, transparent);
+}
+
+
+.flagBoxRight{
+  flex: 4;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.flagBoxRightTop{
+  display: flex;
+  align-items: center;
+
+}
+
+.flagBoxRightBottom{
+  display: flex;
+  align-items: center;
+}
+
+.Icon{
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+}

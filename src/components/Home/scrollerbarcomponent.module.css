@@ -1,0 +1,63 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
+.homeMainDiv{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.h4Master{
+  font-family: 'Poppins', sans-serif;
+   font-size: 30px;
+   font-weight: 300;
+    text-align: center;
+}
+
+.h5Master{
+  font-size: 15px;
+}
+
+.frequentlyQuestions{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .scrollingText{
+    border-radius: 5px;
+    background-color: white;
+    padding: 5px;
+    margin-top: 10px;
+    max-width: 600px;
+    max-height:auto;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+  
+  }
+  
+  .scrollingTextFirstLineText{
+    font-weight: 800;
+    margin-bottom: 5px;
+  }
+  
+  .scrollingTextFirstLine{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .scrollingTextMainText {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+  }
+  
+  .rotate {
+    transform: rotate(180deg);
+  }
+  .arrowDiv {
+    transition: transform 0.5s ease-out;
+  }
+  

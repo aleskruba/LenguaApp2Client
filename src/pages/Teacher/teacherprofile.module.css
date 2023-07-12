@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.mainTeacherContainer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: row;
+  z-index: 999;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.navbar{
+  display: flex;
+}
+
+.leftUl{
+display: flex;
+  list-style-type: none;
+  align-items: center;
+}
+
+
+.leftLi{
+  margin-left: 50px;
+ justify-content: center;
+  height: 50px;
+  width: 50px;
+
+}
+
+.logoImg{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.centerUl {
+  list-style-type: none;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.centerUl li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+}
+
+
+.mainTeacherProfile {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-top: 10px;
+}
+
+.mainTeacherProfileLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  margin-left: 15px;
+  width: 750px;
+  height: 1500px;
+  top: 0;
+  gap: 10px;
+
+}
+
+.mainTeacherProfileMainBox{
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 700px;
+  height: auto;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  
+}
+
+.mainTeacherProfileBox{
+  display: flex;
+  border-radius: 10px;
+  margin: 20px;
+  height: 220px;
+}
+
+.mainTeacherProfileBoxLeft{
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  flex:1;
+  border-radius: 10px;
+  
+}
+
+
+.mainTeacherProfileBoxLeftImgDiv{
+  margin: 10px;
+  height: 150px;
+
+}
+
+
+.Img{
+  width:100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mainTeacherProfileBoxLeftLessonsDiv{
+  margin-top: 10px;
+  font-size: 13px;
+
+}
+
+.mainTeacherProfileBoxLeftLessonsDivh5{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  text-align: center;
+}
+
+
+.mainTeacherProfileBoxRight{
+  display: flex;
+  flex-direction: column;
+
+  margin: 10px;
+  flex:3;
+  border-radius: 10px;
+
+
+}
+
+.nameH1{
+  margin-top: 25px;
+  margin-left: 25px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 25px;
+}
+
+.teacherTypeH1{
+  margin-left: 25px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+}
+
+.languageH1{
+  margin-top: 25px;
+  margin-left: 25px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+}
+.aboutMe{
+display: flex;
+justify-content: center;
+  margin: 20px;
+  padding: 10px;
+  width: 650px;
+  height: auto;
+
+  border-radius: 10px;
+}
+
+
+.mainTeacherProfileAvailability{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 700px;
+  height: 170px;
+  border-radius: 10px;
+
+}
+
+.mainTeacherProfileAvailabilityH1{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+}
+
+.booklessondiv{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+
+
+}
+
+
+.bookButton{
+  width: 180px;
+  border-radius: 10px;
+  background-color: red;
+  text-align: center;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  padding: 10px;
+  margin-left: 10px;
+
+}
+
+.bookButton:hover{
+  background-color: rgb(225, 51, 51);
+}
+
+.mainTeacherProfileRight {
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  margin-left: 50px;
+  width: 600px;
+  border-radius: 10px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  background-color: whitesmoke;
+  max-height: 500px;
+  top: 80px; /* Adjust the top value to match the height of the header */
+}
+
+
+
+@media (max-width: 767px) {
+
+
+  .header {
+    display: none;
+  }
+
+  .mainTeacherProfile {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+    width: 410px;
+    margin-top: 10px;
+  }
+
+  .mainTeacherProfileMainBox{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 410px;
+    height: auto;
+    border-radius: 10px;
+
+  }
+  
+
+  .mainTeacherProfileBox{
+    display: flex;
+    margin-top: 350px;
+
+    align-items: center;
+    width: 360px;
+    flex-direction: column;
+    border-radius: 10px;
+    height: 550px;
+
+  }
+
+  
+.mainTeacherProfileLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 10px;
+  width: 400px;
+  top: 0;
+  
+
+
+}
+
+  .mainTeacherProfileBoxLeft{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 340px;
+    border-radius: 10px;
+  
+  }
+
+  .mainTeacherProfileBoxLeftImgDiv{
+    width: 150px;
+    height: 150px;
+
+  }
+
+  .mainTeacherProfileBoxRight{
+    display: flex;
+    align-items: center;
+    width: 340px;
+    flex:1;
+    border-radius: 10px;
+    margin: 0;
+
+
+   
+  
+  }
+  
+  .mainTeacherProfileAvailability{
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+   
+  }
+
+
+ 
+  .mainTeacherProfileRight {
+    top: 50px; /* Adjust the top value to match the height of the header */
+    position: absolute;
+    left:-15px;
+    width: 360px;
+    height: 260px;
+    border-radius: 10px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    background-color: whitesmoke;
+  }
+  
+
+  
+.mainTeacherProfileAvailability{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 400px;
+  height: 170px;
+  border-radius: 10px;
+ 
+}
+
+
+
+.mainTeacherProfileAvailabilityH1{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.booklessondiv{
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.aboutMe{
+  display: flex;
+  justify-content: center;
+
+    width: 350px;
+    height: auto;
+    background-color: whitesmoke;
+    border-radius: 10px;
+  }
+
+
+  .nameH1{
+
+    margin-left: 0px;
+
+  }
+  
+  .teacherTypeH1{
+    margin-left: 0px;
+
+  }
+  
+  .languageH1{
+    margin-left: 0px;
+
+  }
+    
+
+}

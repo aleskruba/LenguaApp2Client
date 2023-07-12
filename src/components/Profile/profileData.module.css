@@ -1,0 +1,57 @@
+.profileDataContainer {
+    display: grid;
+    grid-template-columns: 1fr fr;
+  }
+  
+  ul {
+    list-style-type: none;
+  }
+  
+  .profileDataMenu {
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+  
+  .profileDataCurrent {
+    grid-column-start: 2;
+    grid-column-end: 3;
+  }
+  
+  .updateButtonLI{
+    margin-top: 20px;
+  }
+
+  .updateButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  
+  .passwordButtonLI{
+    margin-top: 20px;
+  }
+
+  .passwordButton{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: red;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  .updateButton:hover {
+    background-color: #408c40; /* Darker shade of the original color */
+  }

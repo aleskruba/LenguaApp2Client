@@ -1,0 +1,268 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
+dialog[open] {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background overlay */
+}
+
+dialog[open]::backdrop {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background overlay */
+}
+
+dialog[open] > div {
+  position: fixed;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.formikMainFlexDiv{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.profileMainContainer{
+    display: grid;
+    width: 98vw;
+    height: 100vh;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: 180px 140px 1fr;
+   
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.profileImgContainer{
+    grid-column-start: 1;
+    grid-column-end: 2;
+
+}
+
+.profileImgContainerFlexBox{
+    position: absolute;
+    margin-top: 10px;
+    margin-left: 150px;
+    height: auto;
+}
+
+.profileImgContainerimgDiv{
+    width: 140px;
+    height: 140px;
+}
+
+.profileImgContainerImg{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profileClassesData{
+     grid-column-start: 2;
+    grid-column-end: 4;
+    margin-left: 50px;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap:10px;
+    padding-right: 15px;
+    padding-left: 5px;
+}
+
+.profileClassesDataMember{
+     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.profileClassesDataH1{
+    font-size: 25px;
+    font-weight: 400;
+    color: gray;
+
+}
+
+.profileClassesDataH2{
+     font-size: 18px;
+    font-weight: 300;
+}
+.profileLanguagesContainer{
+
+    padding-left: 20px;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    border-bottom: 1px solid black;
+}
+
+
+
+.profileForm {
+    
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+  
+ 
+
+  .taxInputContainer {
+    width: 380px;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: lightblue; 
+    transition: background 0.3s ease; 
+  }
+  
+  .taxInputContainer:focus {
+    background: white; 
+  }
+  
+  
+
+.taxErrorContainer{
+    color:red;
+    font-size: 14px;
+    font-weight: 100;
+   }
+
+.presentationInputContainer {
+    width: 380px;
+    height: 350px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: lightblue; 
+    transition: background 0.3s ease; 
+    resize: none;
+ }
+
+ .presentationInputContainer:focus {
+    background: white; 
+  }
+  
+
+.presentationErrorContainer{
+    color:red;
+    font-size: 14px;
+    font-weight: 100;
+ 
+  }  
+
+.videoPresentationInputContainer {
+    width: 380px;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: lightblue; 
+    transition: background 0.3s ease; 
+ }
+
+ .videoPresentationInputContainer:focus {
+    background: white; 
+  }
+
+.videoPresentationErrorContainer{
+    color:red;
+    font-size: 14px;
+    font-weight: 100;
+ 
+ }
+ .TeacherLanguagesComponentDiv{
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+ }
+
+.buttons{
+    display: flex;
+    margin-top: 20px;
+    gap:20px
+  }
+
+.updateBtn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  .updateBtn:hover {
+    background-color: #408c40; /* Darker shade of the original color */
+  }
+  
+  .closeBtn {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .closeBtn:hover {
+    background-color: rgb(37, 36, 36);
+  }
+
+  .profileUserDataContainer{
+    margin-top: 50px;
+    grid-column-start: 1;
+    grid-column-end: 2;   
+   
+ }
+
+
+ .profileUserDataUpdateContainer{
+  padding-top: 10px;
+  padding-left: 80px;
+  background-color: whitesmoke;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+
+.noChangesMessage{
+  text-align: center;
+  color: red;
+}
+
+
+@media (max-width: 767px) {
+  .taxInputContainer {
+    width: 350px;
+ 
+  }
+  
+  .presentationInputContainer {
+    width: 350px;
+
+ }
+
+ .videoPresentationInputContainer {
+  width: 350px;
+
+}
+
+}

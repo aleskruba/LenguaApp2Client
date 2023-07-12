@@ -1,0 +1,163 @@
+.maincontainer{
+    margin-top: 20px;
+display: flex;
+justify-content: space-around;
+}
+
+.maindiv{
+    
+    width: 300px;
+    height: 300px;
+
+}
+
+.prevbutton{
+    background-color: lightgray;
+    border-radius: 5px;
+}
+
+.nextbutton{
+    background-color: lightgray;
+    border-radius: 5px;
+}
+
+.months{
+
+}
+
+.table{
+    width: 300px;
+    height: 300px;
+
+}
+
+.thead{
+
+}
+
+.tr{
+
+}
+
+.th{
+
+}
+
+.td{
+  font-size: 20px;
+  font-weight: 900;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.pastDay {
+    background-color: lightgray;
+  }
+
+  .hoursmaincontainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .currentDay {
+    background-color: blue;
+    /* Add any other custom styles you desire */
+  }
+  
+  .calendartop{
+    display: flex;
+    justify-content: space-around;
+  }
+  .day{
+    border-radius: 5px;
+  }
+
+  .rightsidecontainer{
+    margin-left: 50px;
+    width: 300px;
+  }
+
+  .hourscontainer{
+    
+    display: flex;
+    gap: 20px;
+      }
+
+.hourBox{
+    text-align: center;
+    border: 1px solid black;
+    margin-top: 5px;
+    border-radius: 5px;
+    width: 100px;
+    height: 20px;
+}
+
+.hourBoxSelected{
+    text-align: center;
+    background: blue;
+    border: 1px solid black;
+    margin-top: 5px;
+    border-radius: 5px;
+    width: 100px;
+    height: 20px;
+}
+
+.h4text{
+    text-align: center;
+}
+
+.rightsidecontainerDiv{
+    display: flex;;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.buttons{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap:30px;
+}
+.nobuttons{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap:30px;
+}
+
+.saveButton{
+    width: 120px;
+    height: 30px;
+    background: rgb(223, 60, 60);
+    border-radius: 5px;
+    color: white;
+}
+
+.saveButton:hover{
+    background: red;
+}
+
+.cancelButton{
+    width: 120px;
+    height: 30px;
+    background: lightgray;
+    border-radius: 5px;
+    
+}
+
+.cancelButton:hover{
+    background: rgb(240, 237, 237);
+}
+@media (max-width: 768px) {
+    .maincontainer {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    .rightsidecontainer{
+        width: 300px;
+        margin-left: 0;
+         margin-top: 50px;
+     }
+   }

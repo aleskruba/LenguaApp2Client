@@ -1,0 +1,127 @@
+.mainContainer{
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.mainContainerFixed{
+position: fixed;
+}
+
+.mainDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    flex-direction: column;
+    margin-top: 10px;
+    position: absolute,;
+}
+
+.goUp{
+    margin-top: 15px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: gray;
+    color: white;
+    width: 150px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.filters{
+    position: fixed;
+    top:150px;
+    right: 150px;
+    width: 150px;
+    height: 50px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+.filtersBack{
+    position: fixed;
+    top:250px;
+    right: 150px;
+    width: 150px;
+    height: 50px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.filters:hover{
+    background-color: lightgray;
+
+}
+
+.filtersBack:hover{
+    background-color: lightgray;
+
+}
+
+
+@media (max-width: 1200px) {
+    .filters{
+        position: fixed;
+        top:200px;
+        right: 60px;
+        width: 100px;
+        height: 50px;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .filtersBack{
+        position: fixed;
+        top:280px;
+        right: 60px;
+        width: 100px;
+        height: 50px;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    
+}
+
+@media (max-width: 767px) {
+    .filters{
+        position: fixed;
+        top:200px;
+        right: 10px;
+        width: 70px;
+        height: 50px;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .filtersBack{
+        position: fixed;
+        top:280px;
+        right: 10px;
+        width: 70px;
+        height: 50px;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    
+}

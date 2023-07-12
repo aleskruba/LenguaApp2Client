@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Baskervville&family=Cormorant+SC:wght@500&family=Montserrat&display=swap');
+.testMainContainer{
+   height: 50px;
+    width: 100vw;
+  }
+
+.titleDiv{
+  display: flex;
+  justify-content: space-between;
+  margin-right: 20px;
+  margin-left: 10px;
+  padding-top: 15px;
+}
+.titleH1{
+  font-size: 30px;
+  font-weight: 200;
+  font-family: 'Poppins', sans-serif;
+  color: gray;
+}
+.titleH2{
+  font-size: 20px;
+  font-weight: 200;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 15px;
+}
+
+
+.testMainContainerOptions{
+    display: flex;
+    align-items: center;
+    gap:20px;
+    height: 50px;
+    padding-top: 15px;
+    padding-bottom: 20px;
+    margin-right: 20px;
+  }
+
+.testTopContainer{
+  background-color: #f2f2f2;
+}
+
+.testMainContainerOption{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 2px;
+    border-radius: 10px;
+    width: 100px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+       border: 1px solid black;
+  }
+
+  .testMainContainerOption:hover{
+  background-color: white ;
+  transform: scale(1.02);
+  cursor: pointer;
+  }
+
+  .testMainContainerOptionFlag{
+  position: relative;
+  width: 30px;
+  height: 30px;
+ }
+
+.flag{
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+
+}
+
+.leaveTestPage{
+  margin-left: 20px;
+  background-color: gray;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
+
+.leaveTestPage:hover{
+  margin-left: 20px;
+  background-color: lightgray;
+  color: black;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+  
+
+
+.closeBtn{
+    background-color: gray;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.element {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    justify-content: center;
+    background-image: url('./testbg.png');
+    max-width: 100%;
+    height: 347.666px;
+  }
+  
+  .elementText {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    justify-content: center;
+    animation: moveText 1.5s forwards;
+    opacity: 0;
+    margin-top: 100px;
+  }
+  .learningtips {
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin-left: 50px;
+  }
+  
+  .learningtips h2 {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .learningtips ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  .learningtips li {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .learningtips li:before {
+    content: "\2022";
+    color: #333;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+  }
+  
+  @keyframes moveText {
+    0% {
+      opacity: 0;
+      margin-top: 100px;
+    }
+    100% {
+      opacity: 1;
+      margin-top: 0;
+    }
+  }
+  
+  .elementH2 {
+    font-family: 'Cormorant SC', serif;
+    margin-right: 50px;
+    color: white;
+    font-size: 50px;
+    font-weight: 300;
+  }
+  
+  .elementH3 {
+    font-family: 'Cormorant SC', serif;
+    margin-right: 50px;
+    color: white;
+    font-size: 30px;
+    font-weight: 300;
+  }
+  
+
+  @media only screen and (max-width: 768px) {
+    .elementH2 {
+      font-size: 30px;
+    }
+  
+    .elementH3 {
+      font-size: 15px;
+    }
+
+    .titleH1{
+      font-size: 20px;
+      font-weight: 200;
+      font-family: 'Poppins', sans-serif;
+      color: gray;
+    }
+    .titleH2{
+      font-size: 13px;
+      font-weight: 200;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+  }

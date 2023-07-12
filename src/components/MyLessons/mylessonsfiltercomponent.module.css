@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
+.mainDiv {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+  }
+  
+  .leftDiv {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: scroll;
+    min-width: 150px;
+    width: 300px;
+    max-height: 450px;
+    height: 450px;
+    background-color: #e5e7eb;
+    padding: 20px;
+  }
+  
+  .leftDivInput {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    padding-left: 10px;
+  }
+
+  .leftBottomDiv {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    width: 100%;
+    height: 350px;
+    background-color: #e5e7eb;
+    overflow: hidden; /* Add this line */
+  }
+  
+  
+  .rightDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    margin-left: 10px;
+    min-width: 120px;
+    height: 450px;
+    width: 300px;
+    max-height: 450px;
+    background-color: #e5e7eb;
+  }
+
+  .rightImgDiv{
+    width: 100px;
+    height: 100px;
+  }
+
+  .profileImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .rightLanguageDiv{
+    margin-top: 30px;
+  }
+
+  .rightLanguagDivH1{
+    font-size: 17px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+  }
+
+.rightNameDiv{
+  margin-top: 50px;
+}
+.rightNameDivH1{
+  font-size: 17px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+}
+
+.righttotalLessonsDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+.righttotalLessonsDivH1{
+  text-align: center;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+}
+
+  .select{
+    margin-top: 5px;
+    width: 300px;
+  }
+  
+  .Select{
+    width: 300px;
+    margin-top: 10px;
+  }
+  
+  .Select__control,
+  .inputStyle {
+    border-radius: 0;
+    border-color: #ccc;
+  }
+  
+  .Select__single-value,
+  .inputStyle {
+    color: #333;
+  }
+  
+  .Select__menu {
+    border-radius: 0;
+    margin-top: 0;
+    box-shadow: none;
+  }
+  
+  .Select__option,
+  .inputStyle {
+    color: #333;
+  }
+  
+  .buttons{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .confirmButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 35px;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .confirmButton:hover {
+    background-color: #408c40;
+  }
+  
+
+  .cancelBUtton{
+    cursor: pointer;
+    margin-left: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 35px;
+    background-color: lightgray;;
+    color:black;
+    border-radius: 5px;
+  }
+
+  .cancelBUtton:hover {
+    background-color: rgb(37, 36, 36);
+    color: white;
+  }

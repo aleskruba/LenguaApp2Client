@@ -1,0 +1,299 @@
+{
+    "teachers": [
+      {
+        "id": 1,
+        "firstName": "Emily",
+        "teacherType": "Tutor",
+        "language": "english",
+        "profileText": "Hi, I'm Emily, an experienced English tutor.",
+        "tax": 10,
+        "totalLesson": 2000
+      },
+      {
+        "id": 2,
+        "firstName": "Daniel",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Daniel y soy profesor de español.",
+        "tax": 15,
+        "totalLesson": 3000
+      },
+      {
+        "id": 3,
+        "firstName": "Sophia",
+        "teacherType": "Tutor",
+        "language": "french",
+        "profileText": "Bonjour! Je m'appelle Sophia et je suis une tutrice de français.",
+        "tax": 8,
+        "totalLesson": 1800
+      },
+      {
+        "id": 4,
+        "firstName": "Michael",
+        "teacherType": "Teacher",
+        "language": "german",
+        "profileText": "Hallo! Ich bin Michael und unterrichte Deutsch.",
+        "tax": 12,
+        "totalLesson": 2500
+      },
+      {
+        "id": 5,
+        "firstName": "Olivia",
+        "teacherType": "Tutor",
+        "language": "english",
+        "profileText": "Hi, I'm Olivia, an enthusiastic English tutor.",
+        "tax": 10,
+        "totalLesson": 2200
+      },
+      {
+        "id": 6,
+        "firstName": "Alexis",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Alexis y soy profesor de español.",
+        "tax": 14,
+        "totalLesson": 2800
+      },
+      {
+        "id": 7,
+        "firstName": "Léa",
+        "teacherType": "Tutor",
+        "language": "french",
+        "profileText": "Bonjour! Je m'appelle Léa et je suis une tutrice de français.",
+        "tax": 9,
+        "totalLesson": 1900
+      },
+      {
+        "id": 8,
+        "firstName": "Max",
+        "teacherType": "Teacher",
+        "language": "german",
+        "profileText": "Hallo! Ich bin Max und unterrichte Deutsch.",
+        "tax": 11,
+        "totalLesson": 2700
+      },
+      {
+        "id": 9,
+        "firstName": "Ava",
+        "teacherType": "Tutor",
+        "language": "english",
+        "profileText": "Hi, I'm Ava, a passionate English tutor.",
+        "tax": 9,
+        "totalLesson": 2100
+      },
+      {
+        "id": 10,
+        "firstName": "Diego",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Diego y soy profesor de español.",
+        "tax": 13,
+        "totalLesson": 2600
+      }
+      ,
+      {
+        "id": 11,
+        "firstName": "Daniel",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Daniel y soy profesor de español.",
+        "tax": 15,
+        "totalLesson": 3000
+      },
+      {
+        "id": 12,
+        "firstName": "Sophia",
+        "teacherType": "Tutor",
+        "language": "french",
+        "profileText": "Bonjour! Je m'appelle Sophia et je suis une tutrice de français.",
+        "tax": 8,
+        "totalLesson": 1800
+      },
+      {
+        "id": 13,
+        "firstName": "Michael",
+        "teacherType": "Teacher",
+        "language": "german",
+        "profileText": "Hallo! Ich bin Michael und unterrichte Deutsch.",
+        "tax": 12,
+        "totalLesson": 2500
+      },
+      {
+        "id": 14,
+        "firstName": "Olivia",
+        "teacherType": "Tutor",
+        "language": "english",
+        "profileText": "Hi, I'm Olivia, an enthusiastic English tutor.",
+        "tax": 10,
+        "totalLesson": 2200
+      },
+      {
+        "id": 15,
+        "firstName": "Alexis",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Alexis y soy profesor de español.",
+        "tax": 14,
+        "totalLesson": 2800
+      },
+      {
+        "id": 16,
+        "firstName": "Léa",
+        "teacherType": "Tutor",
+        "language": "french",
+        "profileText": "Bonjour! Je m'appelle Léa et je suis une tutrice de français.",
+        "tax": 9,
+        "totalLesson": 1900
+      },
+      {
+        "id": 17,
+        "firstName": "Max",
+        "teacherType": "Teacher",
+        "language": "german",
+        "profileText": "Hallo! Ich bin Max und unterrichte Deutsch.",
+        "tax": 11,
+        "totalLesson": 2700
+      },
+      {
+        "id": 18,
+        "firstName": "Ava",
+        "teacherType": "Teacher",
+        "language": "english",
+        "profileText": "Hi, I'm Ava, a passionate English tutor.",
+        "tax": 19,
+        "totalLesson": 2100
+      },
+      {
+        "id": 19,
+        "firstName": "Diego",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Diego y soy profesor de español.",
+        "tax": 13,
+        "totalLesson": 2600
+      }
+      ,
+      {
+        "id": 20,
+        "firstName": "Daniel",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Daniel y soy profesor de español.",
+        "tax": 15,
+        "totalLesson": 3000
+      },
+      {
+        "id": 21,
+        "firstName": "Sophia",
+        "teacherType": "Tutor",
+        "language": "french",
+        "profileText": "Bonjour! Je m'appelle Sophia et je suis une tutrice de français.",
+        "tax": 8,
+        "totalLesson": 1800
+      },
+      {
+        "id": 22,
+        "firstName": "Michael",
+        "teacherType": "Teacher",
+        "language": "german",
+        "profileText": "Hallo! Ich bin Michael und unterrichte Deutsch.",
+        "tax": 12,
+        "totalLesson": 2500
+      },
+      {
+        "id": 23,
+        "firstName": "Olivia",
+        "teacherType": "Tutor",
+        "language": "english",
+        "profileText": "Hi, I'm Olivia, an enthusiastic English tutor.",
+        "tax": 10,
+        "totalLesson": 2200
+      },
+      {
+        "id": 24,
+        "firstName": "Alexis",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Alexis y soy profesor de español.",
+        "tax": 14,
+        "totalLesson": 2800
+      },
+      {
+        "id": 25,
+        "firstName": "Léa",
+        "teacherType": "Teacher",
+        "language": "french",
+        "profileText": "Bonjour! Je m'appelle Léa et je suis une tutrice de français.",
+        "tax": 9,
+        "totalLesson": 1900
+      },
+      {
+        "id": 26,
+        "firstName": "Max",
+        "teacherType": "Teacher",
+        "language": "german",
+        "profileText": "Hallo! Ich bin Max und unterrichte Deutsch.",
+        "tax": 11,
+        "totalLesson": 2700
+      },
+      {
+        "id": 27,
+        "firstName": "Ava",
+        "teacherType": "Teacher",
+        "language": "english",
+        "profileText": "Hi, I'm Ava, a passionate English tutor.",
+        "tax": 9,
+        "totalLesson": 2100
+      },
+      {
+        "id": 28,
+        "firstName": "Diego",
+        "teacherType": "Teacher",
+        "language": "spanish",
+        "profileText": "¡Hola! Me llamo Diego y soy profesor de español.",
+        "tax": 13,
+        "totalLesson": 2600
+      },      {
+        "id": 29,
+        "firstName": "John",
+        "teacherType": "Teacher",
+        "language": "english",
+        "profileText": "Hi, I'm Ava, a passionate English tutor.",
+        "tax": 20,
+        "totalLesson": 2100
+      },      {
+        "id": 30,
+        "firstName": "Peter",
+        "teacherType": "Teacher",
+        "language": "english",
+        "profileText": "Hi, I'm Peter, a passionate English tutor.",
+        "tax": 5,
+        "totalLesson": 2100
+      },      {
+        "id": 31,
+        "firstName": "Martin",
+        "teacherType": "Teacher",
+        "language": "english",
+        "profileText": "Hi, I'm Martin, a passionate English tutor.",
+        "tax": 16,
+        "totalLesson": 2100
+      },      {
+        "id": 32,
+        "firstName": "Emil",
+        "teacherType": "Teacher",
+        "language": "english",
+        "profileText": "Hi, I'm Emil, a passionate English tutor.",
+        "tax": 8,
+        "totalLesson": 2100
+      },      {
+        "id": 33,
+        "firstName": "Paul",
+        "teacherType": "Teacher",
+        "language": "english",
+        "profileText": "Hi, I'm Paul, a passionate English tutor.",
+        "tax": 21,
+        "totalLesson": 2100
+      }
+    ]
+  }
+  

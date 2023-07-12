@@ -1,0 +1,113 @@
+.homeMainDiv {
+  padding-left: 20px;
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.homeLeftDiv {
+  min-width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+  flex-direction: column;
+  background: white;
+  width: 50%;
+}
+
+.homeLeftComponentDiv {
+  max-width: 580px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.homeLeftDivText {}
+
+.homeLeftDivH1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 54px;
+  line-height: 65px;
+}
+
+.homeLeftDivUL {
+  margin-top: 50px;
+  list-style-type: none;
+  padding: 0;
+}
+
+.homeLeftDivUL li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 10px;
+}
+
+.homeLeftDivUL li::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  border-radius: 25px 25px 0 25px;
+  background: #ff4438;
+}
+
+.startButton {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  width: 150px;
+  padding: 10px;
+  background: #ff4438;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.homeRightDiv {}
+
+.italkiImg {
+  margin-top: 100px;
+  max-width: 80%; /* Ensures the image scales down with the container */
+  height: auto;
+}
+
+@media (max-width: 1200px) {
+  .homeLeftDivH1 {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 767px) {
+  .homeMainDiv {
+    flex-direction: column;
+  }
+
+  .homeLeftDivH1 {
+    text-align: center;
+    margin-left: 20px;
+    font-size: 26px;
+  }
+
+  .homeLeftDivUL {
+    margin-top: 25px;
+    padding-left: 50px;
+  }
+
+  .startButton {
+    margin-left: 50px;
+  }
+
+  .italkiImg {
+    margin-top: 50px;
+    max-width: 100%; /* Adjust the max-width to make the image responsive */
+  }
+}

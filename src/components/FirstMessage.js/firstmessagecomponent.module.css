@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
+.languageDiv{
+    border-bottom: 1px solid black;
+}
+
+.languagesOptions{
+    display: flex;
+    gap:30px;
+    margin-top: 10px;
+    padding-bottom: 15px;
+
+}
+
+.languageH1{
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+
+.languagesOption{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    width: 100px;
+    height: 25px;
+    background-color: lightgray;
+    color: black;
+    cursor: pointer;
+}
+
+.languagesOption input[type='radio'] {
+    display: none;
+  }
+
+.languagesOption:hover{
+    background-color: red;
+    color: white;
+}
+
+.languagesOption [type='radio']:checked + span {
+    background-color: red;
+    color: white;
+    
+  }
+
+  .languagesOptionSpan{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    width: 100px;
+    height: 25px;
+     cursor: pointer;
+  }
+  
+
+
+.levelDiv{
+    border-bottom: 1px solid black;
+    max-width: 380px;
+}
+
+.levelInnerDiv{
+  max-width: 380px;
+}
+
+.levelH1{
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+
+.levelSlider {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    }
+  
+  .levelCircle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .levelCirclespan {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: lightgray;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .levelCirclespan:hover {
+    background-color: red;
+    color: white;
+  }
+  
+  .levelCircle input[type='radio'] {
+    display: none;
+  }
+  
+  .levelCircle input[type='radio']:checked + span {
+    background-color: red;
+    color: white;
+  }
+  
+
+.preferencies{
+    border-bottom: 1px solid black;
+}
+
+.preferenciesH1{
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+
+.preferenciesOptions{
+    gap:10px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    padding-bottom: 15px;
+}
+
+.preferenciesOption{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    width: 130px;
+    height: 25px;
+    background-color: lightgray;
+    color: black;
+    cursor: pointer;
+}
+
+.preferenciesOption input[type='checkbox'] {
+    display: none;
+  }
+
+.preferenciesOption:hover{
+    background-color: red;
+    color: white;
+}
+
+.preferenciesOption [type='checkbox']:checked + span {
+    background-color: red;
+    color: white;
+    
+  }
+
+  .preferenciesOptionSpan{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    width: 130px;
+    height: 25px;
+     cursor: pointer;
+  }
+  
+  
+
+
+.questionsDiv{
+    border-bottom: 1px solid black;
+  }
+
+.questionsH1{
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+
+.buttons{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+
+}
+
+.sendbutton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    width: 100px;
+    height: 25px;
+    background-color: red;
+    border-radius: 5px;
+    color: white;
+}
+
+.sendbutton:hover{
+background-color: rgb(232, 106, 106);
+}
+
+.cancelbutton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    width: 100px;
+    height: 25px;
+    background-color: gray;
+    border-radius: 5px;
+    color: white;
+}
+
+.cancelbutton:hover{
+   background-color: lightgray;
+    color: black;
+}
+
+.questionInputContainer{
+  width: 100%;
+  height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: lightblue; 
+    transition: background 0.3s ease; 
+    resize: none;
+}
+
+.questionInputContainer:focus {
+    background: white; 
+  }
+  
+.ErrorContainer{
+    text-align: center;
+    color: red;
+}
+
+@media (max-width: 767px) {
+.preferenciesOptions{
+  display: flex;
+  justify-content: center;
+}
+ 
+.languagesOptions{
+  display: flex;
+  justify-content: space-around;
+}
+
+  .levelSlider {
+    display: flex;
+    justify-content: space-around;
+  }
+
+}

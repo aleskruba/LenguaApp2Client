@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+
+    .body{
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: blue;
+    }
+    .flag img{
+        width: 35px;
+    }
+
+    .wrapper{
+        padding: 35px;
+        overflow-x: hidden;
+        max-width: 800px;
+        background-color: aliceblue;
+        border-radius: 13px;
+        position: relative;
+    }
+    .wrapper .flags{
+        display: flex;
+        list-style: none;
+        gap: 12px;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+    }
+
+    .wrapper .icon {
+        position: absolute;
+        top: 0;
+        height:100% ;
+        width: 120px;
+        display: flex;
+        align-items: center;
+    }
+
+.flags.dragging{
+    scroll-behavior: auto;
+    cursor: grab;
+}
+
+    .icon:first-child {
+        left:0;
+        display: none;
+        background: linear-gradient(90deg, white 70%,transparent);
+    }
+
+    .icon:last-child {
+        right:0;
+        background: linear-gradient(-90deg, white 70%,transparent);
+    }
+
+    .icon{
+        cursor: pointer;
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+        text-align: center;
+        line-height: 55px;
+        background: blueviolet;
+        color: black;
+    }
+
+    .icon:hover{
+         color: gray;
+    }
+
+
+    .flags .flag{
+        cursor: pointer;
+        background-color: blanchedalmond;
+        border: 1px solid black;
+        padding: 13px 20px;
+        border-radius: 30px;
+
+    }
+
+    .flags.dragging .flag{
+user-select: none;
+}
+
+</style>
+<body>
+<div class="wrapper">
+    <div class="icon" id="left">left</div>
+    <ul class="flags">
+   <li><div class="flag"><img src="../../../public/cz.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/fr.png" alt=""></div></li>
+   <li><div class="flag"><img src="../../../public/pt.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/uk.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/de.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/cz.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/fr.png" alt=""></div></li>
+   <li><div class="flag"><img src="../../../public/pt.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/uk.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/de.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/cz.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/fr.png" alt=""></div></li>
+   <li><div class="flag"><img src="../../../public/pt.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/uk.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/de.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/cz.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/fr.png" alt=""></div></li>
+   <li><div class="flag"><img src="../../../public/pt.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/uk.png" alt=""></div></li> 
+   <li><div class="flag"><img src="../../../public/de.png" alt=""></div></li> 
+</ul>
+    <div class="icon" id="right">right</div>
+</div>
+
+    <script>
+        const flags = document.querySelector('.flags') 
+        const arrowsIcons = document.querySelectorAll('.icon')
+
+        let isDragging = false
+
+        const handleIcons = () =>{
+            let scrollVal = Math.round(flags.scrollLeft);
+            let maxScrollLableWidth = flags.scrollWidth - flags.clientWidth;
+
+            arrowsIcons[0].style.display = scrollVal > 0? "flex" : "none"
+       
+            arrowsIcons[1].style.display = maxScrollLableWidth > scrollVal ? "flex" : "none"
+        }
+
+
+        arrowsIcons.forEach(icon => {
+            icon.addEventListener("click",()=> {
+                flags.scrollLeft += icon.id === "left" ? -350 : 350; 
+                handleIcons()
+                setTimeout(()=>handleIcons(),50)
+            })
+        })
+
+        const dragging = (e) => {
+            if (!isDragging) return;
+            flags.classList.add("dragging")
+            flags.scrollLeft -= e.movementX
+            handleIcons()
+        }
+
+        const dragStop = () => {
+              isDragging = false
+              flags.classList.remove("dragging")
+        }
+      
+        flags.addEventListener("mousedown", ()=> isDragging=true);
+        flags.addEventListener("mousemove", dragging);
+        document.addEventListener("mouseup", dragStop);
+
+  </script>
+</body>
+
+</html>
+

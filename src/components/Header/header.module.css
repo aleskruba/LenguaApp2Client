@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+.header {
+
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+ 
+  padding: 10px;
+
+
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.navbar li :hover {
+ color: gray
+}
+.teacherzone {
+  position: relative;
+  padding: 5px;
+  padding-right: 40px;
+
+}
+
+
+.chatIcon {
+  margin-right: 10px;
+  position: absolute;
+  top: -5px;
+  right: 2px;
+
+}
+.chatIconNumber{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: -14px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  color: white;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  font-family: 'arial';
+
+
+}
+
+.UserMessagesLi {
+position: relative;
+}
+
+.chatUserIcon {
+  margin-right: 10px;
+  position: absolute;
+  top:-50px;
+  left: 30px;
+}
+.chatUserIconNumber{
+  font-family: 'arial';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  color: white;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  font-weight: 100;
+
+}
+
+
+
+
+
+
+.logoImg {
+  width: 70px;
+  height: 70px;
+}
+.leftUl{
+  display: flex;
+  align-items: center;
+  list-style: none;
+
+}
+.rightUl {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin-right: 20px;
+
+}
+
+.rightUl li {
+  margin-right: 50px;
+  margin-bottom: 1em;
+  margin-left: 1em;
+  cursor: pointer;
+}
+
+.rightUl li a {
+  text-decoration: none;
+  color: #000;
+}
+
+.profileImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+.profileImgDiv {
+  width: 45px;
+  height: 45px;
+
+}
+
+
+
+.profileImgUl {
+  width: 250px;
+  position: absolute;
+  text-align: left;
+  top: 65px;
+  right: 60px;
+  background-color: #f9f9f9;
+  transform: scale(1,0);
+  transform-origin: top;
+  transition: transform 500ms ease-in-out;
+  z-index:1500;
+
+
+}
+
+.checkbox{
+  display: none;
+}
+
+.checkbox:checked ~ .profileImgUl{
+  display: flex;
+  right: 60px;
+  width: 250px;
+  flex-direction: column;
+  transform: scale(1,1);
+}
+
+.profileImgUl li {
+  margin-bottom: 5px;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+
+}
+
+.checkbox:checked ~ .profileImgUl li{
+  opacity: 1;
+  transition: opacity 250ms ease-in-out 250ms;
+}
+
+.profileImgUl li.profileLogout a {
+  color: red;
+}
+
+.profileImgUl li a {
+  padding-left: 0px;
+  padding-right: 20px;
+  text-decoration: none;
+  color: #000;
+}
+
+.profileImgUl li a:hover {
+  background-color: #000;
+  color:#f2f2f2; /* adjust this value to change the hover color */
+}
+
+
+.profileImgUl li.profileLogout a:hover {
+  background-color: red;
+  color:#f2f2f2; /* adjust this value to change the hover color */
+}
+
+
+@media (max-width: 767px) {
+  .navbar {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .navbar ul {
+    margin-top: 10px;
+  }
+
+  .rightUl {
+    margin-right: 0;
+  }
+
+  .profileImgDiv {
+    margin-left: 10px;
+  }
+
+  .profileImgUl {
+    top: 165px;
+    z-index: 1999;
+  }
+  .teacherzone {
+font-size: 14px;
+  
+  }
+  .UserMessagesLi{
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .findteachersLi{
+    font-size: 14px;
+  }
+  .testLi{
+    font-size: 14px;
+  }
+}
+
+
+
+
