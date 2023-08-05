@@ -12,7 +12,6 @@ root.render(
   <BrowserRouter>
     <AuthProvider>
     <StyledEngineProvider injectFirst>
-
       <Routes>
         <Route path="/*" element={<App/>} />
       </Routes>

@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Modal from 'react-modal';
-
+import BASE_URL from '../../config';
+import axios from 'axios';
 
 
     Modal.setAppElement('#root');
@@ -43,14 +44,47 @@ function ProfileChangePassword({setPasswordButton}) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
   const [backendError, setBackendError] = useState('');
+  const [Success,setSuccess] = useState(false)
+
 
  
 
-  const onSubmit = (values) => {
+  const onSubmit =async (values) => {
     setBackendError('');
-    console.log(values)
-    setIsOpen(false)
-    closeDialog()
+
+  
+  
+    try {
+      const url = `${BASE_URL}/changepassword`;
+            const data = {
+              newPassword: values.password,
+              oldPassword:values.oldPassword
+          };
+
+          const config = {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true, // Set the withCredentials option to true
+          };
+
+          const response = await axios.post(url, data, config);
+                if (response.status===201) 
+                { setSuccess(true)
+                  setTimeout(()=>{
+                    navigate('/profile') 
+                    setIsOpen(false)
+                    closeDialog()
+                  },1000 )
+                     
+          }
+
+    } catch (err) {
+      setBackendError("Wrong old password");
+    }
+  
+  
+  
    };
 
    const closeDialog = () => {
@@ -75,7 +109,8 @@ function ProfileChangePassword({setPasswordButton}) {
                          autoComplete="off" 
                          className={styles.oldPasswordInputContainerInput}/>
                 </div>
-              
+                {backendError && <div className={styles.firstNameErrorContainer}>{backendError}</div>}
+
               <ErrorMessage name="oldPassword" component="div">
                 {(errorMsg) =>
                   backendError ? (
@@ -106,7 +141,7 @@ function ProfileChangePassword({setPasswordButton}) {
                   )
                 }
               </ErrorMessage>
-              {backendError && <div className={styles.firstNameErrorContainer}>{backendError}</div>}
+
 
               <div >
 
@@ -128,10 +163,9 @@ function ProfileChangePassword({setPasswordButton}) {
                   )
                 }
               </ErrorMessage>
-              {backendError && <div className={styles.lastNameErrorContainer}>{backendError}</div>}
-
+    
           
-              
+              {Success ?   <div className={styles.success}>Password has been reset successfully !!!</div> : ''}
 
             <div className={styles.buttons}>
               <input type="submit" className={styles.updateBtn} value="Update" />

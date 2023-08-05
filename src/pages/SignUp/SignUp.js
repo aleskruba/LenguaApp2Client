@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useContext,useEffect } from 'react';
 import styles from './signup.module.css';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { Formik ,Form, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup'
+import axios from 'axios';
+import AuthContext from '../../context/AuthProvider';
+import BASE_URL from '../../config';
 
 Modal.setAppElement('#root');
 
@@ -35,6 +38,7 @@ const initialValues = {
   confirmPassword:''
 }
 
+const profile = 'avatar.png'
 
 function SignUp() {
 
@@ -43,10 +47,50 @@ function SignUp() {
   const [backendError, setBackendError] = useState('');
 
 
-  const onSubmit = values => {
+  const {auth} = useContext(AuthContext);
+
+  useEffect(() => {
+    if (auth.user) {
+      navigate('/');
+    }
+  }, [auth]);
+
+
+  const onSubmit = async (values) => {
     setBackendError('');
-   console.log(values)
-  }
+    console.log(values);
+    
+    try {
+      const url = `${BASE_URL}/signup`
+      const data = {
+        email: values.email,
+        password: values.password,
+        profile,
+      };
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+  
+      const res = await axios.post(url, data, config);
+      const responseData = res.data;
+      console.log(responseData);
+  
+      if (responseData.message) {
+        // Handle specific error messages
+        setBackendError(responseData.message);
+      }
+      if (responseData.user) {
+        // Redirect to a different page if the user property exists in the response data
+        navigate('/');
+      }
+    } catch (err) {
+      console.log(err);
+      setBackendError('An error occurred while signing up.');
+    }
+  };
+  
 
   const closeDialog = () => {
     setIsOpen(false);

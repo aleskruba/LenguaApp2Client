@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState,useEffect } from 'react';
 import styles from './login.module.css';
-import { Link } from 'react-router-dom';
+import { Link ,Redirect } from 'react-router-dom';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+import AuthContext from '../../context/AuthProvider';
+import BASE_URL from '../../config';
 
 Modal.setAppElement('#root');
 
@@ -15,10 +18,6 @@ const validationSchema = Yup.object({
     .max(50, 'Email must be at most 50 characters'),
   password: Yup.string()
     .required('Required')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,50}$/,
-      'Password must contain at least one lowercase letter, one uppercase letter, and one digit'
-    )
     .min(6, 'Password must be at least 6 characters')
     .max(50, 'Password must be at most 50 characters'),
 });
@@ -30,15 +29,58 @@ const initialValues = {
 
 
 function Login() {
+
+  const {auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (auth.user) {
+      navigate('/');
+    }
+  }, [auth]);
+
+
   const [isOpen, setIsOpen] = useState(true);
   const [backendError, setBackendError] = useState('');
 
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     setBackendError('');
-    console.log(values);
-   };
+    try {
+      const url = `${BASE_URL}/login`;
+      const data = {
+        email: values.email,
+        password: values.password,
+      };
+  
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Set the withCredentials option to true
+      };
+  
+      const response = await axios.post(url, data, config);
+      const responseData = response.data;
+  
+      if (responseData.user && responseData.accessToken && responseData.refreshToken) {
+        // Update the user context with the received data
+        setAuth(responseData.user, {
+          jwt: responseData.accessToken,
+          refreshToken: responseData.refreshToken,
+        });
+  
+        navigate('/');
+      }
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setBackendError(err.response.data.message);
+      } else {
+        setBackendError('Email or password is invalid.');
+      }
+    }
+  };
+  
+  
   
   const closeDialog = () => {
     setIsOpen(false);

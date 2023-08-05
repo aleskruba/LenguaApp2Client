@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './home.module.css';
 import FlagComponent from '../../components/Home/FlagComponent';
 import RankingHomeComponent from '../../components/Home/RankingHomeComponent';
@@ -6,9 +6,12 @@ import TeachersHomeComponent from '../../components/Home/TeachersHomeComponent';
 import Footer from '../../components/Footer/Footer';
 import ScrollerBarComponent from '../../components/Home/SrollerBarComponent';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
+import AuthContext from '../../context/AuthProvider';
 
 function Home() {
 
+const {currentUser} = useContext(AuthContext)
 
 
   return ( 

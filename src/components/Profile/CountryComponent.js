@@ -1,36 +1,35 @@
-import * as React from 'react';
+import react,{useEffect} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-export default function CountrySelect({setSelectedCountry}) {
+export default function CountrySelect({setSelectedCountry,selectedCountry,userData}) {
 
-    const [country,setCountry] = React.useState()
-    const [dial,setDial] = React.useState()
+   // console.log(userData.country) 
 
-    const handleCountryChange = (event, value) => {
-        if (value) {
-          setCountry(value.label);
-          setDial(value.phone);
-          setSelectedCountry(value.label)
-          console.log('Selected Country:', value.label);
-          console.log('Dial Code:', value.phone);
-        } else {
-          setCountry('');
-          setDial('');
-          console.log('Selected Country: None');
-          console.log('Dial Code: None');
-        }
-      };
+       
+    useEffect(() => {
+      if (userData.country !== '') { 
+      const initialCountry = countries.find(country => country.label === userData.country);
+      setSelectedCountry(initialCountry);
+      }
+  }, [userData]); 
 
+
+  const handleCountryChange = (event, newValue) => {
+    setSelectedCountry(newValue);
+    //console.log(newValue); // This will log the selected country object
+  };
 
       return (
         <Autocomplete
           id="country-select-demo"
-          sx={{ width: 300}}
+          sx={{ width: 280}}
           options={countries}
           autoHighlight
           getOptionLabel={(option) => option.label}
+          value={selectedCountry}
+          onChange={handleCountryChange} 
           renderOption={(props, option) => (
             <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
               <img
@@ -54,7 +53,7 @@ export default function CountrySelect({setSelectedCountry}) {
               sx={{ backgroundColor: 'lightblue' }} // Set the background color here
             />
           )}
-          onChange={handleCountryChange} // Add onChange event handler
+        
         />
       );
     }

@@ -41,6 +41,20 @@
     height: auto;
 }
 
+.profileImgContainerimgDivSpanNone{
+display: none;
+
+}
+.profileImgContainerimgDivSpan{
+  position: absolute;
+  top:50px;
+  left:150px;
+  width: 300px;
+  font-weight: 900;
+  color: red;
+
+}
+
 .profileImgContainerimgDiv{
     width: 140px;
     height: 140px;

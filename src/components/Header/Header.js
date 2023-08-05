@@ -3,8 +3,12 @@ import { Link } from 'react-router-dom';
 import styles from './header.module.css';
 import { useLocation } from 'react-router-dom';
 import ChatIcon from '@mui/icons-material/Chat';
+import useAuth from '../../hooks/useAuth';
+
 
 function Header() {
+
+  const { user } = useAuth();
 
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const location = useLocation();
@@ -16,6 +20,8 @@ function Header() {
   const handleCheckboxChange = () => {
     setCheckboxChecked(!checkboxChecked); // Toggle checkbox state
   };
+
+
 
   return (
     <div className={styles.header}>
@@ -48,6 +54,10 @@ function Header() {
         </ul>
 
         {/* right side */}
+
+
+        {user ? 
+
         <ul className={styles.rightUl}>
      {/*      <li>
             <Link to="/login">Login</Link>
@@ -57,8 +67,6 @@ function Header() {
           </li> */}
 
           <li className={styles.profileImgDiv} >
-
-        
           <input type='checkbox' 
                  id={styles.checkbox} 
                  className={styles.checkbox}
@@ -67,9 +75,9 @@ function Header() {
                  
                  />
      
-     
+
         <label  htmlFor={styles.checkbox}>
-          <img src="/man.jpg" alt="" className={styles.profileImg}/>
+          <img src={user.profile} alt="" className={styles.profileImg}/>
      
           <div className={styles.UserMessagesLi}>
             <Link to='/studentmessages'>
@@ -104,7 +112,15 @@ function Header() {
             </ul>
           </li>
          </ul>
-      </nav>
+
+        : 
+          <ul>
+                 <li><Link to="/signup">Sign Up</Link></li>
+            <li><Link to="/login">Login</Link></li>
+          </ul> 
+        }
+
+        </nav>
     </div>
   );
 }
