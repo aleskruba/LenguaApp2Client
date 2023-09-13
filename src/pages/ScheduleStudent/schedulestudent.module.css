@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
 .maincontainer{
     margin-top: 20px;
 display: flex;
@@ -6,44 +8,67 @@ justify-content: space-around;
 
 .maindiv{
     
-    width: 300px;
-    height: 300px;
+    
+  width: 350px;
+  height: 300px;
 
 }
 
 .prevbutton{
     background-color: lightgray;
     border-radius: 5px;
+    padding: 4px;
 }
 
 .nextbutton{
     background-color: lightgray;
     border-radius: 5px;
+    padding: 4px;
 }
 
 .months{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+}
 
+.maindivH3{
+  font-weight: 200;
+  font-size: 20px;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
 }
 
 .table{
-    width: 300px;
-    height: 300px;
+  width: 350px; /* 7 columns * 25px each */
+    height: 350px;
+    
 
+}
+
+.thmain{
+  text-align: center;
 }
 
 .thead{
-
+  text-align: center;
 }
 
 .tr{
-
+  margin-bottom: 20px;
 }
 
 .th{
+  width: 100%;
+  border-bottom: 1px solid;
+ 
+  border: 1px dotted #000; 
 
 }
 
 .td{
+  height: 50px;
+  width: 50px;
+  border: 1px dotted #000; 
   font-size: 20px;
   font-weight: 900;
   text-align: center;
@@ -51,8 +76,13 @@ justify-content: space-around;
 }
 
 .pastDay {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
     background-color: lightgray;
   }
+
 
   .hoursmaincontainer{
     display: flex;
@@ -62,9 +92,33 @@ justify-content: space-around;
   
   .currentDay {
     background-color: blue;
+    height: 100%;
+    /* Add any other custom styles you desire */
+  }
+
+  .currentReservedDay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: none;
+    background-color: lightgreen;
+    outline: 5px solid green; 
+    height: 100%;
     /* Add any other custom styles you desire */
   }
   
+  
+
+  .activeDay{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    background: lightgreen;
+    height: 100%;
+  }
+
   .calendartop{
     display: flex;
     justify-content: space-around;
@@ -84,18 +138,22 @@ justify-content: space-around;
     gap: 20px;
       }
 
-.hourBox{
-    text-align: center;
-    border: 1px solid black;
-    margin-top: 5px;
-    border-radius: 5px;
-    width: 100px;
-    height: 20px;
-}
+      .hourBox {
+        opacity: 70%;
+        text-align: center;
+        border: 1px solid black;
+        margin-top: 5px;
+        border-radius: 5px;
+        width: 100px;
+        height: 20px;
+        pointer-events: none; /* Add this line to disable pointer events */
+      }
+      
 
 .hourBoxSelected{
     text-align: center;
-    background: blue;
+    background: red;
+    color: white;
     border: 1px solid black;
     margin-top: 5px;
     border-radius: 5px;
@@ -107,6 +165,67 @@ justify-content: space-around;
     text-align: center;
 }
 
+.teacherTitle{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.imageDiv{
+  width: 60px;
+  height: 60px;
+  }
+.image{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.h5text{
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: blue;
+}
+.saveSlot{
+margin-top: 20px;
+}
+
+.saveSlotButton{
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 1px 🇸olid white;
+  border-radius: 5px;
+  width: 200px;
+  height: 50px;
+  background-color: brown;
+}
+.ButtonText{
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+
+  }
+
+  .saveSlotButton:hover{
+    background-color: red;
+  }
+
+  .cancelButton{
+    width: 200px;
+    height: 50px;
+    background: gray;
+    color: #eee;
+    border-radius: 5px;
+  }
+  .cancelButton:hover{
+    background: rgb(159, 158, 158);
+  }
+
+
+  
+
 .rightsidecontainerDiv{
     display: flex;;
     flex-direction: column;
@@ -114,11 +233,156 @@ justify-content: space-around;
 }
 
 
+
+.activeHour {
+  text-align: center;
+  background: green;
+  color:white;
+  border: 1px solid black;
+  margin-top: 5px;
+  border-radius: 5px;
+  width: 100px;
+  height: 20px;
+  position: relative;
+}
+
+.reservedHour {
+  opacity: 40%;
+  text-align: center;
+  background: lightgreen;
+  color:white;
+  border: 1px solid black;
+  margin-top: 5px;
+  border-radius: 5px;
+  width: 100px;
+  height: 20px;
+  position: relative;
+}
+
+.myBookeddHour {
+
+  text-align: center;
+  background: red;
+  color:white;
+  border: 1px solid black;
+  margin-top: 5px;
+  border-radius: 5px;
+  width: 100px;
+  height: 20px;
+  position: relative;
+}
+
+
+
+
+.saveSlot{
+  text-align: center;
+}
+
+/* YourComponent.module.css */
+
+/* ... Your existing styles ... */
+
+.reservedBubble {
+  position: absolute;
+  background-color: rgba(255, 0, 0, 0.8); /* Adjust the color as needed */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 5px;
+  width: 100px;
+  right: -50px;
+  height: 20px;
+  font-size: 12px;
+  top:0px;
+  transform: translateX(-50%);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.reservedBubbleOther{
+  position: absolute;
+  background-color:lightgreen;
+  color: black;
+  padding: 4px 8px;
+  border-radius: 5px;
+  width: 100px;
+  right: -50px;
+  height: 20px;
+  font-weight: 900;
+  font-size: 13px;
+  top:0px;
+  transform: translateX(-50%);
+  z-index: 1;
+  white-space: nowrap;
+
+}
+
+
+.spandate{
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  color: blue;
+}
+.availableSlots{
+  background-color: green;
+  color: #eee;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.error{
+  font-size: 15px;
+  color: red;
+  font-family: 'Poppins', sans-serif;
+}
+
+.reservedBubbleStudent {
+  z-index: 10000;
+  position: absolute;
+  width: 110px;
+  height: 80px;
+  background-color: black;
+  top:-70px;
+  left:110px;
+  border-radius: 25px 25px 25px 0px;
+}
+.hoverDiv{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.imgDiv{
+  z-index: 10000;
+  margin-top: 5px;
+  width: 50px;
+  height: 50px;
+}
+
+.img{
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.spandate{
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  color: blue;
+}
+
+
 @media (max-width: 768px) {
     .maincontainer {
       flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
+      justify-content: center;
+      align-items: center;
     }
     .rightsidecontainer{
        width: 300px;

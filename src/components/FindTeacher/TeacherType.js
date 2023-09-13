@@ -1,11 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-export default function ComboBox({setSelectedTeacherType,setCurrentPage}) {
+export default function ComboBoxTeacherType({ setSelectedTeacherType, setCurrentPage }) {
   const handleTeacherTypeChange = (event, value) => {
     setSelectedTeacherType(value);
-    if (value==null) { setCurrentPage(1);}
+    if (value === null) {
+      setCurrentPage(1);
+    }
   };
 
   return (
@@ -19,7 +21,6 @@ export default function ComboBox({setSelectedTeacherType,setCurrentPage}) {
     />
   );
 }
-
 const teacherType = [
     { label: 'Teacher' },
     { label: 'Tutor' }

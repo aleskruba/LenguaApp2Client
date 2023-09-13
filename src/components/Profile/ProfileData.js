@@ -9,6 +9,10 @@ function ProfileData({setUpdateButton,setPasswordButton,userData}) {
 
   const [state, setState] = React.useState(user.teacherState);
   
+  useEffect(() => {
+    // Update the state prop whenever user.teacherState changes
+    setState(user.teacherState);
+  }, [user.teacherState]);
 
   
   return (

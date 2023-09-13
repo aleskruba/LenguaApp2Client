@@ -1,9 +1,11 @@
 import React, { useState, useEffect,useRef  } from 'react';
 import styles from './teacherprofile.module.css';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link,useParams,useNavigate,useLocation } from 'react-router-dom';
 import ReviewBoxComponent from '../../components/FindTeacher/ReviewBoxComponent';
 import Modal from 'react-modal';
 import FirstMessageComponent from '../../components/FirstMessage.js/FirstMessageComponent';
+
+
 
 Modal.setAppElement('#root');
 
@@ -13,7 +15,30 @@ function TeacherProfile() {
   const availabilityRef = useRef(null); // Step 2: Create a ref
   const aboutMeRef = useRef(null); // Step 2: Create a ref
 
-  const navigate = useNavigate();
+  
+  
+  const location = useLocation();
+  const { teacher,lessons } = location.state; 
+
+
+
+  let { idTeacher } = useParams();
+
+
+  
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page when the component mounts
+  }, []);
+
+  let count=0 ;
+
+  lessons?.map((lesson,index)=>{ 
+    if(lesson.idTeacher == teacher._id ) {
+      count ++
+    }
+    return count 
+  })
+
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,17 +84,21 @@ function TeacherProfile() {
     window.scrollTo({ top: offsetTop, behavior: 'smooth' });
   };
 
+const navigate = useNavigate()
+  const goBackToTeachers = () => {
+    navigate('/findteachers', { state: { teacher, lessons } })
+  };
 
-
-
+  
   return (
+    
     <div className={styles.mainTeacherContainer} style={isOpen ? {display:'none'}: {display:'flex'}}>
 
     {showHeader && <div className={styles.header}>
       <nav className={styles.navbar}>
             <ul className={styles.leftUl}>
                 <li className={styles.leftLi}>
-                <img src={process.env.PUBLIC_URL + '/man.jpg'} alt="" className={styles.logoImg} />
+                <img src={teacher?.profile} alt="" className={styles.logoImg} />
                 </li>
             </ul>
 
@@ -91,43 +120,46 @@ function TeacherProfile() {
     <div className={styles.mainTeacherProfile}>
 
       <div className={styles.mainTeacherProfileLeft}>
+     
 
         <div className={styles.mainTeacherProfileMainBox} ref={aboutMeRef}>
+
            <div className={styles.mainTeacherProfileBox}>
+
+     
             < div className={styles.mainTeacherProfileBoxLeft}>
 
                 <div className={styles.mainTeacherProfileBoxLeftImgDiv}>
-                      <img src={process.env.PUBLIC_URL + '/man.jpg'} alt="" className={styles.Img} />
+                      <img src={teacher?.profile} alt="" className={styles.Img} />
                 </div>
 
                 <div className={styles.mainTeacherProfileBoxLeftLessonsDiv}>
-                      <h5 className={styles.mainTeacherProfileBoxLeftLessonsDivh5}>129 lessons</h5>
+                      <h5 className={styles.mainTeacherProfileBoxLeftLessonsDivh5}>{count} lessons</h5>
                 </div>
 
              </div>
               <div className={styles.mainTeacherProfileBoxRight}>
                   <div className={styles.name}>
-                     <h1 className={styles.nameH1}>Petr Novak</h1> 
+                     <h1 className={styles.nameH1}>{teacher?.firstName} {teacher?.lastName}</h1> 
                   </div>
                   <div className={styles.teacherType}>
-                       <h1 className={styles.teacherTypeH1}>Tutor</h1> 
+                       <h1 className={styles.teacherTypeH1}>{teacher?.teacherType}</h1> 
                   </div>
                   <div className={styles.language}>
-                      <h1 className={styles.languageH1}>  Teaches: english</h1> 
+                      <h1 className={styles.languageH1}>  Teaches: {teacher?.teachlanguages.map((lan, index) => (
+                      <span key={index}>{lan.language} </span>
+                    ))}</h1> 
                          </div>
 
 
             </div>
-    
+ 
            </div>
 
            <div className={styles.aboutMe}>
-           Hi, my name is Caroline and I am from Cape Town, South Africa. Therefore I am a native ENGLISH speaker. I am a TEFL Certified teacher with more than 15 years of experience.
-            I currently live in Cape Town, I have been here all my life and I teach English at a private nursery.
-            I have explored South Africa and lots of areas within our country, but there is so much still to see and I have a wish list to visit other countries later on. 
-            My main hobby is arts (my personal favorite) but I also thoroughly enjoy reading, cycling and socializing.
-            Living beside the sea lets me enjoy the outdoor lifestyle and I love spending time camping in the surrounding area.          
-           </div>
+       {teacher?.profileText}   </div>
+  
+  
         </div>
 
         <div className={styles.mainTeacherProfileAvailability} ref={availabilityRef}>
@@ -139,24 +171,37 @@ function TeacherProfile() {
  
           <div className={styles.bookButton} onClick={()=> setIsOpen(true)}>Contact Teacher</div>
         
-        <Link to="/schedulestudent">
+          <Link to={`/findteachers/${idTeacher}/schedulestudent`}>
           <div className={styles.bookButton} >Book lesson</div>
           </Link>
       
-      \ </div>
+       </div>
         
         </div>
     
       <div ref={reviewsRef}>
-      <ReviewBoxComponent />
+      <ReviewBoxComponent  lessons={lessons} teacher={teacher}/>
       </div>
     
         </div>
     
+
+
+
       <div className={styles.mainTeacherProfileRight}>
-        <div className={styles.mainTeacherProfileVideo}>
-         <h1>Video component</h1>
-        </div>
+ 
+      <button className={styles.backButton} onClick={goBackToTeachers}>back to teachers</button>
+ 
+          <iframe
+                className={styles.iframeVideo}
+                src={`https://www.youtube.com/embed/${teacher?.profileVideo}`}
+                frameBorder="0"
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+                allowFullScreen={true} // Use camelCase attribute name
+                title="Teacher Video"
+                muted // Mute the video
+              ></iframe>
+
       </div>
 
     </div>

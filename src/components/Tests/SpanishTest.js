@@ -58,7 +58,7 @@ function SpanishTest({setIsOpen}) {
   return (
     <div className={styles.testMainDiv} ref={newPage} >
       <div className={styles.title}>
-        <h2>English Test</h2>
+        <h2>Spanish Test</h2>
       </div>
 
       <div className={styles.questions}>
@@ -101,7 +101,7 @@ function SpanishTest({setIsOpen}) {
       <div className={styles.results} ref={resultsRef} >
           {resultDiv ? (<>
           <h2> You answered {count} correctly out of {levels[levelNumber].length}</h2>
-          {count >= 1 ? 
+          {count >= 7 ? 
           <>
           <div>You passed level {levelsString[levelNumber]} 
           {levelNumber < 2 ? 

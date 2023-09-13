@@ -1,29 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import styles from './mylessons.module.css';
-import MyLessonComponent from '../../components/MyLessons/MyLessonComponent';
+import styles from './myteachingupcominglessons.module.css';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
-import MyLessonsFilterComponent from '../../components/MyLessons/MyLessonsFilterComponent';
+import MyTeachingLessonFilterComponent from '../../components/MyTeachingLessons/MyTeachingLessonFilterComponent';
+import MyTeachingLessonComponent from '../../components/MyTeachingLessons/MyTeachingLessonComponent';
 import BASE_URL from '../../config';
-import CircularProgress from '@mui/material/CircularProgress'
+import MyTeachingUpcomingLessonComponent from '../../components/MyTeachingLessons/MyTeachingUpcomingLessonComponent';
+import CircularProgress from '@mui/material/CircularProgress';
 
 Modal.setAppElement('#root');
 
-function MyLessons() {
+function MyTeachingUpcomingLessons() {
   const [arr, setArray] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [lastPage, setLastPage] = useState(false);
-  const observerRef = useRef(null);
   const [loading,setLoading] = useState(true)
-  const [userTeachers,setUserTeachers] = useState(null)
+  const observerRef = useRef(null);
+
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const closeDialog = () => {
     setIsOpen(false);
-    navigate('/mylessons');
+    navigate('/myteachinglessons');
   };
 
   const openTestModal = (test) => {
@@ -32,17 +33,19 @@ function MyLessons() {
   };
 
 
+
+
+
   useEffect(() => {
 
-    const url = `${BASE_URL}/mybookedlessons`
+    const url = `${BASE_URL}/myUpcomingTeachingLessons`
 
     async function fetchData() {
       try {
         const response = await axios.get(url, { withCredentials: true });
         const lessons = response.data.myLessonArray;
         setTotalElements(lessons.length);
-        setUserTeachers(response.data.myTeachers)
-        setArray((prevArray) => [...prevArray, ...lessons.slice(startIndex, startIndex[startIndex -1])]);
+        setArray((prevArray) => [...prevArray, ...lessons.slice(startIndex, startIndex + 15)]);
         setLoading(false)
       } catch (error) {
         console.error(error);
@@ -50,6 +53,7 @@ function MyLessons() {
     }
     fetchData();
   }, [startIndex]);
+
 
   useEffect(() => {
     const options = {
@@ -61,7 +65,7 @@ function MyLessons() {
     const handleIntersection = (entries) => {
       const target = entries[0];
       if (target.isIntersecting) {
-      //  handleLoadMore();
+        handleLoadMore();
       }
     };
 
@@ -79,7 +83,7 @@ function MyLessons() {
   }, []); // Empty dependency array to only add observer once
 
   useEffect(() => {
-    if (arr.length > 0 && startIndex >= totalElements ) {
+    if (arr.length > 0 && startIndex >= totalElements - 15) {
       setLastPage(true);
     } else {
       setLastPage(false);
@@ -91,50 +95,50 @@ function MyLessons() {
   };
 
   const goUpFunction = () => {
-    window.scrollTo(0, 0);
     setStartIndex(0);
-    //setArray([]);
-    //setLastPage(false);
+    setArray([]);
+    setLastPage(false);
   };
 
   return (
-<div className={isOpen ? styles.mainContainerFixed : styles.mainContainer}>
+  
+  <div className={isOpen ? styles.mainContainerFixed : styles.mainContainer}>
        <div className={styles.mainDiv}>
 
-       {loading ? 
+       {loading ?  
        
+           
        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px', height: '100vh' }}>
-<CircularProgress />
-</div>
+       <CircularProgress />
+     </div>
        
        :  <>
-{arr
-  .sort((a, b) => new Date(b.reservedByStudentcreatedAt) - new Date(a.reservedByStudentcreatedAt))
-  .map((element, index) => {
-    const lesson = arr[index];
-    return <MyLessonComponent element={element} key={index} lesson={lesson} userTeachers={userTeachers}/>;
-  })}
-
+        {arr.map((element, index) => {
+          
+          const lesson = arr[index];
+     
+          return <MyTeachingUpcomingLessonComponent element={element}  key={index} lesson={lesson}/>;
+        })}
 
 </>
       }
 
         <div id="observerElement" ref={observerRef} />
-        {(arr.length > 15) ? (
+        {(lastPage && arr.length > 10) ? (
           <button onClick={goUpFunction} className={styles.goUp}>Go up</button>
         ) : ''}
 
       </div>
 
       <div className={styles.filters} onClick={openTestModal}>Filters</div>
-      <div className={styles.filtersBack}  onClick={()=>navigate("/")}>Back</div>
+      <div className={styles.filtersBack}  onClick={()=>navigate("/teacherzone")}>Back</div>
       
              <Modal isOpen={isOpen} onRequestClose={closeDialog}>
-               <MyLessonsFilterComponent closeDialog={closeDialog} arr={arr} userTeachers={userTeachers}/>
+               <MyTeachingLessonFilterComponent closeDialog={closeDialog} arr={arr}/>
       </Modal>
-  </div>    
+  </div>  
 
   );
 }
 
-export default MyLessons;
+export default MyTeachingUpcomingLessons;

@@ -5,7 +5,10 @@
     border-radius: 10px;
 }
 
-
+.iframeVideo{
+    width:450px;
+    height: 350px;
+}
 
 @media only screen and (max-width: 1200px) {
 .videoDiv{

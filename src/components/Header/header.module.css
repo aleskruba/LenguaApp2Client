@@ -212,6 +212,118 @@ position: relative;
 }
 
 
+.actionRequired {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 70px;
+  width: 90%;
+  height: 25px;
+  background-color: aqua;
+  padding-left: 25px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.actionRequiredText {
+  color: black;
+  display: inline-block;
+  white-space: nowrap;
+  animation: moveRightAndBack 5s linear infinite;
+}
+
+
+.findteachersLi{
+  position: relative;
+}
+
+.findteachersLiPagination{
+  position: absolute;
+  color: red;
+  font-size: 12px;
+  bottom:20px;
+}
+.findteachersLiPagination:hover{
+  background-color: wheat;
+  color:black;
+  font-weight: 900;
+}
+
+.confirmation {
+  z-index: 2000;
+  position: absolute;
+   padding-left: 10px;
+  width: 170px;
+  height: 60px;
+  font-size: 12px;
+  background-color: green;
+  color: white;
+  border-radius: 0px 0px 25px 0px;
+  animation: colorChange 2s infinite alternate;
+}
+
+.confirmationOpacity {
+  position: absolute;
+  padding-left: 10px;
+  width: 170px;
+  height: 60px;
+  font-size: 12px;
+  background-color: green;
+  color: white;
+  border-radius: 0px 0px 25px 0px;
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+
+@keyframes colorChange {
+  0% {
+    background-color: green;
+  }
+  100% {
+    background-color: blue;
+  }
+}
+
+.confirmationReject {
+  z-index: 2000;
+  position: absolute;
+  padding-left: 10px;
+  width: 170px;
+  height: 60px;
+  font-size: 12px;
+  background-color: red;
+  color: white;
+  border-radius: 0px 0px 25px 0px;
+  animation: colorChangeReject 2s infinite alternate;
+}
+
+@keyframes colorChangeReject {
+  0% {
+    background-color: pink;
+  }
+  100% {
+    background-color: red;
+  }
+}
+
+.confirmationPText{
+  text-align: center;
+  font-size: 15px;
+}
+
+
+@keyframes moveRightAndBack {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(100%); /* Adjust the value to control how far it moves */
+  }
+}
+
+
+
 @media (max-width: 767px) {
   .navbar {
     flex-direction: column;
@@ -245,6 +357,7 @@ font-size: 14px;
 
   .findteachersLi{
     font-size: 14px;
+    position: relative;
   }
   .testLi{
     font-size: 14px;

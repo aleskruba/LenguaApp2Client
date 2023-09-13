@@ -3,23 +3,34 @@ import axios from 'axios';
 import styles from './myteachers.module.css';
 import MyTeacherComponent from '../../components/MyTeachers/MyTeacherComponent';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../../config';
+import CircularProgress from '@mui/material/CircularProgress'
 
 function MyTeachers() {
   const [arr, setArray] = useState([]);
+  const [lessons, setlessons] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [lastPage, setLastPage] = useState(false);
+  const [loading,setLoading] = useState(true)
+  const [userTeachers,setUserTeachers] = useState(null)
   const observerRef = useRef(null);
+  
 
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
+      const url = `${BASE_URL}/myteachers`;
+
       try {
-        const response = await axios.get('./array.json');
-        const teachers = response.data.newTeachers;
+        const response = await axios.get(url, { withCredentials: true });
+        const teachers = response.data.myTeachersArray;
+        setlessons(response.data.allLessons);
+        setUserTeachers(response.data.myTeachers)
         setTotalElements(teachers.length);
         setArray((prevArray) => [...prevArray, ...teachers.slice(startIndex, startIndex + 15)]);
+        setLoading(false)
       } catch (error) {
         console.error(error);
       }
@@ -55,7 +66,7 @@ function MyTeachers() {
   }, []); // Empty dependency array to only add observer once
 
   useEffect(() => {
-    if (arr.length > 0 && startIndex >= totalElements - 15) {
+    if (arr.length > 0 && (startIndex >= totalElements - 15 || arr.length >= 10)) {
       setLastPage(true);
     } else {
       setLastPage(false);
@@ -74,16 +85,42 @@ function MyTeachers() {
 
   return (
     <div className={styles.mainDiv}>
+      {loading ? 
+      
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px', height: '100vh' }}>
+      <CircularProgress />
+      </div>
+      :  <>
+
       {arr.map((element, index) => {
-        return <MyTeacherComponent element={element} name={element.name} key={index} />;
-      })}
+        const countCompletedLessons = lessons.reduce((count, lesson) => {
+          if (lesson.idTeacher === element.idTeacher && lesson.isCompleted) {
+            return count + 1;
+          }
+          return count;
+        }, 0);
+
+        return <MyTeacherComponent 
+                    userTeachers={userTeachers}
+                    element={element} 
+                    name={element.name} 
+                    key={index} 
+                    arr={arr} 
+                    countCompletedLessons={countCompletedLessons}/>;
+              
+              })}
+     </>
+      }
+
       <div id="observerElement" ref={observerRef} />
-      {lastPage ? (
+      {/* Show "Go up" button only if it's the last page or there are at least 10 elements */}
+      {(lastPage && arr.length > 10)  ? (
         <button onClick={goUpFunction} className={styles.goUp}>Go up</button>
       ) : ''}
-    <div className={styles.filtersBack}  onClick={()=>navigate("/")}>Back</div>
-    </div>
-
+      <div className={styles.filtersBack}  onClick={()=>navigate("/")}>Back</div>
+ 
+      </div>
+      
   );
 }
 

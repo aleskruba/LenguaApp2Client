@@ -1,8 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState,useContext } from 'react';
 import styles from './myteachercomponent.module.css';
+import AuthContext from '../../context/AuthProvider';
+import { Link } from 'react-router-dom';
 
-function MyTeacherComponent({ name }) {
+function MyTeacherComponent({ element ,countCompletedLessons,userTeachers}) {
+
   const [isIntersecting, setIsIntersecting] = useState(false);
+
+
   const observerRef = useRef(null);
   const elementRef = useRef(null);
 
@@ -30,20 +35,35 @@ function MyTeacherComponent({ name }) {
     });
   };
 
+  const selectedTeacher = userTeachers.find(t => t._id === element.idTeacher);
+
   return (
-    <div className={`${styles.card} ${isIntersecting ? styles.show : ''}`} ref={elementRef}>
+    <Link to={{pathname:`/findteachers/${element.idTeacher}`}} 
+
+          state={{ teacher: selectedTeacher  }} 
+    
+    >
+
+    <div className={`${styles.card} ${isIntersecting ? styles.show : ''}`} ref={elementRef}    >
       <div className={styles.leftBox}>
           <div className={styles.profileImgDiv} >
-             <img src="/man.jpg" alt="" className={styles.profileImg} />
+             <img src={element.teacherProfile} alt="" className={styles.profileImg} />
             </div>
       </div>
 
       <div className={styles.rightBox}>
-        <div className={styles.rightBoxName} >{name}</div>  
-        <div className={styles.rightBoxType}>Tutor</div>
-        <div className={styles.rightBoxLessons}>28 lessons</div>
+        <div className={styles.rightBoxName} >{element.teacherFirstName} {element.teacherLastName} </div>  
+        <div className={styles.rightBoxType}>from {element.teacherCountry}</div>
+        <div className={styles.rightBoxLessons}>completed lessons {countCompletedLessons}
+        
+
+
+
+          </div>
         </div>
     </div>
+    </Link>
+
   );
 }
 

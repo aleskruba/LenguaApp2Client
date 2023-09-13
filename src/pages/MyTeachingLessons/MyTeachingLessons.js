@@ -5,7 +5,8 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import MyTeachingLessonFilterComponent from '../../components/MyTeachingLessons/MyTeachingLessonFilterComponent';
 import MyTeachingLessonComponent from '../../components/MyTeachingLessons/MyTeachingLessonComponent';
-
+import BASE_URL from '../../config';
+import CircularProgress from '@mui/material/CircularProgress';
 
 Modal.setAppElement('#root');
 
@@ -15,7 +16,7 @@ function MyTeachingLessons() {
   const [totalElements, setTotalElements] = useState(0);
   const [lastPage, setLastPage] = useState(false);
   const observerRef = useRef(null);
-
+  const [loading,setLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -31,18 +32,23 @@ function MyTeachingLessons() {
 
 
   useEffect(() => {
+
+    const url = `${BASE_URL}/myFinishedTeachingLessons`
+
     async function fetchData() {
       try {
-        const response = await axios.get('./teachers.json');
-        const teachers = response.data.teachers;
-        setTotalElements(teachers.length);
-        setArray((prevArray) => [...prevArray, ...teachers.slice(startIndex, startIndex + 15)]);
+        const response = await axios.get(url, { withCredentials: true });
+        const lessons = response.data.myLessonArray;
+        setTotalElements(lessons.length);
+        setArray((prevArray) => [...prevArray, ...lessons.slice(startIndex, startIndex + 15)]);
+        setLoading(false)
       } catch (error) {
         console.error(error);
       }
     }
     fetchData();
   }, [startIndex]);
+
 
   useEffect(() => {
     const options = {
@@ -90,24 +96,40 @@ function MyTeachingLessons() {
   };
 
   return (
-<div className={isOpen ? styles.mainContainerFixed : styles.mainContainer}>
+  
+  <div className={isOpen ? styles.mainContainerFixed : styles.mainContainer}>
        <div className={styles.mainDiv}>
+
+       {loading ?
+       
+       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px', height: '100vh' }}>
+       <CircularProgress />
+     </div>
+       
+       :  <>
         {arr.map((element, index) => {
-          return <MyTeachingLessonComponent element={element}  key={index} />;
+          
+          const lesson = arr[index];
+     
+          return <MyTeachingLessonComponent element={element}  key={index} lesson={lesson}/>;
         })}
+
+</>
+      }
         <div id="observerElement" ref={observerRef} />
-        {lastPage ? (
+        {(lastPage && arr.length > 10) ? (
           <button onClick={goUpFunction} className={styles.goUp}>Go up</button>
         ) : ''}
 
       </div>
-      
+
       <div className={styles.filters} onClick={openTestModal}>Filters</div>
       <div className={styles.filtersBack}  onClick={()=>navigate("/teacherzone")}>Back</div>
-          <Modal isOpen={isOpen} onRequestClose={closeDialog}>
+      
+             <Modal isOpen={isOpen} onRequestClose={closeDialog}>
                <MyTeachingLessonFilterComponent closeDialog={closeDialog} arr={arr}/>
       </Modal>
-  </div>    
+  </div>  
 
   );
 }

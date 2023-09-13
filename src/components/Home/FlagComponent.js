@@ -1,21 +1,50 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import styles from './flagcomponent.module.css';
+import AuthContext from '../../context/AuthProvider';
+import axios from 'axios';
+import BASE_URL from '../../config';
 
-const flags = [
-  { flag: 'uk.png', language: 'english', total: 125 },
-  { flag: 'de.png', language: 'german', total: 35 },
-  { flag: 'es.png', language: 'spanish', total: 75 },
-  { flag: 'pt.png', language: 'portuguese', total: 55 },
-  { flag: 'fr.png', language: 'french', total: 68 },
-  { flag: 'cz.png', language: 'czech', total: 125 },
 
-];
+
+
+
 
 const MyComponent = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [showLeftIcon, setShowLeftIcon] = useState(false);
   const [showRightIcon, setShowRightIcon] = useState(true);
   const flagsRef = useRef(null);
+  const [homelanguages,setHomeLanguages] = useState([])
+
+
+  
+  useEffect(()=>{
+    
+    const fetchFunction  = async () => {
+    try {
+      const url = `${BASE_URL}/loadhomedata`;
+      const response = await axios.get(url, { withCredentials: true });
+      const responseData = response.data;
+      setHomeLanguages(responseData)
+    }catch (err) {
+      console.log('Error fetching user data:', err);
+    }
+  }
+  fetchFunction()
+  },[])
+
+
+  const flags = [
+    { flag: 'uk.png', language: 'english', total: homelanguages?.totalEn },
+    { flag: 'de.png', language: 'german', total: homelanguages?.totalDe },
+    { flag: 'es.png', language: 'spanish', total: homelanguages?.totalSp },
+    { flag: 'pt.png', language: 'portuguese', total: homelanguages?.totalPt },
+    { flag: 'fr.png', language: 'french', total: homelanguages?.totalFr },
+    { flag: 'cz.png', language: 'czech', total: homelanguages?.totalCZ },
+  
+  ];
+
+
 
   useEffect(() => {
     handleIcons();

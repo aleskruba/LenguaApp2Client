@@ -31,7 +31,7 @@ const {currentUser} = useContext(AuthContext)
                   <li>Connect with a global community of language learners</li>
                 </ul>
               
-           <Link to="/login"><div className={styles.startButton}>Start now</div></Link>
+           <Link to="/findteachers"><div className={styles.startButton}>Start now</div></Link>
             </div>
 
         </div>

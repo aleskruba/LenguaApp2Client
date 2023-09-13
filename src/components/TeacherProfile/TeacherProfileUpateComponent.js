@@ -1,11 +1,11 @@
-
-
 import React,{useEffect, useState} from 'react'
 import  styles from './teacherprofileupdatecomponent.module.css'
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Modal from 'react-modal';
+import BASE_URL from '../../config';
+import axios from 'axios';
 
     Modal.setAppElement('#root');
 
@@ -14,9 +14,9 @@ const validationSchema = Yup.object({
   tax: Yup.number()
      .typeError('Tax must be a number')
      .max(30,'Maximum allowed hourly Tax is $30'),
-  presentation: Yup.string()
+     profileText: Yup.string()
     .max(1200, 'Presentation must be at most 1200 characters'),
-  videoPresentation: Yup.string()
+    profileVideo: Yup.string()
     .max(30, 'Video code must be at most 30 characters')
   
 });
@@ -28,14 +28,15 @@ function TeacherProfileUpateComponent({ setUpdateButton, isOpen,setUpdatedData,u
   const [backendError, setBackendError] = useState('');
   const [noChanges, setNoChanges] = useState(false);
 
+
   const initialValues = {
     tax: updatedData !== null ? updatedData.tax : '',
-    presentation: updatedData !== null ? updatedData.presentation : '',
-    videoPresentation: updatedData !== null ? updatedData.videoPresentation : '',
+    profileText: updatedData !== null ? updatedData.profileText : '',
+    profileVideo: updatedData !== null ? updatedData.profileVideo : '',
   };
-
-  const onSubmit = (values, { resetForm }) => {
+  const onSubmit = async (values, { resetForm }) => {
     setBackendError('');
+  
     if (isFormChanged(values)) {
       const updatedFields = {};
   
@@ -45,11 +46,32 @@ function TeacherProfileUpateComponent({ setUpdateButton, isOpen,setUpdatedData,u
         }
       });
   
+      try {
+        const url = `${BASE_URL}/updateprofile`;
+        const data = {
+          updatedProfile:updatedFields,
+           };
+    
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true, // Set the withCredentials option to true
+        };
+    
+        await axios.put(url, data, config);
+     
+      } catch(err) {console.log(err)}
+
+
+
+  
       setUpdatedData((prevData) => ({
         ...prevData,
         ...updatedFields,
       }));
-      setIsOpen(false)
+  
+      setIsOpen(false);
       closeDialog();
     } else {
       setNoChanges(true);
@@ -71,8 +93,8 @@ function TeacherProfileUpateComponent({ setUpdateButton, isOpen,setUpdatedData,u
   const isFormChanged = (values) => {
     return (
       values.tax !== initialValues.tax ||
-      values.presentation !== initialValues.presentation ||
-      values.videoPresentation !== initialValues.videoPresentation
+      values.profileText !== initialValues.profileText ||
+      values.profileVideo !== initialValues.profileVideo
     );
   };
 
@@ -86,12 +108,13 @@ function TeacherProfileUpateComponent({ setUpdateButton, isOpen,setUpdatedData,u
                        <Field
                           name="tax"
                           type="text"
-                          id="tax"
+                          id='tax'
                           placeholder="Hourly Tax"
                           autoComplete="off"
                           className={styles.taxInputContainer}
                           inputMode="decimal"
                           maxLength={2}
+             
                         />
        
                
@@ -111,12 +134,14 @@ function TeacherProfileUpateComponent({ setUpdateButton, isOpen,setUpdatedData,u
            
                 <Field
                       as="textarea" // Use textarea instead of input
-                      name="presentation"
-                      id="presentation"
+                      name="profileText"
+                      id='profileText'
+             
                       placeholder="Presentation"
                       autoComplete="off"
                       className={styles.presentationInputContainer}
                       maxLength='1200'
+           
                     />
      
               
@@ -131,13 +156,14 @@ function TeacherProfileUpateComponent({ setUpdateButton, isOpen,setUpdatedData,u
               </ErrorMessage>
               {backendError && <div className={styles.presentationErrorContainer}>{backendError}</div>}
 
-                  <Field name="videoPresentation"
+                  <Field name="profileVideo"
                          type="text" 
-                         id="videoPresentation" 
+                         id="profileVideo" 
                          placeholder="Video Presentation" 
                          autoComplete="off" 
                          className={styles.videoPresentationInputContainer}
                          maxLength='30'
+
                          />
               
               <ErrorMessage name="videoPresentation" component="div">

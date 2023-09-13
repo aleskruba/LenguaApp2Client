@@ -1,56 +1,53 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef ,useContext} from 'react';
 import axios from 'axios';
-import styles from './mystudents.module.css';
-import MyStudentComponent from '../../components/MyStudents/MyStudentComponent';
+import styles from './action.module.css';
 import { useNavigate } from 'react-router-dom';
 import BASE_URL from '../../config';
 import CircularProgress from '@mui/material/CircularProgress'
+import MyActionComponent from '../../components/ActionComponent/MyActionComponent';
+import AuthContext from '../../context/AuthProvider';
 
-function MyStudents() {
+function Action() {
   const [arr, setArray] = useState([]);
-  const [lessons, setlessons] = useState([]);
+  const [lessons, setLessons] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
+
   const [lastPage, setLastPage] = useState(false);
   const observerRef = useRef(null);
   const [loading,setLoading] = useState(true)
+  const [loadingConfirm,setLoadingConfirm] =useState(false)
   const navigate = useNavigate();
 
-/*   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get('./array.json');
-        const teachers = response.data.newTeachers;
-        setTotalElements(teachers.length);
-        setArray((prevArray) => [...prevArray, ...teachers.slice(startIndex, startIndex + 15)]);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchData();
-  }, [startIndex]); */
+  const {totalElements, setTotalElements,upCOmmingLessons} = useContext(AuthContext)
 
+
+  const removeFromDisplayedLessons = (lessonId) => {
+    setArray((prevArray) => prevArray.filter((lesson) => lesson._id !== lessonId));
+  };
 
   useEffect(() => {
+    console.log('useEffect test')
     async function fetchData() {
-      const url = `${BASE_URL}/mystudents`
-
-
-
+      const url = `${BASE_URL}/lessonreservationdata`;
+  
       try {
         const response = await axios.get(url, { withCredentials: true });
-        const students = response.data.myStudentsArray;
+        const lessonsData = response.data.lessons;
+        setLessons(lessonsData);
+        setTotalElements(lessonsData.length);
+    
 
-        setlessons(response.data.allLessons)
-        setTotalElements(students.length);
-        setArray((prevArray) => [...prevArray, ...students.slice(startIndex, startIndex + 15)]);
+        // Initially populate the arr state with the first 15 lessons (or all if less than 15)
+        setArray(lessonsData.slice(0, Math.min(15, lessonsData.length)));
         setLoading(false)
       } catch (error) {
         console.error(error);
       }
     }
     fetchData();
-  }, [startIndex]);
+  }, []);
+
+
 
   useEffect(() => {
     const options = {
@@ -100,15 +97,15 @@ function MyStudents() {
   return (
     <div className={styles.mainDiv}>
 
-{loading ?  
+{loading && !loadingConfirm?  
 
 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px', height: '100vh' }}>
 <CircularProgress />
 </div>
 
 
-:  <>
-      {arr.map((element, index) => {
+:  <>  {!loadingConfirm ? <>
+      {arr?.reverse().map((element, index) => {
 
     const countCompletedLessons = lessons.reduce((count, lesson) => {
       if (lesson.idStudent === element.idStudent && lesson.isCompleted) {
@@ -118,19 +115,31 @@ function MyStudents() {
     }, 0)
 
 
-        return <MyStudentComponent element={element} name={element.name} key={index} arr={arr} countCompletedLessons={countCompletedLessons}/>;
+        return <MyActionComponent element={element} 
+                                  name={element.name} 
+                                  key={index} 
+                                  arr={arr} 
+                                  loading={loading}
+                                  loadingConfirm={loadingConfirm}
+                                  setLoadingConfirm={setLoadingConfirm}
+                                  countCompletedLessons={countCompletedLessons}
+                                  removeFromDisplayedLessons={removeFromDisplayedLessons}/>;
       })}
+       </>: <p>wait please...</p>}
 </>
       }
+      
+     {upCOmmingLessons>1 ? <div>No other requests.... </div> : null}
+    
 
       <div id="observerElement" ref={observerRef} />
       {(lastPage && arr.length > 10) ? (
         <button onClick={goUpFunction} className={styles.goUp}>Go up</button>
       ) : ''}
-    <div className={styles.filtersBack}  onClick={()=>navigate("/teacherzone")}>Back</div>
+    <div className={styles.filtersBack}  onClick={()=>navigate("/")}>Back</div>
     </div>
 
   );
 }
 
-export default MyStudents;
+export default Action;

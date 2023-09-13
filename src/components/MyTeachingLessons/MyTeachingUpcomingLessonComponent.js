@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styles from './mystudentcomponent.module.css';
+import styles from './myteachingcomponent.module.css';
+import moment from 'moment';
 
-function MyStudentComponent( {element ,countCompletedLessons }) {
+
+function MyTeachingUpcomingLessonComponent({ element,lesson}) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const observerRef = useRef(null);
   const elementRef = useRef(null);
+
 
   useEffect(() => {
     const options = {
@@ -39,12 +42,23 @@ function MyStudentComponent( {element ,countCompletedLessons }) {
       </div>
 
       <div className={styles.rightBox}>
-        <div className={styles.rightBoxName} >{element.studentFirstName}</div>  
+          <div className={styles.rightBoxTop}>      
+        <div className={styles.rightBoxName} >{element.studentFirstName}</div>
+        </div>  
         <div className={styles.rightBoxType}>from {element.studentCountry}</div>
-        <div className={styles.rightBoxLessons}>completed lessons {countCompletedLessons}</div>
+        <div className={styles.rightBoxBottom}>        
+            <div className={styles.rightBoxDate}>     
+             {lesson.timeSlot.map((date, index) => (
+              <div key={index}>
+                {moment(parseInt(date)).format('DD MMMM HH:mm')} -{' '}
+                {moment(parseInt(date)).add(1, 'hour').utc().format('HH:mm')} 
+              </div>
+            ))}</div>
+            <div className={styles.rightBoxLesson}>completed</div>
         </div>
+    </div>
     </div>
   );
 }
 
-export default MyStudentComponent;
+export default MyTeachingUpcomingLessonComponent;

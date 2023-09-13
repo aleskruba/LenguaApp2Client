@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import styles from './teachershomecomponent.module.css';
 import axios from 'axios';
+import BASE_URL from '../../config';
 
 function TeachersHomeComponent() {
   const [teachersArray, setTeachersArray] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      const url = `${BASE_URL}/findteachers`;
+
       try {
-        const response = await axios.get(`${process.env.PUBLIC_URL}/teachers.json`);
-        const data = response.data;
-        setTeachersArray(data.teachers);
+        const response = await axios.get(url, { withCredentials: true });
+        const teacherdata = response.data.teachers;
+
+        setTeachersArray(teacherdata);
+
+        if (!teacherdata || !Array.isArray(teacherdata)) {
+          console.error('Invalid data received from API');
+          return;
+        }
       } catch (error) {
-        console.error('Error fetching data:', error);
+               console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
-  }, []);
-
+  }, []); 
  
 
   const calculateRowCount = () => {
@@ -46,7 +54,11 @@ function TeachersHomeComponent() {
               }}
               key={index}
             >
-              <div className={styles.teacherBoxTop}>Video presentation</div>
+              <div className={styles.teacherBoxTop}>
+                  <div className={styles.teacherBoxTopImage}>
+                       <img src={element.profile} className={styles.profile} alt="" />
+                   </div>
+              </div>
               <div className={styles.teacherBoxBottom}>
                 <div className={styles.teacherBoxName}>{element.firstName}</div>
                 <div className={styles.teacherType}>{element.teacherType}</div>

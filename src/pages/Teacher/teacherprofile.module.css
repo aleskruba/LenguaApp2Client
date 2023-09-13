@@ -236,20 +236,42 @@ justify-content: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   flex: 1;
   margin-left: 50px;
   width: 600px;
   border-radius: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
-  background-color: whitesmoke;
   max-height: 500px;
   top: 80px; /* Adjust the top value to match the height of the header */
 }
 
+.backButton{
+  margin-bottom: 5px;
+  width: 120px;
+  height: 30px;
+  border-radius: 10px;
+  background-color: gray;
+  color: white;
+}
+
+.backButton:hover{
+  background-color:lightgray;
+  color: black;
+}
+
+.iframeVideo{
+ width: 600px;
+ height: 450px;
+}
 
 
 @media (max-width: 767px) {
 
+  .iframeVideo{
+  height: 260px;
+  width: 360px;
+   }
 
   .header {
     display: none;

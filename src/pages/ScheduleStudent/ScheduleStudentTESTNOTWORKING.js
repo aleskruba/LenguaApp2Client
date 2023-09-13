@@ -1,12 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import styles from './schedulepageteacher.module.css';
-import { useEffect } from 'react';
+import styles from './schedulestudent.module.css';
+import { useParams } from 'react-router-dom';
+import BASE_URL from '../../config';
+import axios from 'axios';
 
-function Calendar() {
+function CalendarStudent() {
   const [currentMonth, setCurrentMonth] = useState(moment());
   const [selectedDay, setSelectedDay] = useState(null);
   const [showHours, setShowHours] = useState(false);
+  const [teacher,setTeacher] = useState(null)
+
+  const { idTeacher } = useParams();
+
+useEffect(()=>{
+
+  console.log(idTeacher)
+
+  const fetchData = async () => {
+    const url = `${BASE_URL}/findteachers`
+     
+    try {
+      const response = await axios.get(url, { withCredentials: true });
+      const data = response.data.teachers;
+
+      const teacherObject = data.find(teacher => teacher._id === idTeacher);
+
+      setTeacher(teacherObject)
+    
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    };
+  
+
+  fetchData();
+},[idTeacher])
+
+
 
   const handlePrevMonth = () => {
     setCurrentMonth(currentMonth.clone().subtract(1, 'month'));
@@ -25,10 +57,13 @@ function Calendar() {
   };
 
   return (
-    <div className={styles.maincontainer}>
+    
+<div className={styles.maincontainer}>
       <div className={styles.maindiv}>
+      <h3 className={styles.maindivH3}>Book lesson with {teacher?.firstName  }</h3>
         <div className={styles.calendartop}>
-          <button className={styles.prevbutton} onClick={handlePrevMonth}>
+          
+           <button className={styles.prevbutton} onClick={handlePrevMonth}>
             Prev
           </button>
           <h2 className={styles.months}>{currentMonth.format('YYYY')}</h2>
@@ -36,11 +71,11 @@ function Calendar() {
             Next
           </button>
         </div>
-        <Month month={currentMonth}  selectedDay={selectedDay} onDayClick={handleDayClick} />
+        <Month month={currentMonth} selectedDay={selectedDay} onDayClick={handleDayClick} />
       </div>
-      <div>{showHours && <Hours selectedDay={selectedDay} showHours={showHours}  setShowHours={setShowHours}/>}</div>
+      <div>{showHours && <Hours selectedDay={selectedDay} />}</div>
     </div>
-  );
+     );
 }
 
 function Month({ month, selectedDay, onDayClick }) {
@@ -109,27 +144,18 @@ function Month({ month, selectedDay, onDayClick }) {
   );
 }
 
-
-function Hours({ selectedDay,showHours,setShowHours }) {
-  const [selectedSlots, setSelectedSlots] = useState([]);
+function Hours({ selectedDay }) {
+  const [selectedHour, setSelectedHour] = useState(null);
 
   const handleHourClick = (hour) => {
-    const selectedHour = selectedDay.clone().hour(hour);
-    const isSelected = selectedSlots.some((slot) => slot.isSame(selectedHour));
-
-    if (isSelected) {
-      setSelectedSlots((prevSlots) => prevSlots.filter((slot) => !slot.isSame(selectedHour)));
+    if (selectedHour === hour) {
+      setSelectedHour(null); // Deselect the hour
+      console.log(null); // Log the deselected hour
     } else {
-      setSelectedSlots((prevSlots) => [...prevSlots, selectedHour]);
+      setSelectedHour(hour); // Select the hour
+      console.log(formatHour(hour)); // Log the selected hour
     }
   };
-
-  useEffect(() => {
-    const formattedSlots = selectedSlots.map((slot) =>
-      slot.format('YYYY-MM-DD HH:mm')
-    );
-    console.log(formattedSlots);
-  }, [selectedSlots]);
 
   const formatHour = (hour) => {
     if (hour === 0) {
@@ -147,68 +173,50 @@ function Hours({ selectedDay,showHours,setShowHours }) {
     <div className={styles.rightsidecontainer}>
       <div className={styles.rightsidecontainerDiv}>
         <h4 className={styles.h4text}>Select the time slot</h4>
-
         <div className={styles.hoursmaincontainer}>
           <div className={styles.hourscontainer}>
             <div className={styles.column}>
               <h4 className={styles.h4text}>AM</h4>
-              {[...Array(12)].map((_, index) => {
-                const hour = index + 1;
-                const selectedHour = selectedDay.clone().hour(hour);
-                const isSelected = selectedSlots.some((slot) => slot.isSame(selectedHour));
-
-                return (
-                  <div
-                    className={isSelected ? styles.hourBoxSelected : styles.hourBox}
-                    key={index}
-                    onClick={() => handleHourClick(hour)}
-                  >
-                    {formatHour(hour)} - {formatHour(hour + 1)}
-                  </div>
-                );
-              })}
+              {[...Array(12)].map((_, index) => (
+                <div
+                  className={
+                    selectedHour === index + 1 ? styles.hourBoxSelected : styles.hourBox
+                  }
+                  key={index}
+                  onClick={() => handleHourClick(index + 1)}
+                >
+                  {formatHour(index + 1)} - {formatHour(index + 2)}
+                </div>
+              ))}
             </div>
             <div className={styles.column}>
               <h4 className={styles.h4text}>PM</h4>
-              {[...Array(12)].map((_, index) => {
-                const hour = index + 13;
-                const selectedHour = selectedDay.clone().hour(hour);
-                const isSelected = selectedSlots.some((slot) => slot.isSame(selectedHour));
-
-                return (
-                  <div
-                    className={isSelected ? styles.hourBoxSelected : styles.hourBox}
-                    key={index}
-                    onClick={() => handleHourClick(hour)}
-                  >
-                    {formatHour(hour - 12)} - {formatHour(hour - 11)}
-                  </div>
-                );
-              })}
+              {[...Array(12)].map((_, index) => (
+                <div
+                  className={
+                    selectedHour === index + 13 ? styles.hourBoxSelected : styles.hourBox
+                  }
+                  key={index}
+                  onClick={() => handleHourClick(index + 13)}
+                >
+                  {formatHour(index + 1 + 12)} - {formatHour(index + 2 + 12)}
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-
-      <div className={showHours ? styles.buttons : styles.nobuttons} >
-        <button className={styles.saveButton}>save</button>
-        <button className={styles.cancelButton} onClick={()=>setShowHours(false)}>cancel</button>
     </div>
- 
+  );
+  
+}
+
+function ScheduleStudent() {
+  return (
+    <div className={styles.maincontainer}>
+      <CalendarStudent />
     </div>
   );
 }
 
-  
-
-function SchedulePage() {
-return (
-<>
-    <div className={styles.maincontainer}>
-    <Calendar />
-    </div>
-    </>
-);
-}
-
-export default SchedulePage;
+export default ScheduleStudent;

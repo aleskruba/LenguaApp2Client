@@ -22,10 +22,14 @@ import StudentMessages from './pages/StudentMessages/StudentMessages';
 import TeacherMessages from './pages/TeacherMessages/TeacherMessages';
 import MyTeachingLessons from './pages/MyTeachingLessons/MyTeachingLessons';
 import MyStudents from './pages/MyStudents/MyStudents';
-import SchedulePage from './pages/Schedule/SchedulePage';
+//import SchedulePage from './pages/Schedule/SchedulePage';
 import ScheduleStudent from './pages/ScheduleStudent/ScheduleStudent';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import TestPage from './pages/TESTPAGE/TestPage';
+import SchedulePageTEST from './pages/Schedule/SchedulePageTEST';
+import MyTeachingUpcomingLessons from './pages/MyTeachingUpcomingLessons/MyTeachingUpcomingLessons';
+import Action from './pages/Action/Action';
+import FindTeachersPagination from './pages/FindTeachers/FindTeacherPagination';
 
 export default  function App() {
 
@@ -59,6 +63,9 @@ export default  function App() {
     <Route path='/completion' element={<Completion/>} /> 
     <Route path='/resetpassword' element= {<ResetPassword/>} canActivate={checkAuthentication} /> 
     <Route path='/testpage' element={<TestPage/>}  />
+    <Route path='/findteachers' element={<FindTeachers />}/>
+    <Route path="/findteachers/:idTeacher" element={<TeacherProfile />} />
+
     
   <Route element={<RequireAuth />}>
   <Route path='/completion' element={<Completion/>} /> 
@@ -70,15 +77,21 @@ export default  function App() {
       <Route path='/logout' element={<Logout />} />
       <Route path='/wallet' element={<Wallet/>} />
       <Route path='/findteachers' element={<FindTeachers />}/>
-      <Route path="/findteachers/:teacherid" element={<TeacherProfile />} />
+      <Route path='/findteachersPagination' element={<FindTeachersPagination />}/>
+      
+   
       <Route path='/profile' element={<Profile />} />
       <Route path='/mylessons' element={<MyLessons/>}  />
       <Route path='/myteachinglessons' element={<MyTeachingLessons/>}  />
+      <Route path='/myteachingupcominglessons' element={<MyTeachingUpcomingLessons/>}  />
       <Route path='/myteachers' element={<MyTeachers/>}  />
       <Route path='/mystudents' element={<MyStudents/>}  />
-      <Route path='/schedule' element={<SchedulePage/>}  />
-      <Route path='/schedulestudent' element={<ScheduleStudent/>}  />
-      <Route path='/schedulestudent' element={<ScheduleStudent/>}  />
+{/*       <Route path='/schedule' element={<SchedulePage/>}  /> */}
+    <Route path='/schedule' element={<SchedulePageTEST/>}  />
+        <Route path="/findteachers/:idTeacher/schedulestudent" element={<ScheduleStudent/>}  />
+
+        <Route path='/action' element={<Action/>}  />
+
 
       <Route path='*' element={<NotFound404 />} />
     </Route>

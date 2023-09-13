@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './myteachingcomponent.module.css';
+import moment from 'moment';
 
-function MyTeachingLessonComponent({ element}) {
+function MyTeachingLessonComponent({ element,lesson}) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const observerRef = useRef(null);
   const elementRef = useRef(null);
+
 
   useEffect(() => {
     const options = {
@@ -34,18 +36,23 @@ function MyTeachingLessonComponent({ element}) {
     <div className={`${styles.card} ${isIntersecting ? styles.show : ''}`} ref={elementRef}>
       <div className={styles.leftBox}>
           <div className={styles.profileImgDiv} >
-             <img src="/man.jpg" alt="" className={styles.profileImg} />
+             <img src={element.studentProfile} alt="" className={styles.profileImg} />
             </div>
       </div>
 
       <div className={styles.rightBox}>
           <div className={styles.rightBoxTop}>      
-        <div className={styles.rightBoxName} >{element.firstName}</div>
-        <div className={styles.rightBoxLanguage} >{element.language}</div>
+        <div className={styles.rightBoxName} >{element.studentFirstName}</div>
         </div>  
-        <div className={styles.rightBoxType}>{element.teacherType}</div>
+        <div className={styles.rightBoxType}>from {element.studentCountry}</div>
         <div className={styles.rightBoxBottom}>        
-            <div className={styles.rightBoxDate}>28.6.2023</div>
+            <div className={styles.rightBoxDate}>     
+             {lesson.timeSlot.map((date, index) => (
+              <div key={index}>
+                {moment(parseInt(date)).format('DD MMMM HH:mm')} -{' '}
+                {moment(parseInt(date)).add(1, 'hour').utc().format('HH:mm')} 
+              </div>
+            ))}</div>
             <div className={styles.rightBoxLesson}>completed</div>
         </div>
     </div>

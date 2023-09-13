@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useContext} from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -6,9 +6,12 @@ import NativeSelect from '@mui/material/NativeSelect';
 import axios from 'axios';
 import BASE_URL from '../../config';
 import styles from './toggleTeacher.module.css';
+import AuthContext from '../../context/AuthProvider';
 
 
 export default function NativeSelectDemo({state,setState}) {
+
+  const { updateUserTeacherState } = useContext(AuthContext);
 
   const [buttonState,setButtonState] = React.useState(false)
   const [successMessage,setSuccessMessage] = React.useState(false)
@@ -40,6 +43,9 @@ export default function NativeSelectDemo({state,setState}) {
       const response = await axios.post(url, data, config);
       setSuccessMessage(true)
       setButtonState(false)
+    // console.log(response.data.user.teacherState)
+     updateUserTeacherState(response.data.user.teacherState)
+       //setState(response.data.user.teacherState); 
     //  console.log(response.data.message); // Assuming your backend sends a message upon successful update
       setTimeout(()=>{setSuccessMessage(false)},1000)
     } catch (err) {

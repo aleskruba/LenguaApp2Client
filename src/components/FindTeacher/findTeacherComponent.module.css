@@ -148,6 +148,10 @@ font-weight:900;
 }
 
 
+.rightSideLanguagesTextSpan{
+    font-weight: 900;
+}
+
 @media only screen and (max-width: 767px) {
 
     .mainTeacherBox{
@@ -194,6 +198,9 @@ font-weight:900;
             margin-left: 20px;
             padding-bottom: 10px;
         }
-
+        .rightSideLanguagesTextSpan{
+            margin-left: 20px;
+            font-weight: 900;
+        }
  
     }

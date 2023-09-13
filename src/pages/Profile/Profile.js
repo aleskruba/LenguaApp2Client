@@ -9,6 +9,7 @@ import axios from 'axios';
 import AuthContext from '../../context/AuthProvider';
 import useAuth from '../../hooks/useAuth';
 import { Field } from 'formik';
+const moment = require('moment');
 
 function Profile() {
   const { user } = useAuth(); // Get user from the useAuth hook
@@ -27,6 +28,27 @@ function Profile() {
     country: user.country,
     profile: user.profile,
   });
+
+
+ 
+  const  [totalCOnfirmedLessons,setTotalCOnfirmedLessons] = useState(0)
+
+  useEffect(() => {
+
+    const url = `${BASE_URL}/mybookedlessons`
+
+    async function fetchData() {
+      try {
+        const response = await axios.get(url, { withCredentials: true });
+        const lessons = response.data.myCompletedLessonArray;
+        setTotalCOnfirmedLessons(lessons.length);
+       } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
+  }, []);
+
 
 
   function convertToBase64(file) {
@@ -160,7 +182,7 @@ function Profile() {
     }
   }
 
-
+  moment(user.memberDate).format('DD:MM:YY');
 
   return (
     <div className={updateButton || passwordButton ? styles.profileMainContainerFixed : styles.profileMainContainer}>
@@ -183,9 +205,9 @@ function Profile() {
       </div>
 
       <div className={styles.profileClassesData}>
-                  <div>  <h2 className={styles.profileClassesDataH2}>Member on Lengua since 24.6.2023</h2></div>
+                  <div>  <h2 className={styles.profileClassesDataH2}>Member on Lengua since   {moment(user.memberDate).format('DD.MM YYYY')}</h2></div>
             <div className={styles.profileClassesDataMember}>        
-          <div className={styles.profileClassesDataLessons}>  <h2 className={styles.profileClassesDataH1}>142</h2></div>
+          <div className={styles.profileClassesDataLessons}>  <h2 className={styles.profileClassesDataH1}>{totalCOnfirmedLessons}</h2></div>
           <div className={styles.profileClassesDataText}>  <h2 className={styles.profileClassesDataH2}>Total completed lessons</h2></div>
           </div>
       </div>

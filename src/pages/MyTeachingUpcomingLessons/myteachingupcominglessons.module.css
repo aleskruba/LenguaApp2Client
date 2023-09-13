@@ -1,6 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
 
 
+.mainContainer{
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.mainContainerFixed{
+position: fixed;
+}
+
 .mainDiv{
     display: flex;
     align-items: center;
@@ -9,6 +19,7 @@
     margin-top: 10px;
     position: absolute,;
 }
+
 
 .goUp{
     display: flex;
@@ -27,6 +38,21 @@
 }
 
 
+.filters{
+    position: fixed;
+    top:150px;
+    right: 150px;
+    width: 150px;
+    height: 50px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 .filtersBack{
     position: fixed;
     top:250px;
@@ -42,6 +68,10 @@
     cursor: pointer;
 }
 
+.filters:hover{
+    background-color: lightgray;
+
+}
 
 .filtersBack:hover{
     background-color: lightgray;
@@ -49,7 +79,19 @@
 }
 
 
+
 @media (max-width: 1200px) {
+    .filters{
+        position: fixed;
+        top:200px;
+        right: 60px;
+        width: 100px;
+        height: 50px;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
     .filtersBack{
         position: fixed;
@@ -68,6 +110,17 @@
 }
 
 @media (max-width: 767px) {
+    .filters{
+        position: fixed;
+        top:200px;
+        right: 10px;
+        width: 70px;
+        height: 50px;
+        background-color: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
     .filtersBack{
         position: fixed;

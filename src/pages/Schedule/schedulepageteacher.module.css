@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Poppins:ital,wght@0,200;0,400;1,200&display=swap');
+
 .maincontainer{
     margin-top: 20px;
 display: flex;
@@ -6,7 +8,7 @@ justify-content: space-around;
 
 .maindiv{
     
-    width: 300px;
+    width: 350px;
     height: 300px;
 
 }
@@ -14,36 +16,49 @@ justify-content: space-around;
 .prevbutton{
     background-color: lightgray;
     border-radius: 5px;
+    padding: 4px;
 }
 
 .nextbutton{
     background-color: lightgray;
     border-radius: 5px;
+    padding: 4px;
 }
 
 .months{
-
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
 }
 
 .table{
-    width: 300px;
-    height: 300px;
-
+  width: 350px; /* 7 columns * 25px each */
+    height: 350px;
+    
+}
+.thmain{
+  text-align: center;
 }
 
 .thead{
-
+  text-align: center;
 }
 
 .tr{
-
+  margin-bottom: 20px;
 }
 
 .th{
+  width: 100%;
+  border-bottom: 1px solid;
+ 
+  border: 1px dotted #000; 
 
 }
 
 .td{
+  height: 50px;
+  width: 50px;
+  border: 1px dotted #000; 
   font-size: 20px;
   font-weight: 900;
   text-align: center;
@@ -51,6 +66,10 @@ justify-content: space-around;
 }
 
 .pastDay {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
     background-color: lightgray;
   }
 
@@ -61,16 +80,47 @@ justify-content: space-around;
   }
   
   .currentDay {
-    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: none;
+    outline: 5px solid blue; 
+    height: 100%;
+    /* Add any other custom styles you desire */
+  }
+
+  .currentReservedDay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: none;
+    background-color: lightblue;
+    outline: 5px solid blue; 
+    height: 100%;
     /* Add any other custom styles you desire */
   }
   
   .calendartop{
+    width: 100%;
     display: flex;
     justify-content: space-around;
+
   }
   .day{
     border-radius: 5px;
+
+  }
+
+  .activeDay{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 5px;
+    color: white;
+    background: lightblue;
   }
 
   .rightsidecontainer{
@@ -103,6 +153,20 @@ justify-content: space-around;
     height: 20px;
 }
 
+.reservedHour {
+
+  text-align: center;
+  background: rgb(202, 238, 202);
+  color:white;
+  border: 1px solid black;
+  margin-top: 5px;
+  border-radius: 5px;
+  width: 100px;
+  height: 20px;
+  position: relative;
+}
+
+
 .h4text{
     text-align: center;
 }
@@ -133,10 +197,11 @@ justify-content: space-around;
     border-radius: 5px;
     color: white;
 }
-
 .saveButton:hover{
-    background: red;
+  background: red;
 }
+
+
 
 .cancelButton{
     width: 120px;
@@ -149,11 +214,82 @@ justify-content: space-around;
 .cancelButton:hover{
     background: rgb(240, 237, 237);
 }
+
+
+
+
+
+
+.saveSlot{
+  text-align: center;
+}
+
+/* YourComponent.module.css */
+
+/* ... Your existing styles ... */
+
+.reservedBubble {
+  position: absolute;
+  background-color: rgba(255, 0, 0, 0.8); /* Adjust the color as needed */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 5px;
+  width: 100px;
+  right: -50px;
+  height: 20px;
+  font-size: 12px;
+  top:0px;
+  transform: translateX(-50%);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.reservedBubbleStudent {
+  z-index: 10000;
+  position: absolute;
+  width: 110px;
+  height: 80px;
+  background-color: black;
+  top:-70px;
+  left:110px;
+  border-radius: 25px 25px 25px 0px;
+}
+.hoverDiv{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.imgDiv{
+  z-index: 10000;
+  margin-top: 5px;
+  width: 50px;
+  height: 50px;
+}
+
+.img{
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.spandate{
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  color: blue;
+}
+
+
 @media (max-width: 768px) {
     .maincontainer {
       flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
+      justify-content: center;
+      align-items: center;
     }
     .rightsidecontainer{
         width: 300px;
