@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import styles from './findteachers.module.css';
 import FindTeacherComponent from '../../components/FindTeacher/FindTeacherComponent';
 import BasicSelect from '../../components/FindTeacher/TeacherType.js';
 import SearchBar from '../../components/FindTeacher/SearchBar.js';
 import VideoPresentationComponent from '../../components/FindTeacher/VideoPresentationComponent.js';
 import SliderComp from '../../components/FindTeacher/SliderComp.js';
-import BASE_URL from '../../config';
 import AuthContext from '../../context/AuthProvider';
 
 function FindTeachers() {
@@ -15,47 +13,19 @@ function FindTeachers() {
   
  
   const [currentPage, setCurrentPage] = useState(1); // Current page number
-  const [teachersPerPage, setTeachersPerPage] = useState(15); // Number of teachers to display per page
-  const [loading, setLoading] = useState(true); // Loading page from the API
+  const [teachersPerPage, setTeachersPerPage] = useState(5); // Number of teachers to display per page
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedTeacherType, setSelectedTeacherType] = useState(null);
   const [sliderValue, setSliderValue] = useState([5, 30]);
   const [teachervideo, setTeacherVideo] = useState(null);
 
   const observerRef = useRef(null);
-  const { auth,  lessons, setLessons,  teachersArray, setTeachersArray } = useContext(AuthContext);
+  const { auth,  lessons,  teachersArray } = useContext(AuthContext);
 
 
 
 
-  // Fetch data from the API
-  useEffect(() => {
-
-
-    const fetchData = async () => {
-      const url = `${BASE_URL}/findteachers`;
-
-      try {
-        const response = await axios.get(url, { withCredentials: true });
-        const teacherdata = response.data.teachers;
-        setTeachersArray(teacherdata);
-
-        const lessonsData = response.data.lessons;
-        setLessons(lessonsData);
-
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  
-
-  }, []);
-
-  useEffect(() => {
+/*   useEffect(() => {
     const options = {
       threshold: 0.9,
     };
@@ -72,19 +42,19 @@ function FindTeachers() {
       }
     };
   }, []); // Empty dependency array to only add observer once
-
-  const handleIntersection = (entries) => {
+ */
+/*   const handleIntersection = (entries) => {
     const target = entries[0];
     if (target.isIntersecting) {
       handleLoadMoreTeachers();
     }
   };
-
+ */
   // Function to load more teachers when the last teacher is in view
-  const handleLoadMoreTeachers = () => {
+/*   const handleLoadMoreTeachers = () => {
     setTeachersPerPage((prevPerPage) => prevPerPage + 5);
   };
-
+ */
   // Filtering logic
   useEffect(() => {
     let filteredData = [...teachersArray];
@@ -118,7 +88,7 @@ function FindTeachers() {
   const [displayedTeachers, setDisplayedTeachers] = useState([]); // Displayed teachers on the current page
 
   // Function to handle page change
-  const handlePageChange = (page) => {
+/*   const handlePageChange = (page) => {
     setCurrentPage(page);
 
     // Update the number of teachers per page if lastTeacherRef is not null
@@ -126,6 +96,27 @@ function FindTeachers() {
       setTeachersPerPage(10);
     }
   };
+ */
+
+const isLastPage = teachersPerPage > displayedTeachers.length;
+
+ 
+  const handleNextElementsFunction = () => {
+    setTeachersPerPage(teachersPerPage + 5);
+    setTimeout(() => {
+      if (observerRef.current) {
+        observerRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  const goToTopFunction = () => {
+    setTeachersPerPage(5)
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100)
+  };
+
 
   return (
     <div className={styles.findTeacherTop}>
@@ -146,8 +137,8 @@ function FindTeachers() {
       <div className={styles.mainContainer}>
         <div className={styles.container}>
           {displayedTeachers.length > 0 ? (
-            displayedTeachers.map((teacher, index) => (
-              auth.user._id !== teacher._id && (
+            displayedTeachers.slice(0, teachersPerPage).map((teacher, index) => (
+              auth.user?._id !== teacher._id && (
                 <Link
                   key={index}
                   to={`/findteachers/${teacher._id}`}
@@ -166,10 +157,26 @@ function FindTeachers() {
           ) : (
             <div className={styles.noteacher}></div>
           )}
+
+{displayedTeachers?.length >= 5 && (
+          <>
+            {isLastPage ? (
+              <button className={styles.goUp} onClick={goToTopFunction}>
+                Go Up
+              </button>
+            ) : (
+              <button className={styles.goUp} onClick={handleNextElementsFunction}>
+                next 15....
+              </button>
+            )}
+          </>
+        )}
+          
         </div>
-        {loading && <div className={styles.lodaMore}>... Loading</div>}
-        {/* Trigger loading more teachers when the last teacher is in view */}
+
         <div id="observerElement" />
+
+
       </div>
     </div>
   );

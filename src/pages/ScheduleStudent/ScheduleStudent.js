@@ -135,6 +135,7 @@ function CalendarStudent() {
                                 loadingReservedSlots={loadingReservedSlots}
                                 myBookedLessons={myBookedLessons}
                                 fetchedLessonArray={fetchedLessonArray}
+                                auth={auth}
                                 />}</div>
     </div>
 
@@ -335,7 +336,7 @@ function Hours({ selectedDay,teacher,setSavedDlotdoDB,loadingSlots,loadingReserv
       };
   
       const response = await axios.post(url, payload, config);
-      setSelectedHour(null);
+         setSelectedHour(null);
       setLoading(false)
       setSavedDlotdoDB(true)
      // setSlotChange(!slotChange)
@@ -450,7 +451,11 @@ function Hours({ selectedDay,teacher,setSavedDlotdoDB,loadingSlots,loadingReserv
       
       <div className={styles.reservedBubbleStudent}>
       {fetchedLessonArray.map((lesson, index) => (
-        <Fragment key={index}>
+          <Fragment key={index}>
+        
+        { lesson.idStudent === auth.user._id &&
+
+        <Fragment >
           {lesson.timeSlot.includes(hoverName.toString()) && (
             <div className={styles.hoverDiv}>
               <p key={lesson.id}>{lesson.teacherFirstName}</p>
@@ -460,7 +465,9 @@ function Hours({ selectedDay,teacher,setSavedDlotdoDB,loadingSlots,loadingReserv
             </div>
           )}
         </Fragment>
-      ))}
+                }
+    </Fragment>
+    ))}
     </div> 
   </>
       )
@@ -536,16 +543,26 @@ function Hours({ selectedDay,teacher,setSavedDlotdoDB,loadingSlots,loadingReserv
       
       <div className={styles.reservedBubbleStudent}>
       {fetchedLessonArray.map((lesson, index) => (
-        <Fragment key={index}>
-          {lesson.timeSlot.includes(hoverName.toString()) && (
+
+          <Fragment key={index}>
+                  
+          { lesson.idStudent === auth.user._id &&
+
+        <Fragment>
+          {lesson.timeSlot.includes(hoverName.toString()) ? (
+            
             <div className={styles.hoverDiv}>
               <p key={lesson.id}>{lesson.teacherFirstName}</p>
               <div className={styles.imgDiv}>
-                <img src={lesson.teacherProfile} className={styles.img} alt={lesson.teacherFirstName} />
+               <img src={lesson.teacherProfile} className={styles.img} alt={lesson.teacherFirstName} /> 
+  
+
               </div>
             </div>
-          )}
+          ): null}
         </Fragment>
+                }
+                     </Fragment>
       ))}
     </div> 
   </>)

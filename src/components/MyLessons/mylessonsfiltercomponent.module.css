@@ -52,10 +52,14 @@
   }
 
   .rightImgDiv{
+    display: flex;
+    justify-content: center;
+   }
+
+  .imageDiv{
     width: 100px;
     height: 100px;
   }
-
   .profileImg {
     width: 100%;
     height: 100%;
@@ -75,6 +79,8 @@
 
 .rightNameDiv{
   margin-top: 50px;
+  display: flex;
+  justify-content: center;
 }
 .rightNameDivH1{
   font-size: 17px;

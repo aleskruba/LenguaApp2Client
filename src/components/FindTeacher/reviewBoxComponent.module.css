@@ -62,41 +62,22 @@
     font-size: 26px;
   }
   
-  .GoUpButton{
-    font-family: 'Montserrat', sans-serif;
-    width: 160px;
-    margin-left: 25px;
-    height: 50px;
-    background: #f1f1f1;
-    padding: 10px;
-    font-size: 20px;
-    font-weight: 300;
-    color: black;
-    border-radius: 10px;
-
-  }
-
     
-  .LoadMoreButton{
-    font-family: 'Montserrat', sans-serif;
-    width: 160px;
-    height: 50px;
-    margin-left: 25px;
-    background: #f1f1f1;
-    padding: 10px;
-    font-size: 20px;
-    font-weight: 300;
+
+
+ .goUp{
+
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: gray;
+    color: white;
+  }
+
+  .goUp:hover{
+    background-color: lightgray;
     color: black;
-    border-radius: 10px;
-  }
 
-
-  .LoadMoreButton:hover{
-    background: lightgray;
-  }
-
-  .LoadMoreButton:hover{
-    background: lightgray;
   }
 
   @media (max-width: 767px) {

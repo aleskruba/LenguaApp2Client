@@ -6,12 +6,13 @@ import BASE_URL from '../../config';
 import CircularProgress from '@mui/material/CircularProgress'
 import MyActionComponent from '../../components/ActionComponent/MyActionComponent';
 import AuthContext from '../../context/AuthProvider';
+import MyActionConfirmLessonComponent from '../../components/ActionComponent/MyActionConfirmLessonComponent';
 
 function Action() {
   const [arr, setArray] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
-
+  const [completedLessonsArray,setCompoletedLessonsArray] = useState([])
   const [lastPage, setLastPage] = useState(false);
   const observerRef = useRef(null);
   const [loading,setLoading] = useState(true)
@@ -23,18 +24,24 @@ function Action() {
 
   const removeFromDisplayedLessons = (lessonId) => {
     setArray((prevArray) => prevArray.filter((lesson) => lesson._id !== lessonId));
+    setCompoletedLessonsArray((prevArray) => prevArray.filter((lesson) => lesson._id !== lessonId));
+
   };
 
+
+
   useEffect(() => {
-    console.log('useEffect test')
-    async function fetchData() {
+      async function fetchData() {
       const url = `${BASE_URL}/lessonreservationdata`;
   
       try {
         const response = await axios.get(url, { withCredentials: true });
         const lessonsData = response.data.lessons;
+        const completedLessonsToConfirmByStudent = response.data.completedLessonsToConfirmByStudent
+        setCompoletedLessonsArray(completedLessonsToConfirmByStudent)
         setLessons(lessonsData);
-        setTotalElements(lessonsData.length);
+    
+        setTotalElements(lessonsData.length+response.data.completedLessonsToConfirmByStudent.length);
     
 
         // Initially populate the arr state with the first 15 lessons (or all if less than 15)
@@ -47,7 +54,11 @@ function Action() {
     fetchData();
   }, []);
 
-
+useEffect(()=>{
+  if (totalElements<1){
+    navigate('/')
+  }
+},[totalElements])
 
   useEffect(() => {
     const options = {
@@ -104,7 +115,7 @@ function Action() {
 </div>
 
 
-:  <>  {!loadingConfirm ? <>
+:  <>  {!loadingConfirm? <>
       {arr?.reverse().map((element, index) => {
 
     const countCompletedLessons = lessons.reduce((count, lesson) => {
@@ -125,7 +136,22 @@ function Action() {
                                   countCompletedLessons={countCompletedLessons}
                                   removeFromDisplayedLessons={removeFromDisplayedLessons}/>;
       })}
-       </>: <p>wait please...</p>}
+      
+            {completedLessonsArray?.reverse().map((element, index) => {
+
+
+              return <MyActionConfirmLessonComponent element={element} 
+                                        name={element.name} 
+                                        key={index} 
+                                        arr={arr} 
+                                        loading={loading}
+                                        loadingConfirm={loadingConfirm}
+                                        setLoadingConfirm={setLoadingConfirm}
+                                        removeFromDisplayedLessons={removeFromDisplayedLessons}/>;
+            })}
+     
+     
+       </>: <p>wait please......</p>}
 </>
       }
       

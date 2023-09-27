@@ -1,0 +1,18 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 350px;
+    height: 100px;
+    background-color: bisque;
+    margin-bottom: 5px;
+    font-size: 15px;
+}

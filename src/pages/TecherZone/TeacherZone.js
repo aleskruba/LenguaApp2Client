@@ -20,37 +20,8 @@ function TeacherZone() {
 
     // const [myReservedArrayNumber,setmyReservedArrayNumber] = useState(0)
     const { user} = useAuth();
-    const {updatedData,setUpdatedData} = useContext(AuthContext)
-
-    const [myFinishedLessonsNumber,setMyFinishedLessonsNumber] = useState(null)
-    const [myStudentsNumber,setMyStudentsNumber] = useState(null)
-    const [myUpcomingLessonsNumber,setMyUpcomingLessonsNumber] = useState(null)
-
-    useEffect(() => {
-
-        const url = `${BASE_URL}/teacherZone`
-    
-        async function fetchData() {
-          try {
-            const response = await axios.get(url, { withCredentials: true });
-    
-                setUpdatedData(response.data.teacherDetails[0])
-         
-           // setUpdatedData(response.data[0])
-               setMyFinishedLessonsNumber(response.data.myFinishedLessonsNumber)
-            setMyStudentsNumber(response.data.myStudentsNumber)
-            //setmyReservedArrayNumber(response.data.myReservedArrayNumber)
-            setMyUpcomingLessonsNumber(response.data.myUpcomingLessonsNumber)
-     
-          } catch (error) {
-            console.error(error);
-          }
-        }
-        fetchData();
-      }, []);
-    
-
-  
+    const {updatedData,setUpdatedData,myFinishedLessonsNumber,myStudentsNumber,myUpcomingLessonsNumber,
+        isLoading,fetchedTotalEarning} = useContext(AuthContext)
 
 
     return (
@@ -73,7 +44,7 @@ function TeacherZone() {
             <div className={styles.mainTeacherZoneUpcomingLessons}>
                 <div> Upcoming Lessons  </div>
                 <div className={styles.flexBtn}>
-                <div className={styles.mainTeacherZoneStudentsSpan} >{myUpcomingLessonsNumber ? myUpcomingLessonsNumber : 0 }</div>
+                <div className={isLoading ? styles.mainTeacherZoneStudentsSpanBlur : styles.mainTeacherZoneStudentsSpan} >{myUpcomingLessonsNumber ? myUpcomingLessonsNumber : 0 }</div>
                 <Link to="/myteachingupcominglessons">
                 <div className={styles.mainTeacherZoneSchedulesBtn}>Details</div>
                 </Link>
@@ -85,7 +56,7 @@ function TeacherZone() {
             <div className={styles.mainTeacherZoneCompletedLessons}>
                 <div> Completed Lessons  </div>
                 <div className={styles.flexBtn}>
-                <div className={styles.mainTeacherZoneStudentsSpan} >{myFinishedLessonsNumber}</div>
+                <div className={isLoading ? styles.mainTeacherZoneStudentsSpanBlur : styles.mainTeacherZoneStudentsSpan}>{myFinishedLessonsNumber ? myFinishedLessonsNumber: 0}</div>
                 <Link to="/myteachinglessons">
                 <div className={styles.mainTeacherZoneSchedulesBtn}>Details</div>
                 </Link>
@@ -96,20 +67,21 @@ function TeacherZone() {
         <div className={styles.mainTeacherZoneStudents}>         
             <div> My Students </div>
             <div className={styles.flexBtn}>
-                <div className={styles.mainTeacherZoneStudentsSpan} >{myStudentsNumber}</div>
-                <Link to="/mystudents">
+                <div className={isLoading ? styles.mainTeacherZoneStudentsSpanBlur : styles.mainTeacherZoneStudentsSpan} >{myStudentsNumber? myStudentsNumber : 0}</div>
+
+                <Link to="/myStudents">
                 <div className={styles.mainTeacherZoneSchedulesBtn}>Details</div>
                 </Link>
                 </div> 
         </div>
 
         <div className={styles.mainTeacherZoneDivEarnedMoney}>
-            <div>Earned money since  {moment(user.memberDate).format('DD.MM YYYY')} </div><span className={styles.mainTeacherZoneEarnedMoneySpan}>$ 150</span>
+            <div>Earned money since  {moment(user.memberDate).format('DD.MM YYYY')} </div><span className={isLoading ? styles.mainTeacherZoneStudentsSpanBlur: styles.mainTeacherZoneEarnedMoneySpan}>$ {fetchedTotalEarning}</span>
          
 
         </div>
         <div className={styles.mainTeacherZoneDivBalance}>
-           <div>Lengua Balance </div> <span className={styles.mainTeacherZoneBalanceSpan}>$ 350</span>
+           <div>Lengua Balance </div> <span className={styles.mainTeacherZoneBalanceSpan}>$ {user.credits}</span>
         
         </div>
        

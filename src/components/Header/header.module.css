@@ -160,7 +160,7 @@ position: relative;
   transform: scale(1,0);
   transform-origin: top;
   transition: transform 500ms ease-in-out;
-  z-index:1500;
+  z-index:3500;
 
 
 }
@@ -307,6 +307,32 @@ position: relative;
   }
 }
 
+
+.confirmationCancelled {
+  left:100px;
+  z-index: 2000;
+  position: absolute;
+  padding-left: 10px;
+  width: 170px;
+  height: 60px;
+  font-size: 12px;
+  background-color: red;
+  color: white;
+  border-radius: 0px 0px 25px 0px;
+  animation: colorChangeReject 2s infinite alternate;
+}
+
+@keyframes colorChangeReject {
+  0% {
+    background-color: pink;
+  }
+  100% {
+    background-color: red;
+  }
+}
+
+
+
 .confirmationPText{
   text-align: center;
   font-size: 15px;
@@ -321,6 +347,7 @@ position: relative;
     transform: translateX(100%); /* Adjust the value to control how far it moves */
   }
 }
+
 
 
 

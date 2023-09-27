@@ -1,7 +1,7 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
-import styles from './buycredit.module.css';
+import styles from './withdraw.module.css';
 import axios from 'axios';
 import BASE_URL from "../../config";
 
@@ -11,7 +11,6 @@ export default function CheckoutForm({setCredits,credits}) {
 
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const bankTax = 2
 
 
 
@@ -19,7 +18,7 @@ export default function CheckoutForm({setCredits,credits}) {
     e.preventDefault();
   
     try {
-      const url = `${BASE_URL}/buycredits`;
+      const url = `${BASE_URL}/withdrawmoney`;
       const data = {
         credits: credits,
       };
@@ -73,7 +72,7 @@ export default function CheckoutForm({setCredits,credits}) {
       <PaymentElement id="payment-element" />
       <button disabled={isProcessing || !stripe || !elements} id="submit" className={styles.button}>
         <span id="button-text">
-          {isProcessing ? "Processing ... " : "Pay now"}
+          {isProcessing ? "Processing ... " : "Withdraw now"}
         </span>
       </button>
       {/* Show any error or success messages */}

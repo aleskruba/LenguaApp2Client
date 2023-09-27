@@ -6,15 +6,15 @@ import ChatIcon from '@mui/icons-material/Chat';
 import useAuth from '../../hooks/useAuth';
 import AuthContext from '../../context/AuthProvider';
 
-
 function Header() {
+
   const { user} = useAuth();
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const location = useLocation();
   const ulRef = useRef(null);
 
-  const {totalElements,actionNotice,readConfirmation,confirmNotification,notificationReaded} = useContext(AuthContext)
-
+  const {totalElements,actionNotice,readConfirmation,readCancelLessonConfirmation,confirmNotification,
+                                            confirmCancelLessonNotification } = useContext(AuthContext)
 
   useEffect(() => {
     setCheckboxChecked(false); // Uncheck the checkbox on route change
@@ -43,7 +43,6 @@ function Header() {
   const handleCheckboxChange = () => {
     setCheckboxChecked(!checkboxChecked); // Toggle checkbox state
   };
-
 
 
 
@@ -137,18 +136,18 @@ function Header() {
 
         </nav>
 
-    { totalElements > 0  && !actionNotice ? 
+  { user && totalElements > 0  && !actionNotice ? 
+
       <Link to='/action'>
         <div className={styles.actionRequired}>
-          <span className={styles.actionRequiredText}>Action required click here</span>
+             <span className={styles.actionRequiredText}>Action required click here</span>
         </div>
         </Link>  
    : null}
 
+{ user &&  readConfirmation?.map((note, index) => 
 
-
-{readConfirmation?.map((note, index) => (
-
+(
   <Fragment key={note._id}>
     {!note.isReadConfirmation  ? (
         note.isConfirmed &&  !note.isRejected ?(
@@ -157,7 +156,7 @@ function Header() {
           style={{ top: `calc(70px + ${index * 70}px)`, left: `30px` }}
           key={index}
           onClick={()=>confirmNotification(note._id) }
-        >
+        >   
           <span>Lesson accepted by: </span>
           <p className={styles.confirmationPText}>{note.teacherFirstName}</p>
           <p className={styles.confirmationText}>Confirm by clicking here</p>
@@ -174,10 +173,27 @@ function Header() {
           <p className={styles.confirmationText}>Confirm by clicking here</p>
         </div>
       )
-    ) : null}
+    )  : null}
   </Fragment>
 ))}
 
+{readCancelLessonConfirmation?.map((note, index) => (
+
+  <Fragment key={note._id}>
+      <div
+        className={ styles.confirmationCancelled}
+        style={{ top: `calc(70px + ${index * 70}px)`, left: `250px` }}
+        key={index}
+        onClick={()=>confirmCancelLessonNotification(note._id) }
+      >
+   
+        <span>Lesson cancelled by: </span>
+        <p className={styles.confirmationPText}>{note.studentFirstName}</p>
+        <p className={styles.confirmationText}>Confirm by clicking here</p>
+      </div>
+
+</Fragment>
+))}
 
     </div>
   );

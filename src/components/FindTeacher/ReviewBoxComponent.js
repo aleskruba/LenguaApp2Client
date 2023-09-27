@@ -1,6 +1,5 @@
 import React,{useState,useEffect,useRef, Fragment} from 'react'
 import styles from './reviewBoxComponent.module.css';
-import axios from 'axios';
 import moment from 'moment';
 
 
@@ -8,53 +7,39 @@ import moment from 'moment';
 
 function ReviewBoxComponent({reviewsRef,lessons,teacher}) {
 
-    const [arr, setArray] = useState([]);
-    const [startIndex, setStartIndex] = useState(0);
-    const [totalElements, setTotalElements] = useState(0);
-    const [lastPage, setLastPage] = useState(false);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
+    const firstNewElementRef = useRef(null);
 
-    useEffect(() => {
-
-      function fetchData() {
-          try {
-     
-            lessons && setArray((prevArray) => [...prevArray, ...lessons.slice(startIndex, startIndex + 15)]);
-          } catch (error) {
-            console.error(error);
-          }
+    const handleNextElementsFunction = () => {
+      setItemsPerPage(itemsPerPage + 15);
+      setTimeout(() => {
+        if (firstNewElementRef.current) {
+          firstNewElementRef.current.scrollIntoView({ behavior: 'smooth' });
         }
-        fetchData();
-      }, [startIndex]);
+      }, 100);
+    };
+  
+    const goToTopFunction = () => {
+      setItemsPerPage(itemsPerPage - lessons.length+ 15)
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100)
+    };
+  
 
-      useEffect(() => {
-        if (arr.length > 0 && startIndex >= totalElements - 15) {
-          setLastPage(true);
-        } else {
-          setLastPage(false);
-        }
-      }, [arr, startIndex, totalElements]);
-    
-      const handleLoadMore = () => {
-        setStartIndex((prevIndex) => prevIndex + 15);
-      };
-    
-      const goUpFunction = () => {
-        setStartIndex(0);
-        setArray([]);
-        setLastPage(false);
-      };
 
+    const isLastPage = itemsPerPage >= lessons.length;
     return (
     <Fragment>
          <div className={styles.mainTeacherProfileMainBoxReviews} ref={reviewsRef}>
         <div className={styles.ReviewTitleDiv}>    <h5 className={styles.ReviewTitle}>Reviews</h5>    </div>   
 
      
-      {lessons?.map((element, index) => { 
-            if (element.idTeacher === teacher._id)  {
+      {lessons?.slice(0, itemsPerPage).map((element, index) => { 
+            if (element.idTeacher === teacher._id )   {
         return  (
-      <div className={styles.teacherReviewsMainBox} key={index}>
+      <div className={styles.teacherReviewsMainBox} key={index} ref={index === itemsPerPage-18 ? firstNewElementRef : null}>
             <div className={styles.teacherReviewsnameAndImage}>
               <div className={styles.boxName}>
                 <p><b>{element.firstName}</b></p>
@@ -72,19 +57,19 @@ function ReviewBoxComponent({reviewsRef,lessons,teacher}) {
                 
                 )}
                         <div className={styles.innerDiv}>
-
-                      {arr.length > 15  ? 
-
-                      <Fragment>
-
-                            {lastPage ? (
-                            <button onClick={goUpFunction} className={styles.GoUpButton}>Go up</button>
+                        { lessons?.length > 10 && (
+                          <>
+                            {isLastPage ? (
+                              <button className={styles.goUp} onClick={goToTopFunction}>
+                                Go Up
+                              </button>
                             ) : (
-                            <button onClick={handleLoadMore} className={styles.LoadMoreButton}>Load More...</button>
+                              <button className={styles.goUp} onClick={handleNextElementsFunction}>
+                                load more
+                              </button>
+                            )}
+                          </>
                         )}
-                       </Fragment>
-                        :
-                          null  }
                     </div>
                  </div>
    

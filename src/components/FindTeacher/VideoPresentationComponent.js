@@ -6,15 +6,15 @@ import styles from './videoPresentationComponent.module.css';
   return (
     <div className={styles.videoDiv}>
 
-              <iframe
+             <iframe
                 className={styles.iframeVideo}
-                src={`https://www.youtube.com/embed/${teachervideo}`}
+                src={`https://www.youtube-nocookie.com//embed/${teachervideo}?enablejsapi=1&origin=https://yourwebsite.com`}
                 frameBorder="0"
                 allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
                 allowFullScreen={true} // Use camelCase attribute name
                 title="Teacher Video"
                 muted // Mute the video
-              ></iframe>
+              ></iframe> 
     </div>
   )
 }

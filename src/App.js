@@ -30,9 +30,22 @@ import SchedulePageTEST from './pages/Schedule/SchedulePageTEST';
 import MyTeachingUpcomingLessons from './pages/MyTeachingUpcomingLessons/MyTeachingUpcomingLessons';
 import Action from './pages/Action/Action';
 import FindTeachersPagination from './pages/FindTeachers/FindTeacherPagination';
+import Withdraw from './pages/Withdraw/Withdraw';
 
 export default  function App() {
 
+
+  // Inside your main JavaScript file (e.g., index.js)
+/* if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js') // Replace with the correct path to your service worker file
+    .then((registration) => {
+      console.log('Service Worker registered with scope:', registration.scope);
+    })
+    .catch((error) => {
+      console.error('Service Worker registration failed:', error);
+    });
+}
+ */
   const navigate = useNavigate();
 
   const checkAuthentication = () => {
@@ -71,6 +84,7 @@ export default  function App() {
   <Route path='/completion' element={<Completion/>} /> 
       <Route path='/test' element={<Test />} />
       <Route path='/buycredit' element={<BuyCredit/>} />
+      <Route path='/withdrawmoney' element={<Withdraw/>} />
         <Route path='/teacherzone' element={<TeacherZone/>} />
       <Route path='/studentmessages' element={<StudentMessages/>} />
       <Route path='/teachermessages' element={<TeacherMessages/>} />
@@ -91,6 +105,7 @@ export default  function App() {
         <Route path="/findteachers/:idTeacher/schedulestudent" element={<ScheduleStudent/>}  />
 
         <Route path='/action' element={<Action/>}  />
+
 
 
       <Route path='*' element={<NotFound404 />} />

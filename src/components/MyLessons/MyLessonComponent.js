@@ -1,49 +1,53 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './mylessoncomponent.module.css';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import BASE_URL from '../../config';
+import axios from 'axios';
 
-function MyLessonComponent({ element,lesson,userTeachers}) {
+function MyLessonComponent({ element,updatedLesson,setUpdatedLesson,lesson,itemsPerPage,firstNewElementRef,index}) {
 
 
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const observerRef = useRef(null);
-  const elementRef = useRef(null);
+  const [backendError,setBackendError] = useState(null)
+  const todayDate = new Date()
+  const unixTimestampMilliseconds = Date.parse(todayDate);
 
-  useEffect(() => {
-    const options = {
-      threshold: 0.9,
-    };
+  const cancelLessonFunction = async (id, billedPrice) => {
 
-    observerRef.current = new IntersectionObserver(handleIntersection, options);
+     try {
+      const url = `${BASE_URL}/cancellesson`;
+      const data = {
+        idLesson: id,
+        billedPrice: billedPrice,
+      };
+  
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      };
+  
+      const response = await axios.put(url, data, config);
+      if (response.status === 201) {   setUpdatedLesson(!updatedLesson)}        
 
-    if (observerRef.current && elementRef.current) {
-      observerRef.current.observe(elementRef.current);
+    } catch (err) {
+      if (err.message == 'Network Error') {setBackendError(err.message) }
+      setUpdatedLesson(!updatedLesson)
+
     }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
-
-  const handleIntersection = (entries) => {
-    entries.forEach((entry) => {
-      setIsIntersecting(entry.isIntersecting);
-    });
   };
-
-  const selectedTeacher = userTeachers.find(t => t._id === element.idTeacher);
-
+  
 
   return (
-/*      <Link to={{pathname:`/findteachers/${element.idTeacher}`}}  
+    <div className={
+       element.timeSlot.some(date => parseInt(date) < parseInt(unixTimestampMilliseconds)) ? 
+       `${styles.card} ${styles.past}`
+       :
+      `${styles.card} ${styles.show}`} 
+    
+    
+    ref={index === itemsPerPage-18 ? firstNewElementRef : null}>
 
-    state={{ teacher: selectedTeacher  }} 
-
-> */
-    <div className={`${styles.card} ${isIntersecting ? styles.show : ''}`} ref={elementRef}>
       <div className={styles.leftBox}>
           <div className={styles.profileImgDiv} >
              <img src={element.teacherProfile} alt="" className={styles.profileImg} />
@@ -81,17 +85,17 @@ function MyLessonComponent({ element,lesson,userTeachers}) {
   
         <div>
           
-          {lesson.isReserved && !lesson.isConfirmed && (
+          {element.isReserved && !element.isConfirmed && (
             <p className={styles.reservedLesson}>Reserved by Student</p>
           )}
 
-          {lesson.isCompleted && <p className={styles.completedLesson}>Completed lesson</p>}
+          {element.isCompleted && <p className={styles.completedLesson}>Completed lesson</p>}
 
-          {lesson.isConfirmed && !lesson.isCompleted && !lesson.completedProblem && (
+          {element.isConfirmed && !element.isCompleted && !element.completedProblem && (
             <p className={styles.confirmedLesson}>Confirmed by teacher</p>
           )}
 
-          {lesson.isConfirmed && lesson.completedProblem && (
+          {element.isConfirmed && element.completedProblem && (
             <>
               <p>PROBLEM WITH LESSON</p>
               <p>in progress....</p>
@@ -101,16 +105,23 @@ function MyLessonComponent({ element,lesson,userTeachers}) {
 
               </div>
         </div>
-        <div className={styles.buttons}>
-            <button className={styles.CancelBtn}>Cancel Lesson</button>
-            
-             <button className={styles.RebookBtn}>Rebook Lesson</button>
-        </div>
+
+        {element.timeSlot.map((date, index) => {
+            if (parseInt(date) > parseInt(unixTimestampMilliseconds)) {
+              return (
+                <div className={styles.buttons} key={index}>
+                  <button className={styles.CancelBtn} onClick={()=>cancelLessonFunction(element._id,element.billedPrice)}>Cancel Lesson</button>
+                  <button className={styles.RebookBtn}>Rebook Lesson</button>
+                </div>
+              );
+            }
+          })}
+      <div className={styles.error}>{backendError ? backendError : null}</div>
 
     </div>
     
     </div>
-/*     </Link> */
+
   );
 }
 

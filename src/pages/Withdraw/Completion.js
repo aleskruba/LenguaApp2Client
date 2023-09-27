@@ -10,7 +10,6 @@ const Component = () => {
 
   const user = useAuth()
 
-
   useEffect(() => {
     setShowCompletion(true);
   }, []);
@@ -27,14 +26,14 @@ const Component = () => {
     <div className={styles.mainDiv}>
       <div className={`${styles.completionDiv} ${showCompletion ? styles.show : ''}`}>
         <h1 className={styles.completionH1}>Thank You</h1>
-        <h1 className={styles.completionH1}>Money was deposited successfully to your card.</h1>
-        <h1 className={styles.completionH1}>Your remaining credits ${user.user?.credits}</h1>
+        <h1 className={styles.completionH1}>Your credits have been successfully updated.</h1>
+        <h1 className={styles.completionH1}>Total credits ${user.user.credits}</h1>
       </div>
 
       {showButton && (
-        <Link to="/">
+        <Link to="/findteachers">
         <div className={styles.findTeacher} >
-          <div className={styles.findTeacherButton} >Go back</div>
+          <div className={styles.findTeacherButton} >Find your teacher</div>
         </div>
         </Link>
       )}

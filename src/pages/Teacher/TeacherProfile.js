@@ -5,8 +5,6 @@ import ReviewBoxComponent from '../../components/FindTeacher/ReviewBoxComponent'
 import Modal from 'react-modal';
 import FirstMessageComponent from '../../components/FirstMessage.js/FirstMessageComponent';
 
-
-
 Modal.setAppElement('#root');
 
 function TeacherProfile() {
@@ -14,16 +12,11 @@ function TeacherProfile() {
   const reviewsRef = useRef(null); // Step 2: Create a ref
   const availabilityRef = useRef(null); // Step 2: Create a ref
   const aboutMeRef = useRef(null); // Step 2: Create a ref
-
-  
   
   const location = useLocation();
   const { teacher,lessons } = location.state; 
 
-
-
   let { idTeacher } = useParams();
-
 
   
   useEffect(() => {
@@ -186,15 +179,13 @@ const navigate = useNavigate()
         </div>
     
 
-
-
       <div className={styles.mainTeacherProfileRight}>
  
       <button className={styles.backButton} onClick={goBackToTeachers}>back to teachers</button>
  
           <iframe
                 className={styles.iframeVideo}
-                src={`https://www.youtube.com/embed/${teacher?.profileVideo}`}
+                src={`https://www.youtube.com/embed/${teacher?.profileVideo}?enablejsapi=1&origin=https://yourwebsite.com&key=AIzaSyAacVfBvuqLFggniw5_CgSfdq-M2g61_Lo`}
                 frameBorder="0"
                 allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
                 allowFullScreen={true} // Use camelCase attribute name

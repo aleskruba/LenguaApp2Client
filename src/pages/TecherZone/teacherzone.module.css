@@ -168,6 +168,13 @@
 
 }
 
+.mainTeacherZoneStudentsSpanBlur {
+    font-size: 25px;
+    margin-right: 50px;
+    color: transparent; /* Make the text transparent */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Add a shadow with blur effect */
+}
+
 .flexBtn{
     display: flex;
     flex-direction: row;

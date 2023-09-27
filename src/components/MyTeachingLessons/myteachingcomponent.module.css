@@ -30,6 +30,22 @@
     margin-top: 10px;
   }
 
+
+  .card.cancelled {
+    transform: translateX(0);
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 350px;
+    height: 100px;
+    border-radius: 10px;
+    background-color: red;
+    margin-top: 10px;
+    color:white;
+  }
+
   .leftBox{
     flex: 1.1;
     display: flex;

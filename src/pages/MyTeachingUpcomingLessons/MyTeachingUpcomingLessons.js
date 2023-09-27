@@ -1,39 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styles from './myteachingupcominglessons.module.css';
-import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
-import MyTeachingLessonFilterComponent from '../../components/MyTeachingLessons/MyTeachingLessonFilterComponent';
-import MyTeachingLessonComponent from '../../components/MyTeachingLessons/MyTeachingLessonComponent';
-import BASE_URL from '../../config';
 import MyTeachingUpcomingLessonComponent from '../../components/MyTeachingLessons/MyTeachingUpcomingLessonComponent';
+import BASE_URL from '../../config';
 import CircularProgress from '@mui/material/CircularProgress';
 
-Modal.setAppElement('#root');
 
 function MyTeachingUpcomingLessons() {
+
+
   const [arr, setArray] = useState([]);
-  const [startIndex, setStartIndex] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-  const [lastPage, setLastPage] = useState(false);
-  const [loading,setLoading] = useState(true)
-  const observerRef = useRef(null);
-
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const firstNewElementRef = useRef(null);
+  const lastElementRef = useRef(null); // Ref for the last element
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  
   const navigate = useNavigate();
-
-  const closeDialog = () => {
-    setIsOpen(false);
-    navigate('/myteachinglessons');
-  };
-
-  const openTestModal = (test) => {
-
-    setIsOpen(true);
-  };
-
-
-
 
 
   useEffect(() => {
@@ -45,67 +29,40 @@ function MyTeachingUpcomingLessons() {
         const response = await axios.get(url, { withCredentials: true });
         const lessons = response.data.myLessonArray;
         setTotalElements(lessons.length);
-        setArray((prevArray) => [...prevArray, ...lessons.slice(startIndex, startIndex + 15)]);
-        setLoading(false)
+        setArray(lessons);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     }
     fetchData();
-  }, [startIndex]);
+  }, []);
 
-
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    };
-
-    const handleIntersection = (entries) => {
-      const target = entries[0];
-      if (target.isIntersecting) {
-        handleLoadMore();
+  const handleNextElementsFunction = () => {
+    setItemsPerPage(itemsPerPage + 15);
+    setTimeout(() => {
+      if (firstNewElementRef.current) {
+        firstNewElementRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-    };
+    }, 100);
+  };
+  
 
-    observerRef.current = new IntersectionObserver(handleIntersection, options);
-
-    if (observerRef.current) {
-      observerRef.current.observe(document.querySelector('#observerElement'));
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []); // Empty dependency array to only add observer once
-
-  useEffect(() => {
-    if (arr.length > 0 && startIndex >= totalElements - 15) {
-      setLastPage(true);
-    } else {
-      setLastPage(false);
-    }
-  }, [arr, startIndex, totalElements]);
-
-  const handleLoadMore = () => {
-    setStartIndex((prevIndex) => prevIndex + 15);
+  const goToTopFunction = () => {
+    setItemsPerPage(itemsPerPage - arr.length+ 15)
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100)
   };
 
-  const goUpFunction = () => {
-    setStartIndex(0);
-    setArray([]);
-    setLastPage(false);
-  };
+  const isLastPage = itemsPerPage >= totalElements;
 
   return (
   
-  <div className={isOpen ? styles.mainContainerFixed : styles.mainContainer}>
+  <div className={styles.mainContainer}>
        <div className={styles.mainDiv}>
 
-       {loading ?  
+       {isLoading ?  
        
            
        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px', height: '100vh' }}>
@@ -113,29 +70,43 @@ function MyTeachingUpcomingLessons() {
      </div>
        
        :  <>
-        {arr.map((element, index) => {
-          
-          const lesson = arr[index];
-     
-          return <MyTeachingUpcomingLessonComponent element={element}  key={index} lesson={lesson}/>;
+              {arr.slice(0, itemsPerPage).map((element, index) => {
+                const lesson = arr[index];
+    
+          if (true) {
+          return <MyTeachingUpcomingLessonComponent                   
+                                  element={element}
+                                  key={element._id}
+                                  index={index}
+                                  lesson={lesson}
+                                  firstNewElementRef={index === 0 ? firstNewElementRef : null}
+                                  itemsPerPage={itemsPerPage}
+                                  lastElementRef={index === arr.length - 1 ? lastElementRef : null} />;
+                }
         })}
 
 </>
       }
 
-        <div id="observerElement" ref={observerRef} />
-        {(lastPage && arr.length > 10) ? (
-          <button onClick={goUpFunction} className={styles.goUp}>Go up</button>
-        ) : ''}
-
-      </div>
-
-      <div className={styles.filters} onClick={openTestModal}>Filters</div>
-      <div className={styles.filtersBack}  onClick={()=>navigate("/teacherzone")}>Back</div>
+        {!isLoading && arr?.length > 10 && (
+                  <>
+                    {isLastPage ? (
+                      <button className={styles.goUp} onClick={goToTopFunction}>
+                        Go Up
+                      </button>
+                    ) : (
+                      <button className={styles.goUp} onClick={handleNextElementsFunction}>
+                        next 15....
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+              <div className={styles.filtersBack} onClick={() => navigate('/teacherzone')}>
+                Back
+              </div>
       
-             <Modal isOpen={isOpen} onRequestClose={closeDialog}>
-               <MyTeachingLessonFilterComponent closeDialog={closeDialog} arr={arr}/>
-      </Modal>
+
   </div>  
 
   );

@@ -11,13 +11,12 @@ function Calendar() {
   const [showHours, setShowHours] = useState(false);
   const [loadingReservedSlots, setLoadingReservedSlots] = useState(false);
   const [teacherreservedSlots, setTeacherreservedSlots] = useState(null);
-  const { savedSlot, setSavedSlot } = useContext(AuthContext);
-  console.log(savedSlot)
-
-  const [updateLessonArray, setUpdateLessonArray] = useState(null);
-  const [fetchedLessonArray, setFetchedLessonArray] = useState(null);
+   const [fetchedLessonArray, setFetchedLessonArray] = useState(null);
   const [selectedCalendarDay, setSelectedCalendarDay] = useState(null); // New state for selected day
 
+
+  const {setSavedSlot,auth } = useContext(AuthContext);
+ 
   useEffect(() => {
     setLoadingReservedSlots(true);
     const fetchData = async () => {
@@ -106,6 +105,7 @@ function Calendar() {
                 setShowHours={setShowHours}
                 teacherreservedSlots={teacherreservedSlots}
                 fetchedLessonArray={fetchedLessonArray}
+                auth={auth}
               />
             )}
           </div>
@@ -218,7 +218,7 @@ function Month({ month, selectedDay, onDayClick, teacherreservedSlots, selectedC
 
 
 
-function Hours({ selectedDay, showHours, setShowHours,teacherreservedSlots,fetchedLessonArray }) {
+function Hours({ selectedDay, showHours, setShowHours,teacherreservedSlots,fetchedLessonArray,auth }) {
   const { savedSlot, setSavedSlot } = useContext(AuthContext);
 
   
@@ -363,7 +363,12 @@ function Hours({ selectedDay, showHours, setShowHours,teacherreservedSlots,fetch
                       <div className={styles.reservedBubble}>Reserved</div>
                       <div className={styles.reservedBubbleStudent}>
                           {fetchedLessonArray.map((lesson, index) => (
-                            <Fragment key={index}>
+                                
+                                <Fragment key={index}>
+                                        
+                                { lesson.idTeacher === auth.user._id &&
+
+                            <Fragment>
                               {lesson.timeSlot.includes(hoverName.toString()) && (
                                 <div className={styles.hoverDiv}>
                                   <p key={lesson.id}>{lesson.studentFirstName}</p>
@@ -373,6 +378,10 @@ function Hours({ selectedDay, showHours, setShowHours,teacherreservedSlots,fetch
                                 </div>
                               )}
                             </Fragment>
+
+                              }
+                        </Fragment>
+
                           ))}
                         </div>
 
@@ -439,6 +448,10 @@ function Hours({ selectedDay, showHours, setShowHours,teacherreservedSlots,fetch
                       <div className={styles.reservedBubbleStudent}>
                           {fetchedLessonArray.map((lesson, index) => (
                             <Fragment key={index}>
+                                                              
+                            { lesson.idTeacher === auth.user._id &&
+
+                            <Fragment>
                               {lesson.timeSlot.includes(hoverName.toString()) && (
                                 <div className={styles.hoverDiv}>
                                   <p key={lesson.id}>{lesson.studentFirstName}</p>
@@ -448,6 +461,9 @@ function Hours({ selectedDay, showHours, setShowHours,teacherreservedSlots,fetch
                                 </div>
                               )}
                             </Fragment>
+                    
+                             }
+                         </Fragment>
                           ))}
                         </div>
 

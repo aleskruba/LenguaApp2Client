@@ -43,7 +43,6 @@ function ForgottenPassword() {
 
     const onSubmit = async (values) => {
       setBackendError('');
-      console.log(values.email);
       setemailSOS(values.email)
     
       try {
@@ -65,7 +64,6 @@ function ForgottenPassword() {
 
 
         if (responseData.status) {
-          console.log(responseData.status);
           setSendedOtp(false);
           setEmail(values.email);
           values.email = ''; // Clear the email field directly
@@ -102,7 +100,6 @@ function ForgottenPassword() {
 
       const submitCode = async (e) => {
         e.preventDefault();
-        console.log('code:', code);
       
         try {
           const url = `${BASE_URL}/verifyOTP`;
@@ -119,8 +116,7 @@ function ForgottenPassword() {
 
               const response = await axios.post(url, data, config);
               const responseData = response.data;
-              console.log(responseData.message)
-                  if (responseData.message === 'OTP verified successfully!') {
+                     if (responseData.message === 'OTP verified successfully!') {
         // Navigate to the resetpassword page if OTP is verified
         navigate("/resetpassword", {
           state: { email: emailSOS }, // Pass the email in the location state

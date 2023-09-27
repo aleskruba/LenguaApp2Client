@@ -1,136 +1,111 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styles from './myteachinglessons.module.css';
-import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
-import MyTeachingLessonFilterComponent from '../../components/MyTeachingLessons/MyTeachingLessonFilterComponent';
 import MyTeachingLessonComponent from '../../components/MyTeachingLessons/MyTeachingLessonComponent';
 import BASE_URL from '../../config';
 import CircularProgress from '@mui/material/CircularProgress';
 
-Modal.setAppElement('#root');
 
 function MyTeachingLessons() {
-  const [arr, setArray] = useState([]);
-  const [startIndex, setStartIndex] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
-  const [lastPage, setLastPage] = useState(false);
-  const observerRef = useRef(null);
-  const [loading,setLoading] = useState(true)
-  const [isOpen, setIsOpen] = useState(false);
+
+
   const navigate = useNavigate();
 
-  const closeDialog = () => {
-    setIsOpen(false);
-    navigate('/myteachinglessons');
-  };
 
-  const openTestModal = (test) => {
+  const [arr, setArray] = useState([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const firstNewElementRef = useRef(null);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-    setIsOpen(true);
-  };
 
 
   useEffect(() => {
-
-    const url = `${BASE_URL}/myFinishedTeachingLessons`
+    const url = `${BASE_URL}/myFinishedTeachingLessons`;
 
     async function fetchData() {
       try {
         const response = await axios.get(url, { withCredentials: true });
         const lessons = response.data.myLessonArray;
         setTotalElements(lessons.length);
-        setArray((prevArray) => [...prevArray, ...lessons.slice(startIndex, startIndex + 15)]);
-        setLoading(false)
+        setArray(response.data.myLessonArray);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     }
     fetchData();
-  }, [startIndex]);
+  }, []);
 
-
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    };
-
-    const handleIntersection = (entries) => {
-      const target = entries[0];
-      if (target.isIntersecting) {
-        handleLoadMore();
+  const handleNextElementsFunction = () => {
+    setItemsPerPage(itemsPerPage + 15);
+    setTimeout(() => {
+      if (firstNewElementRef.current) {
+        firstNewElementRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-    };
-
-    observerRef.current = new IntersectionObserver(handleIntersection, options);
-
-    if (observerRef.current) {
-      observerRef.current.observe(document.querySelector('#observerElement'));
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []); // Empty dependency array to only add observer once
-
-  useEffect(() => {
-    if (arr.length > 0 && startIndex >= totalElements - 15) {
-      setLastPage(true);
-    } else {
-      setLastPage(false);
-    }
-  }, [arr, startIndex, totalElements]);
-
-  const handleLoadMore = () => {
-    setStartIndex((prevIndex) => prevIndex + 15);
+    }, 100);
   };
 
-  const goUpFunction = () => {
-    setStartIndex(0);
-    setArray([]);
-    setLastPage(false);
+  const goToTopFunction = () => {
+    setItemsPerPage(itemsPerPage - arr.length+ 15)
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100)
   };
+
+  const isLastPage = itemsPerPage >= totalElements;
 
   return (
-  
-  <div className={isOpen ? styles.mainContainerFixed : styles.mainContainer}>
-       <div className={styles.mainDiv}>
+    <div className={styles.mainContainer}>
+      <div className={styles.mainDiv}>
+      
+      
+        {isLoading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px', height: '100vh' }}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <>
+            {arr.slice(0, itemsPerPage).map((element, index) => {
+              const lesson = arr[index];
 
-       {loading ?
-       
-       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px', height: '100vh' }}>
-       <CircularProgress />
-     </div>
-       
-       :  <>
-        {arr.map((element, index) => {
-          
-          const lesson = arr[index];
-     
-          return <MyTeachingLessonComponent element={element}  key={index} lesson={lesson}/>;
-        })}
+              return (
+                <MyTeachingLessonComponent
+                  element={element}
+                  key={element._id}
+                  index={index}
+                  lesson={lesson}
+                  firstNewElementRef={index === 0 ? firstNewElementRef : null}
+                  itemsPerPage={itemsPerPage}
+                  />
+              );
+            })}
+          </>
+        )}
+        <div/>
 
-</>
-      }
-        <div id="observerElement" ref={observerRef} />
-        {(lastPage && arr.length > 10) ? (
-          <button onClick={goUpFunction} className={styles.goUp}>Go up</button>
-        ) : ''}
 
+        {!isLoading && arr?.length > 10 && (
+          <>
+            {isLastPage ? (
+              <button className={styles.goUp} onClick={goToTopFunction}>
+                Go Up
+              </button>
+            ) : (
+              <button className={styles.goUp} onClick={handleNextElementsFunction}>
+                next 15....
+              </button>
+            )}
+          </>
+        )}
       </div>
 
-      <div className={styles.filters} onClick={openTestModal}>Filters</div>
-      <div className={styles.filtersBack}  onClick={()=>navigate("/teacherzone")}>Back</div>
-      
-             <Modal isOpen={isOpen} onRequestClose={closeDialog}>
-               <MyTeachingLessonFilterComponent closeDialog={closeDialog} arr={arr}/>
-      </Modal>
-  </div>  
 
+      <div className={styles.filtersBack} onClick={() => navigate('/teacherzone')}>
+        Back
+      </div>
+    </div>
   );
 }
 

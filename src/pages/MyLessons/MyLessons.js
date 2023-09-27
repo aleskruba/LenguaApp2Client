@@ -8,18 +8,21 @@ import MyLessonsFilterComponent from '../../components/MyLessons/MyLessonsFilter
 import BASE_URL from '../../config';
 import CircularProgress from '@mui/material/CircularProgress'
 
-Modal.setAppElement('#root');
 
 function MyLessons() {
+
+  const navigate = useNavigate();
+
   const [arr, setArray] = useState([]);
-  const [startIndex, setStartIndex] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
-  const [lastPage, setLastPage] = useState(false);
-  const observerRef = useRef(null);
-  const [loading,setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   const [userTeachers,setUserTeachers] = useState(null)
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
+  const [updatedLesson,setUpdatedLesson] = useState(false)
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalElements, setTotalElements] = useState(0);
+
+  const observerRef = useRef(null);  
+  const firstNewElementRef = useRef(null);
 
   const closeDialog = () => {
     setIsOpen(false);
@@ -27,7 +30,6 @@ function MyLessons() {
   };
 
   const openTestModal = (test) => {
-
     setIsOpen(true);
   };
 
@@ -40,89 +42,90 @@ function MyLessons() {
       try {
         const response = await axios.get(url, { withCredentials: true });
         const lessons = response.data.myLessonArray;
-        setTotalElements(lessons.length);
         setUserTeachers(response.data.myTeachers)
-        setArray((prevArray) => [...prevArray, ...lessons.slice(startIndex, startIndex[startIndex -1])]);
-        setLoading(false)
+        setTotalElements(lessons.length);
+        setArray(lessons.reverse());
+        setIsLoading(false)
       } catch (error) {
         console.error(error);
       }
     }
     fetchData();
-  }, [startIndex]);
+  }, [updatedLesson]);
 
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    };
 
-    const handleIntersection = (entries) => {
-      const target = entries[0];
-      if (target.isIntersecting) {
-      //  handleLoadMore();
+  const handleNextElementsFunction = () => {
+    setItemsPerPage(itemsPerPage + 15);
+    setTimeout(() => {
+      if (firstNewElementRef.current) {
+        firstNewElementRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-    };
-
-    observerRef.current = new IntersectionObserver(handleIntersection, options);
-
-    if (observerRef.current) {
-      observerRef.current.observe(document.querySelector('#observerElement'));
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []); // Empty dependency array to only add observer once
-
-  useEffect(() => {
-    if (arr.length > 0 && startIndex >= totalElements ) {
-      setLastPage(true);
-    } else {
-      setLastPage(false);
-    }
-  }, [arr, startIndex, totalElements]);
-
-  const handleLoadMore = () => {
-    setStartIndex((prevIndex) => prevIndex + 15);
+    }, 100);
   };
 
-  const goUpFunction = () => {
-    window.scrollTo(0, 0);
-    setStartIndex(0);
-    //setArray([]);
-    //setLastPage(false);
+  const goToTopFunction = () => {
+    setItemsPerPage(itemsPerPage - arr.length+ 15)
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100)
   };
+
+  const isLastPage = itemsPerPage >= totalElements;
 
   return (
 <div className={isOpen ? styles.mainContainerFixed : styles.mainContainer}>
        <div className={styles.mainDiv}>
 
-       {loading ? 
+       {isLoading ? 
        
        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px', height: '100vh' }}>
 <CircularProgress />
 </div>
        
        :  <>
-{arr
-  .sort((a, b) => new Date(b.reservedByStudentcreatedAt) - new Date(a.reservedByStudentcreatedAt))
-  .map((element, index) => {
-    const lesson = arr[index];
-    return <MyLessonComponent element={element} key={index} lesson={lesson} userTeachers={userTeachers}/>;
-  })}
+    {arr.slice(0, itemsPerPage).map((element, index) => {
+    if (!(element.isCancelled)) {
+      const lesson = arr[index];
+
+      return (
+        <MyLessonComponent
+          userTeachers={userTeachers}
+          updatedLesson={updatedLesson}
+          setUpdatedLesson={setUpdatedLesson}
+          element={element}
+          key={element._id}
+          index={index}
+          lesson={lesson}
+          firstNewElementRef={index === 0 ? firstNewElementRef : null}
+          itemsPerPage={itemsPerPage}
+        />
+      );
+    }
+    return null; 
+  })
+}
+
 
 
 </>
       }
 
         <div id="observerElement" ref={observerRef} />
-        {(arr.length > 15) ? (
-          <button onClick={goUpFunction} className={styles.goUp}>Go up</button>
-        ) : ''}
+
+        {!isLoading && arr?.length > 10 && (
+          <>
+            {isLastPage ? (
+              <button className={styles.goUp} onClick={goToTopFunction}>
+                Go Up
+              </button>
+            ) : (
+              <button className={styles.goUp} onClick={handleNextElementsFunction}>
+                next 15....
+              </button>
+            )}
+          </>
+        )}
+
 
       </div>
 

@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react'
-import styles from './buycredit.module.css';
+import styles from './withdraw.module.css';
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 
 
-function BuyCredit(props) {
+function Withdraw(props) {
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
@@ -40,8 +40,7 @@ function BuyCredit(props) {
 
   return (
      <div className={styles.buyCreditMainDiv}>
-      <h1 className={styles.title}>Buy Credits Here</h1>
-      <h1 className={styles.title}>Choose your amount</h1>
+      <h1 className={styles.title}>Please select the amount you wish to withdraw</h1>
 
       <h1 className={styles.titleAmount}>${credits}</h1>
 
@@ -67,4 +66,4 @@ function BuyCredit(props) {
   )
 }
 
-export default BuyCredit
+export default Withdraw

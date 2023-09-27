@@ -126,12 +126,11 @@ state={{ teacher: selectedTeacher  }}
  
 
            <div className={styles.rightImgDiv}>
+              <div className={styles.imageDiv}>
               <img src={filteredTeacher.teacherProfile}alt="" className={styles.profileImg} />
+              </div>
             </div>
-            <div className={styles.rightLanguageDiv}>
-              <h1 className={styles.rightLanguagDivH1}>{filteredTeacher.language}</h1>
-            </div>
-
+       
             <div className={styles.rightNameDiv}>
               <h1 className={styles.rightNameDivH1}>{filteredTeacher.name}</h1>
                   </div>

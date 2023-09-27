@@ -3,8 +3,8 @@ import styles from './findTeacherComponent.module.css';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 function FindTeacherComponent({ teacher, lessons, teachervideo }) {
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const observerRef = useRef(null);
+  //const [isIntersecting, setIsIntersecting] = useState(false);
+  //const observerRef = useRef(null);
   const elementRef = useRef(null);
 
   let count = 0;
@@ -20,7 +20,7 @@ function FindTeacherComponent({ teacher, lessons, teachervideo }) {
       ? teacher.profileText.slice(0, 150) + "..."
       : teacher.profileText;
 
-  useEffect(() => {
+/*   useEffect(() => {
     const options = {
       threshold: 0.9,
     };
@@ -43,7 +43,7 @@ function FindTeacherComponent({ teacher, lessons, teachervideo }) {
       setIsIntersecting(entry.isIntersecting);
     });
   };
-
+ */
   return (
     <div className={styles.mainTeacherBox} ref={elementRef}>
       <div className={styles.leftSide}>

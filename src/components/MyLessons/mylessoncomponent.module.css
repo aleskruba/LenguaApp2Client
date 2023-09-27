@@ -28,6 +28,23 @@
     margin-top: 10px;
   }
 
+  .card.past{
+
+    transform: translateX(0);
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 350px;
+    border-radius: 10px;
+    background-color: lightgreen;
+    margin-top: 10px;
+  }
+
+
+
+
   .leftBox{
     flex: 0.8;
     display: flex;
@@ -117,11 +134,12 @@
   }
 
   .confirmedLesson{
-    background-color: lightgreen;
+    
   }
 
   .completedLesson{
-    background-color: green;
+   
+    color: white;
   }
 
 .buttons{
@@ -139,15 +157,34 @@
   border-radius: 10px;
   background-color: red;
   color: white;
+  cursor: pointer;
+}
+
+
+.CancelBtn:hover{
+  background-color: rgb(183, 75, 75);
+
 }
 
 .RebookBtn{
+  cursor: pointer;
   width: 110px;
   height: 25px;
   border-radius: 10px;
   background-color: green;
   color: white;
 }
+
+.RebookBtn:hover{
+  background-color: lightgreen;
+  color: black;
+}
+
+
+.error{
+color: red;
+}
+
 
   @media (max-width: 767px) {
     .card {

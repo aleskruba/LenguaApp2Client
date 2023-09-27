@@ -51,8 +51,7 @@ function ResetPassword() {
 
   const onSubmit = async (values) => {
     setBackendError("");
-    console.log(values.password);
-
+ 
     try {
       const url = `${BASE_URL}/resetpassword`;
             const data = {
