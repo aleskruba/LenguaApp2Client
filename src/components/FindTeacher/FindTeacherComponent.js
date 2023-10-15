@@ -2,10 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import styles from './findTeacherComponent.module.css';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-function FindTeacherComponent({ teacher, lessons, teachervideo }) {
-  //const [isIntersecting, setIsIntersecting] = useState(false);
-  //const observerRef = useRef(null);
-  const elementRef = useRef(null);
+function FindTeacherComponent({ teacher, lessons, lastElement,teachersArray,index,GoUpFunction }) {
+
 
   let count = 0;
 
@@ -20,32 +18,8 @@ function FindTeacherComponent({ teacher, lessons, teachervideo }) {
       ? teacher.profileText.slice(0, 150) + "..."
       : teacher.profileText;
 
-/*   useEffect(() => {
-    const options = {
-      threshold: 0.9,
-    };
-
-    observerRef.current = new IntersectionObserver(handleIntersection, options);
-
-    if (observerRef.current && elementRef.current) {
-      observerRef.current.observe(elementRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
-
-  const handleIntersection = (entries) => {
-    entries.forEach((entry) => {
-      setIsIntersecting(entry.isIntersecting);
-    });
-  };
- */
   return (
-    <div className={styles.mainTeacherBox} ref={elementRef}>
+    <div className={styles.mainTeacherBox}    ref={index % 5 === 0 ? lastElement : null}>
       <div className={styles.leftSide}>
         <div className={styles.leftTopSide}>
           <div className={styles.leftImg}>
@@ -87,6 +61,9 @@ function FindTeacherComponent({ teacher, lessons, teachervideo }) {
         </div>
       </div>
     </div>
+
+
+
   );
 }
 

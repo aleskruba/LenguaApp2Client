@@ -62,9 +62,9 @@ const navigate = useNavigate ()
 
       // Remove the confirmed lesson from the displayed lessons
       //removeFromDisplayedLessons(ID);
-      setConfirmRejectState(!confirmRejectState)
       removeFromDisplayedLessons(ID)
       setLoadingConfirm(false)
+      //setConfirmRejectState(!confirmRejectState)
       if (totalElements <= 1) {
         setActionNotice(true)
         navigate('/')
@@ -94,9 +94,9 @@ const navigate = useNavigate ()
 
       // Remove the confirmed lesson from the displayed lessons
       //removeFromDisplayedLessons(ID);
-      setConfirmRejectState(!confirmRejectState)
       removeFromDisplayedLessons(ID)
       setLoadingConfirm(false)
+      //setConfirmRejectState(!confirmRejectState)
       if (totalElements <= 1) {
         setActionNotice(true)
         navigate('/')
@@ -108,6 +108,8 @@ const navigate = useNavigate ()
   };
   
   return (
+    <>
+    {!loadingConfirm  && !loading? 
     <div className={`${styles.card} ${isIntersecting ? styles.show : ''}`} ref={elementRef}>
       <div className={styles.leftBox}>
           <div className={styles.profileImgDiv} >
@@ -130,16 +132,20 @@ const navigate = useNavigate ()
               );
             })}
           </div>
-  {!loadingConfirm  && !loading? <> 
+  
         <div className={styles.rightBoxLessons}>
         <button className={styles.confirmButton} onClick={()=>confirmLessonFunction(element._id)}>Confirm</button>  
         
         
         <button className={styles.rejectLesson} onClick={()=>rejectLessonFunction(element._id)}>Reject</button>
        </div>
-       </> : <p>wait a moment.....</p>}
+       
         </div>
     </div>
+    
+   : <p>wait a moment.....</p>}
+
+</>
   );
 }
 

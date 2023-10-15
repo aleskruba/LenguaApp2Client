@@ -79,6 +79,22 @@ a {
   margin-top: 50px;
 }
 
+.goUpBtn{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 150px;
+  height: 25px; 
+  background-color: gray;
+  color: white;
+  border-radius: 10px;
+}
+
+
+.goUpBtn:hover{
+  background-color: lightgray;
+  color: black;
+}
+
 
 @media only screen and (max-width: 1310px) {
 .videoDiv{

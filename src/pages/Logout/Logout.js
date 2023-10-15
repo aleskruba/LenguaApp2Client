@@ -6,16 +6,17 @@ import BASE_URL from '../../config';
 
 function Logout() {
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth,setUserDataFetched ,setMyStudentsNumber} = useContext(AuthContext);
 
   useEffect(() => {
     // Function to perform the logout API request
     const logoutUser = async () => {
       try {
         await axios.get(`${BASE_URL}/logout`, { withCredentials: true });
-
+        setUserDataFetched(false)
+        setMyStudentsNumber(0)
         setAuth(null);
-
+     
         navigate('/');
       } catch (err) {
         console.log(err);

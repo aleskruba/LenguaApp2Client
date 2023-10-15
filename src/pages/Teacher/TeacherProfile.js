@@ -3,7 +3,7 @@ import styles from './teacherprofile.module.css';
 import { Link,useParams,useNavigate,useLocation } from 'react-router-dom';
 import ReviewBoxComponent from '../../components/FindTeacher/ReviewBoxComponent';
 import Modal from 'react-modal';
-import FirstMessageComponent from '../../components/FirstMessage.js/FirstMessageComponent';
+import FirstMessageComponent from '../../components/FirstMessage/FirstMessageComponent';
 
 Modal.setAppElement('#root');
 
@@ -203,7 +203,9 @@ const navigate = useNavigate()
           <FirstMessageComponent isOpen={isOpen}
                               openTestModal={openTestModal}
                               closeDialog={closeDialog}
-                              setIsOpen={setIsOpen} />
+                              setIsOpen={setIsOpen} 
+                              idTeacher={idTeacher}
+                              />
       </Modal>
       </div>
     </div>

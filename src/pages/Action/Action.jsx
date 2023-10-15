@@ -115,7 +115,7 @@ useEffect(()=>{
 </div>
 
 
-:  <>  {!loadingConfirm? <>
+:  <>  {!(loadingConfirm && loadingConfirm) ? <>
       {arr?.reverse().map((element, index) => {
 
     const countCompletedLessons = lessons.reduce((count, lesson) => {
@@ -137,7 +137,7 @@ useEffect(()=>{
                                   removeFromDisplayedLessons={removeFromDisplayedLessons}/>;
       })}
       
-            {completedLessonsArray?.reverse().map((element, index) => {
+            {completedLessonsArray?.map((element, index) => {
 
 
               return <MyActionConfirmLessonComponent element={element} 

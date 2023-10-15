@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './findteachers.module.css';
 import FindTeacherComponent from '../../components/FindTeacher/FindTeacherComponent';
@@ -10,54 +10,32 @@ import AuthContext from '../../context/AuthProvider';
 
 function FindTeachers() {
 
-  
+  const { auth,  lessons,  teachersArray } = useContext(AuthContext);
  
   const [currentPage, setCurrentPage] = useState(1); // Current page number
-  const [teachersPerPage, setTeachersPerPage] = useState(5); // Number of teachers to display per page
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [selectedTeacherType, setSelectedTeacherType] = useState(null);
   const [sliderValue, setSliderValue] = useState([5, 30]);
   const [teachervideo, setTeacherVideo] = useState(null);
+  const [displayedTeachers, setDisplayedTeachers] = useState([]);
+  const [page, setPage] = useState(5);
+  const [goUp, setGoUp] = useState(false);
 
-  const observerRef = useRef(null);
-  const { auth,  lessons,  teachersArray } = useContext(AuthContext);
+ 
+  const lastElement = useRef();
 
 
-
-
-/*   useEffect(() => {
-    const options = {
-      threshold: 0.9,
-    };
-
-    observerRef.current = new IntersectionObserver(handleIntersection, options);
-
-    if (observerRef.current) {
-      observerRef.current.observe(document.querySelector('#observerElement'));
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []); // Empty dependency array to only add observer once
- */
-/*   const handleIntersection = (entries) => {
-    const target = entries[0];
-    if (target.isIntersecting) {
-      handleLoadMoreTeachers();
-    }
+  const GoUpFunction = () => {
+    setDisplayedTeachers([])
+    setPage(5);
+    setGoUp(!goUp)
+    window.scrollTo(0, 0); // Scroll to the top of the page
   };
- */
-  // Function to load more teachers when the last teacher is in view
-/*   const handleLoadMoreTeachers = () => {
-    setTeachersPerPage((prevPerPage) => prevPerPage + 5);
-  };
- */
-  // Filtering logic
+
+  let filteredData = [...teachersArray];
+
   useEffect(() => {
-    let filteredData = [...teachersArray];
+   
 
     if (selectedLanguage) {
       filteredData = filteredData.filter((teacher) =>
@@ -73,50 +51,49 @@ function FindTeachers() {
       (teacher) => parseInt(teacher.tax) >= sliderValue[0] && parseInt(teacher.tax) <= sliderValue[1]
     );
 
-    // Update the current page when filtering
     setCurrentPage(1);
 
-    // Update the displayed teachers based on the current page and teachers per page
-    const startIndex = (currentPage - 1) * teachersPerPage;
-    const endIndex = startIndex + teachersPerPage;
+    const startIndex = (currentPage - 1) * page;
+    const endIndex = startIndex + page;
     const displayedTeachers = filteredData.slice(startIndex, endIndex);
 
-    // Set the displayed teachers as the current page's content
     setDisplayedTeachers(displayedTeachers);
-  }, [selectedLanguage, selectedTeacherType, sliderValue, currentPage, teachersArray, teachersPerPage]);
+  }, [selectedLanguage, selectedTeacherType, sliderValue, currentPage, teachersArray, page]);
 
-  const [displayedTeachers, setDisplayedTeachers] = useState([]); // Displayed teachers on the current page
 
-  // Function to handle page change
-/*   const handlePageChange = (page) => {
-    setCurrentPage(page);
 
-    // Update the number of teachers per page if lastTeacherRef is not null
-    if (observerRef.current) {
-      setTeachersPerPage(10);
+  
+  const loadMoreData = () => {
+    if (
+      lastElement.current &&
+      lastElement.current.getBoundingClientRect().bottom <= window.innerHeight
+    ) {
+      // When you reach the last element, load more data
+      setPage((prevPage) => prevPage + 2);
     }
   };
- */
 
-const isLastPage = teachersPerPage > displayedTeachers.length;
+  useEffect(() => {
+    if ( displayedTeachers.length <= teachersArray.length) {
+      const handleScroll = () => {
+        loadMoreData();
+      };
 
- 
-  const handleNextElementsFunction = () => {
-    setTeachersPerPage(teachersPerPage + 5);
-    setTimeout(() => {
-      if (observerRef.current) {
-        observerRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
-  };
+      window.addEventListener('scroll', handleScroll);
 
-  const goToTopFunction = () => {
-    setTeachersPerPage(5)
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100)
-  };
+      return () => {
+        // Remove the event listener when the component unmounts
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [goUp]);
 
+
+
+  useEffect(() => {
+    setDisplayedTeachers([...filteredData].slice(0, page));
+
+  }, [ page,goUp]);
 
   return (
     <div className={styles.findTeacherTop}>
@@ -137,10 +114,10 @@ const isLastPage = teachersPerPage > displayedTeachers.length;
       <div className={styles.mainContainer}>
         <div className={styles.container}>
           {displayedTeachers.length > 0 ? (
-            displayedTeachers.slice(0, teachersPerPage).map((teacher, index) => (
+            displayedTeachers.map((teacher, index) => (
               auth.user?._id !== teacher._id && (
+                <Fragment key={index}>
                 <Link
-                  key={index}
                   to={`/findteachers/${teacher._id}`}
                   state={{ teacher: teacher, lessons:lessons }}
                   className={styles.findTeacherComponent}
@@ -150,33 +127,32 @@ const isLastPage = teachersPerPage > displayedTeachers.length;
                     teacher={teacher}
                     lessons={lessons}
                     teachervideo={teachervideo}
+                    lastElement={lastElement}
+                    teachersArray={teachersArray}
+                    index={index}
+                    GoUpFunction={GoUpFunction}
                   />
                 </Link>
+
+             </Fragment>
               )
             ))
           ) : (
-            <div className={styles.noteacher}></div>
+            <div className={styles.noteacher}>
+              {filteredData.length > 0 ? <p>no teachers ... </p> :
+              <p>wait please ... </p> } 
+              
+              </div>
           )}
 
-{displayedTeachers?.length >= 5 && (
-          <>
-            {isLastPage ? (
-              <button className={styles.goUp} onClick={goToTopFunction}>
-                Go Up
-              </button>
-            ) : (
-              <button className={styles.goUp} onClick={handleNextElementsFunction}>
-                next 15....
-              </button>
-            )}
-          </>
-        )}
-          
+
+{filteredData.length > 0 &&
+                 <div>
+                              <button className={styles.goUpBtn} onClick={() => GoUpFunction()}>Go Up</button>
+             
+                  
+                </div> }
         </div>
-
-        <div id="observerElement" />
-
-
       </div>
     </div>
   );

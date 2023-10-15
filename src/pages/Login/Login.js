@@ -30,7 +30,7 @@ const initialValues = {
 
 function Login() {
 
-  const {auth, setAuth } = useContext(AuthContext);
+  const {auth, setAuth,setUserDataFetched } = useContext(AuthContext);
   const navigate = useNavigate();
   useEffect(() => {
     if (auth.user) {
@@ -68,7 +68,7 @@ function Login() {
           jwt: responseData.accessToken,
           refreshToken: responseData.refreshToken,
         });
-  
+        setUserDataFetched(true);
         navigate('/');
       }
     } catch (err) {

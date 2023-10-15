@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useContext} from 'react';
 import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import Profile from './pages/Profile/Profile';
@@ -33,6 +33,8 @@ import FindTeachersPagination from './pages/FindTeachers/FindTeacherPagination';
 import Withdraw from './pages/Withdraw/Withdraw';
 
 export default  function App() {
+
+  
 
 
   // Inside your main JavaScript file (e.g., index.js)
@@ -71,6 +73,8 @@ export default  function App() {
     <Route path='/signup' element={<SignUp />} />   
     <Route path='/login' element={<Login />} />  
     <Route path='/forgottenpassword' element={<ForgottenPassword />} /> 
+
+
     <Route path='/' element={<Layout />}>  
     <Route index element={<Home />}/> 
     <Route path='/completion' element={<Completion/>} /> 
@@ -81,7 +85,7 @@ export default  function App() {
 
     
   <Route element={<RequireAuth />}>
-  <Route path='/completion' element={<Completion/>} /> 
+   <Route path='/completion' element={<Completion/>} /> 
       <Route path='/test' element={<Test />} />
       <Route path='/buycredit' element={<BuyCredit/>} />
       <Route path='/withdrawmoney' element={<Withdraw/>} />
@@ -106,10 +110,11 @@ export default  function App() {
 
         <Route path='/action' element={<Action/>}  />
 
-
-
-      <Route path='*' element={<NotFound404 />} />
     </Route>
+
+
+    <Route path='*' element={<NotFound404 />} />
+
   </Route>
 
   </Routes>

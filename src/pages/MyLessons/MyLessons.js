@@ -88,6 +88,7 @@ function MyLessons() {
       const lesson = arr[index];
 
       return (
+        
         <MyLessonComponent
           userTeachers={userTeachers}
           updatedLesson={updatedLesson}
@@ -112,6 +113,8 @@ function MyLessons() {
 
         <div id="observerElement" ref={observerRef} />
 
+        {arr.length < 1 && <h1 className={styles.noLessonText}>No lesson yet .... </h1>}
+
         {!isLoading && arr?.length > 10 && (
           <>
             {isLastPage ? (
@@ -129,7 +132,7 @@ function MyLessons() {
 
       </div>
 
-      <div className={styles.filters} onClick={openTestModal}>Filters</div>
+      {arr.length > 1 && <div className={styles.filters} onClick={openTestModal}>Filters</div> }
       <div className={styles.filtersBack}  onClick={()=>navigate("/")}>Back</div>
       
              <Modal isOpen={isOpen} onRequestClose={closeDialog}>

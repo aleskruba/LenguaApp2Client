@@ -251,8 +251,6 @@ justify-content: flex-end;
 }
 
 .mainChatBoxRightSideChatAreaTeacherMain{
-    background-color: pink;
-    border: 1px solid black;
     padding-bottom: 5px;
     margin-bottom: 5px;
 }
@@ -320,7 +318,7 @@ justify-content: flex-end;
     margin-top: 5px;;
     margin-left: 10px;
     margin-right: 10px;
-    background: red;
+    border: 1px solid black;
     padding-left: 10px;
     padding-right: 15px;
     padding-bottom: 10px;
@@ -410,6 +408,29 @@ justify-content: flex-end;
     display: none;
    }
 
+
+   .noReadMessage {
+    display: flex;
+    height: 40px;
+    background-color: lightgray;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 2px;
+    animation: colorChange 5s linear infinite; /* Adjust the duration as needed */
+}
+
+@keyframes colorChange {
+    0% {
+        background-color: green;
+    }
+    50% {
+        background-color: blue;
+    }
+    100% {
+        background-color: green;
+    }
+}
+
 @media screen and (max-width:768px) {
 
 
@@ -454,7 +475,6 @@ justify-content: flex-end;
      margin-top: 10px;;
      margin-left: 5px;
      margin-right: 5px;
-     background: red;
      padding-left: 5px;
      padding-right: 5px;
      padding-bottom: 10px;

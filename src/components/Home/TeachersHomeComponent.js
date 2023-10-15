@@ -66,7 +66,7 @@ function TeachersHomeComponent() {
                   {element.language} <span className={styles.teacherLanguageLevel}>|||||</span>
                 </div>
                 <div className={styles.teacherPriceText}>Lessons start from</div>
-                <div className={styles.teacherPrice}>{element.tax}</div>
+                <div className={styles.teacherPrice}>$ {element.tax}</div>
               </div>
             </div>
           ))}

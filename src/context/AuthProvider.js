@@ -25,6 +25,8 @@ export const AuthProvider = ({ children }) => {
   const [myStudentsNumber,setMyStudentsNumber] = useState(null)
   const [myUpcomingLessonsNumber,setMyUpcomingLessonsNumber] = useState(null)
   const [isLoading,setIsLoading] = useState(true)
+  const [isLoading1,setIsLoading1] = useState(true)
+  
   const [fetchedTotalEarning,setFetchedTotalEarnig] = useState(null)
   const [userDataFetched, setUserDataFetched] = useState(false);
   const [lessonsDataFetched, setLessonsDataFetched] = useState(false);
@@ -32,6 +34,54 @@ export const AuthProvider = ({ children }) => {
   //find teacher
   const [teachersArray, setTeachersArray] = useState([]);
   const [lessons, setLessons] = useState(null);
+const [teachersAreLoading,setTeachersAreLoading] = useState (true)
+const [homelanguages,setHomeLanguages] = useState([])
+
+const [isLoadingLogin,setIsLoadingLogin] = useState(true)
+const [notificationIsLoading,setNotificationIsLoading] = useState(true)
+
+  useEffect(() => {
+
+
+    const fetchData = async () => {
+      const url = `${BASE_URL}/findteachers`;
+
+      try {
+        const response = await axios.get(url, { withCredentials: true });
+        const teacherdata = response.data.teachers;
+        setTeachersArray(teacherdata);
+        setTeachersAreLoading(false)
+
+        const lessonsData = response.data.lessons;
+        setLessons(lessonsData);
+
+       // setLoading(false);
+      } catch (error) {
+       // setLoading(false);
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  
+
+  }, []);
+
+
+  useEffect(()=>{
+    
+    const fetchFunction  = async () => {
+    try {
+      const url = `${BASE_URL}/loadhomedata`;
+      const response = await axios.get(url, { withCredentials: true });
+      const responseData = response.data;
+      setHomeLanguages(responseData)
+    }catch (err) {
+      console.log('Error fetching user data:', err);
+    }
+  }
+  fetchFunction()
+  },[])
 
 
   const updateUserContext = (userData, tokens) => {
@@ -61,32 +111,7 @@ export const AuthProvider = ({ children }) => {
     setKey(Date.now()); 
   };
 
-    // Fetch data from the API
-    useEffect(() => {
-
-
-      const fetchData = async () => {
-        const url = `${BASE_URL}/findteachers`;
-  
-        try {
-          const response = await axios.get(url, { withCredentials: true });
-          const teacherdata = response.data.teachers;
-          setTeachersArray(teacherdata);
-  
-          const lessonsData = response.data.lessons;
-          setLessons(lessonsData);
-  
-         // setLoading(false);
-        } catch (error) {
-         // setLoading(false);
-          console.error('Error fetching data:', error);
-        }
-      };
-  
-      fetchData();
-    
-  
-    }, []);
+ 
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -96,7 +121,7 @@ export const AuthProvider = ({ children }) => {
         const responseData = response.data;
 
         if (responseData.user) {
-          setUserDataFetched(true);
+      
           setAuth({
             user: responseData.user,
             tokens: {
@@ -104,7 +129,8 @@ export const AuthProvider = ({ children }) => {
               refreshToken: responseData.refreshToken,
             },
           });
-   
+          setUserDataFetched(true);
+          
         } else {
           setAuth({ user: null, tokens: null });
         }
@@ -122,11 +148,12 @@ export const AuthProvider = ({ children }) => {
 
 
   useEffect(() => {
+
+    async function fetchData() {
     if (userDataFetched) {
 
      const url = `${BASE_URL}/teacherZone`
 
-    async function fetchData() {
       try {
         const response = await axios.get(url, { withCredentials: true });
 
@@ -135,15 +162,14 @@ export const AuthProvider = ({ children }) => {
         setMyStudentsNumber(response.data.myStudentsNumber)
         setMyUpcomingLessonsNumber(response.data.myUpcomingLessonsNumber)
         setFetchedTotalEarnig(response.data.totalEarning)
-        setIsLoading(false)
         setLessonsDataFetched(true)
+        setIsLoading(false)
       } catch (error) {
         console.error(error);
       }
     }
-    fetchData();
 
-  }
+  }     fetchData(); 
   }, [userDataFetched]);
 
 
@@ -160,7 +186,6 @@ export const AuthProvider = ({ children }) => {
       setCompletedLessons(completedLessonsData)
       setUpcommingLessons(lessonsData)
       setTotalElements(lessonsData.length+completedLessonsData.length);
- 
     } catch (error) {
       console.error(error);
     }
@@ -171,9 +196,10 @@ export const AuthProvider = ({ children }) => {
 }
 
 }, [userDataFetched,confirmRejectState]);
-//confirmRejectState
+
 
 useEffect(() => {
+
   if (userDataFetched) {
     const geturl = `${BASE_URL}/studentnotification`;
 
@@ -184,7 +210,8 @@ useEffect(() => {
     if (response.status === 201) {
     const myNotifications = response.data.myNotifications;
 
-    setReadConfirmation(myNotifications); }
+    setReadConfirmation(myNotifications); 
+    setNotificationIsLoading(false)}
 
   } catch (error) {
     console.error('Error fetching notifications:', error);
@@ -312,15 +339,15 @@ const confirmNotification = async (id) => {
                                   setCompletedLessons,
                                   setUpcommingLessons,
                                   setReadCancelLessonConfirmation,
-
+                                  userDataFetched,setUserDataFetched,
                                   //teacherzone
                                   myFinishedLessonsNumber,setMyFinishedLessonsNumber,
                                   myUpcomingLessonsNumber,setMyUpcomingLessonsNumber,
                                   myStudentsNumber,setMyStudentsNumber,
-                                  isLoading,setIsLoading,
+                                  isLoading,setIsLoading,isLoading1,
                                   fetchedTotalEarning,setFetchedTotalEarnig,
-                                  confirmNotification,confirmCancelLessonNotification
-
+                                  confirmNotification,confirmCancelLessonNotification,
+                                  teachersAreLoading,homelanguages,notificationIsLoading
                                                                                         
                                   }}>
       {children}

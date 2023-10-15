@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:ital,wght@1,100&display=swap');
+
+
+
+.container{
+    height:60vh;
+    width: 30vw;
+    position: absolute;
+    top:50vh;
+    left:50vw;
+    transform: translate(-50%,-50%);
+    perspective: 1000px;
+}
+
+.box{
+    height: 250px;
+    width: 250px;
+    position: absolute;
+    top:100px;
+    left:100px;
+    transform-style: preserve-3d;
+    animation: animate 6s infinite;
+
+}
+
+@keyframes animate {
+    0% {
+        transform: rotateX(90deg) rotateY(-90deg);
+    }
+    50% {
+        transform: rotateX(-180deg) rotateY(180deg);
+    }
+    100% {
+        transform: rotateX(90deg) rotateY(-90deg);
+    }
+}
+
+
+.card{
+    height: 250px;
+    width: 250px;
+    text-align: center;
+    padding: 100px 0px;
+    color: white;
+    background-color: antiquewhite;
+    border: 2px solid white;
+    font-size: 32px;
+    box-sizing: border-box;
+    position: absolute;
+}
+.cardInner{
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+}
+
+.flag{
+        width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+#front{
+    transform: translateZ(125px);
+}
+
+#back{
+    transform: translateZ(-125px);
+}
+
+
+#left{
+    right:125px;
+    transform: rotateY(-90deg);
+}
+#right{
+    left:125px;
+    transform: rotateY(90deg);
+    }
+#top{
+    bottom:125px;
+    transform: rotateX(90deg);
+     }
+#bottom{
+    top:125px;
+    transform: rotateX(-90deg);
+}
+
+
+.topTextWait{
+    width: 450px;
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    font-size: 23px;
+    font-weight: 200;
+    top: -10px;
+    left: 80%;
+    transform: translate(-50%, -50%);
+
+}
+
+@keyframes fadeInTop {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+.topText {
+    width: 450px;
+    color:darkblue;
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    font-size: 35px;
+    font-weight: 200;
+    top: -50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0; 
+    animation: fadeInTop 1s ease-in-out; 
+    animation-delay: 0s; 
+    animation-fill-mode: forwards; 
+}
+
+
+@keyframes fadeInBottom {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+.bottomText {
+    width: 600px;
+    color:darkblue;
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    font-size: 25px;
+    font-weight: 200;
+    top: 500px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0; 
+    animation: fadeInBottom 1s ease-in-out; 
+    animation-delay: 0.5s; 
+    animation-fill-mode: forwards; 
+}
+
+
+
+
+@media (max-width: 768px) {
+
+    .container{
+        left:40vw;
+    }
+
+
+.box {
+    height: 125px;
+    width: 125px;
+    top: 50px;
+    left: 50px;
+}
+
+.card {
+    height: 125px;
+    width: 125px;
+    padding: 50px 0;
+    font-size: 16px;
+    border: 1px solid white;
+}
+
+#front,
+#back {
+    transform: translateZ(62.5px);
+}
+
+#left {
+    right: 62.5px;
+}
+
+#right {
+    left: 62.5px;
+}
+
+#top {
+    bottom: 62.5px;
+}
+
+#bottom {
+    top: 62.5px;
+}
+
+.topText {
+    width: 200px;
+    font-size: 15px;
+    top: -25px;
+    left: 70%; 
+    transform: translate(-50%, -50%); 
+}
+
+.bottomText {
+    width: 360px;
+    font-size: 15px;
+    top: 250px;
+    left: 70%; 
+    transform: translate(-50%, -50%); 
+}
+
+.topTextWait{
+    width: 200px;
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 200;
+    top: -5px;
+    left: 100%;
+    transform: translate(-50%, -50%);
+
+}
+  }
+  

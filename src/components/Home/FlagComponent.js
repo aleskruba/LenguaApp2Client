@@ -10,28 +10,17 @@ import BASE_URL from '../../config';
 
 
 const MyComponent = () => {
+
+  const {homelanguages} = useContext(AuthContext)
+  
   const [isDragging, setIsDragging] = useState(false);
   const [showLeftIcon, setShowLeftIcon] = useState(false);
   const [showRightIcon, setShowRightIcon] = useState(true);
   const flagsRef = useRef(null);
-  const [homelanguages,setHomeLanguages] = useState([])
+
 
 
   
-  useEffect(()=>{
-    
-    const fetchFunction  = async () => {
-    try {
-      const url = `${BASE_URL}/loadhomedata`;
-      const response = await axios.get(url, { withCredentials: true });
-      const responseData = response.data;
-      setHomeLanguages(responseData)
-    }catch (err) {
-      console.log('Error fetching user data:', err);
-    }
-  }
-  fetchFunction()
-  },[])
 
 
   const flags = [
@@ -122,7 +111,7 @@ const MyComponent = () => {
                 </div>
                 <div className={styles.flagBoxRightBottom}>
               
-                {element.total} Teachers
+                {element.total} teachers
               </div>
              </div>
             </div>

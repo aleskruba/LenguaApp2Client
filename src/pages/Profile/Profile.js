@@ -19,6 +19,7 @@ function Profile() {
   const [passwordButton, setPasswordButton] = useState(false);
   const [file,setFile] = useState()
   const [wrongFile,setWrongFile] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
 
   const [userData, setUserData] = useState({
     email: user.email,
@@ -42,6 +43,7 @@ function Profile() {
         const response = await axios.get(url, { withCredentials: true });
         const lessons = response.data.myCompletedLessonArray;
         setTotalCOnfirmedLessons(lessons.length);
+        setIsLoading(false)
        } catch (error) {
         console.error(error);
       }
@@ -207,7 +209,7 @@ function Profile() {
       <div className={styles.profileClassesData}>
                   <div>  <h2 className={styles.profileClassesDataH2}>Member on Lengua since   {moment(user.memberDate).format('DD.MM YYYY')}</h2></div>
             <div className={styles.profileClassesDataMember}>        
-          <div className={styles.profileClassesDataLessons}>  <h2 className={styles.profileClassesDataH1}>{totalCOnfirmedLessons}</h2></div>
+          <div className={styles.profileClassesDataLessons}>  <h2 className={!isLoading ? styles.profileClassesDataH1 : styles.totalLessons}>{!isLoading ?  totalCOnfirmedLessons : '0'}</h2></div>
           <div className={styles.profileClassesDataText}>  <h2 className={styles.profileClassesDataH2}>Total completed lessons</h2></div>
           </div>
       </div>

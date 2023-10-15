@@ -7,6 +7,7 @@ import moment from 'moment';
 
 function ReviewBoxComponent({reviewsRef,lessons,teacher}) {
 
+
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
     const firstNewElementRef = useRef(null);
@@ -26,18 +27,22 @@ function ReviewBoxComponent({reviewsRef,lessons,teacher}) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 100)
     };
+
+
+    const filteredLessons = lessons?.filter(element => element.idTeacher === teacher._id);
   
 
-
-    const isLastPage = itemsPerPage >= lessons.length;
+    const isLastPage = itemsPerPage >= filteredLessons.length;
     return (
     <Fragment>
          <div className={styles.mainTeacherProfileMainBoxReviews} ref={reviewsRef}>
         <div className={styles.ReviewTitleDiv}>    <h5 className={styles.ReviewTitle}>Reviews</h5>    </div>   
 
      
-      {lessons?.slice(0, itemsPerPage).map((element, index) => { 
+      {filteredLessons?.slice(0, itemsPerPage).map((element, index) => { 
             if (element.idTeacher === teacher._id )   {
+                
+
         return  (
       <div className={styles.teacherReviewsMainBox} key={index} ref={index === itemsPerPage-18 ? firstNewElementRef : null}>
             <div className={styles.teacherReviewsnameAndImage}>
@@ -57,13 +62,15 @@ function ReviewBoxComponent({reviewsRef,lessons,teacher}) {
                 
                 )}
                         <div className={styles.innerDiv}>
-                        { lessons?.length > 10 && (
+                        { filteredLessons?.length > 10 && (
                           <>
                             {isLastPage ? (
                               <button className={styles.goUp} onClick={goToTopFunction}>
                                 Go Up
                               </button>
-                            ) : (
+                            ) : 
+                            
+                              (
                               <button className={styles.goUp} onClick={handleNextElementsFunction}>
                                 load more
                               </button>

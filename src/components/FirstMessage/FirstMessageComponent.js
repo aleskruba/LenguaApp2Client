@@ -3,6 +3,9 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import styles from './firstmessagecomponent.module.css';
+import axios from 'axios'
+import BASE_URL from "../../config";
+
 
 const validationSchema = Yup.object({
   language: Yup.string().required('You must choose a language'),
@@ -26,16 +29,37 @@ const validationSchema = Yup.object({
   const levels = ['A1','A2','B1','B2','C1','C2']
   
 
-function FirstMessageComponent({setIsOpen,isOpen,openTestModal,closeDialog}) {
+function FirstMessageComponent({setIsOpen,isOpen,openTestModal,closeDialog,idTeacher}) {
     
     const [backendError, setBackendError] = useState('');
 
     const navigate = useNavigate();
 
-    const onSubmit = (values) => {
+    const onSubmit = async (values) => {
       console.log(values)
       closeDialog()
-      navigate('/studentmessages')
+
+
+
+      try {
+        const url = `${BASE_URL}/chat`;
+        const data = { values: values, idTeacher:idTeacher };
+    
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true, // Set the withCredentials option to true
+        };
+    
+        const response = await axios.post(url, data, config);
+        const responseData = response.data;
+        console.log(responseData)
+        navigate('/studentmessages')
+  
+      } catch (err) {
+             console.log(err)
+        }
      };
 
   return (

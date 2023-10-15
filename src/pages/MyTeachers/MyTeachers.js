@@ -113,6 +113,8 @@ function MyTeachers() {
       }
 
       <div id="observerElement" ref={observerRef} />
+
+      {arr.length < 1 && <h1 className={styles.noTeacherText}>You have no teachers yet .... </h1>}
       {/* Show "Go up" button only if it's the last page or there are at least 10 elements */}
       {(lastPage && arr.length > 10)  ? (
         <button onClick={goUpFunction} className={styles.goUp}>Go up</button>

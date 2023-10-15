@@ -3,38 +3,75 @@ import { io } from 'socket.io-client';
 import styles from './chat.module.css';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import axios from 'axios'
+import BASE_URL from "../../config";
+import useAuth from '../../hooks/useAuth';
+import moment from 'moment'
 
 const socket = io('http://localhost:4000');
 
 const Chat = () => {
 
-  const [savedName,setSavedName] = useState('Ales')    
+
+  const { user} = useAuth();
+  
   const [message, setMessage] = useState();
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [typingUser, setTypingUser] = useState('');
-
+  const [myTeachers,setMyTeachers] = useState([])
   const chatContainerRef = useRef(null);
 
   const [switchSides,setSwitchSides] = useState(false)
   const [rightSide,setRightSide] = useState(true)
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [sentMessage,setSentMessage] = useState(false)
 
-  const [myTeachers,setMyTeachers] = useState([
-    {name:'Emily',
-     date:'25.6.2023'},
-    {name:'Jan',
-     date:'24.6.2023'},
-   {name:'Dan',
-     date:'23.6.2023'},
-  ]) 
+  const [selectedTeacher,setSelectedTeacher] = useState(null)
+
+  useEffect(()=>{
+
+   
+
+    const fetchTeachers = async () =>  {
+    try {
+      const url = `${BASE_URL}/getchatteachers`;
+  
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Set the withCredentials option to true
+      };
+
+
+      const response = await axios.get(url, config);
+      const responseData = response.data;
+
+      setMyTeachers(responseData.teachers)
+     
+    } catch (err) {
+           console.log(err)
+      }
+    }
+    fetchTeachers()
+  },[messages,switchSides])
+
+
+
+useEffect(()=>{
+ if (selectedTeacher) {
+    setSelectedTeacher()
+ }
+},[])
+
 
 
 
 const filteredItems =  useMemo(()=>{  
-    return myTeachers.filter(item => {
-        return item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    return myTeachers?.filter(item => {
+        return item.senderFirstName.toLowerCase().includes(searchQuery.toLowerCase())
   })
 },[myTeachers,searchQuery])
 
@@ -51,11 +88,29 @@ const filteredItems =  useMemo(()=>{
     // Listen for chat messages from the server
     socket.on('chat message', (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
+
+      
+      const newChatThread = {
+        sender: data.sender,
+        message: data.message,
+        createdAt: new Date(),
+        isRead: false,
+      };
+
+      console.log(data)
+      console.log(selectedTeacher)
+
+      if (selectedTeacher){
+      setSelectedTeacher({...selectedTeacher,chatThreads: [...selectedTeacher.chatThreads, newChatThread]});
+    }
+
+
+
     });
 
     // Listen for typing events from the server
     socket.on('typing', (username) => {
-      if (username !== savedName) {
+      if ((username !== user.firstName) &&  username===selectedTeacher?.receiverFirstName) {
         setIsTyping(true);
         setTypingUser(username);
       }
@@ -63,46 +118,105 @@ const filteredItems =  useMemo(()=>{
 
     // Listen for stop typing events from the server
     socket.on('stop typing', (username) => {
-      if (username !== savedName) {
+      if (username !== user.firstName) {
         setIsTyping(false);
         setTypingUser('');
       }
     });
 
     // Emit a message to the server to join the chat room
-    socket.emit('join room', savedName);
+    socket.emit('join room', user.firstName);
 
     // Clean up the socket connection when component unmounts
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [selectedTeacher]);
 
-  const handleSendMessage = () => {
+
+
+  const handleSendMessage = async () => {
     if (message && message.trim() !== '') {
       // Emit the chat message to the server
       const data = {
-        sender: savedName,
+        teacher_id:selectedTeacher.receiver_id,
         message: message,
       };
-      
+  
       socket.emit('chat message', data);
       setMessage('');
+  
+      // Create a new chat thread object
+      const newChatThread = {
+        sender: user.firstName,
+        message: message,
+        createdAt: new Date(),
+        isRead: false,
+      };
+  
+      if (selectedTeacher) {
+        setSelectedTeacher({...selectedTeacher,   chatThreads: [...selectedTeacher.chatThreads, newChatThread]});
+
+      }
+      try {
+        const url = `${BASE_URL}/studentmessage`;
+  
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        };
+  
+        const response = await axios.put(url, data, config);
+        if (response.status === 200) setSentMessage(!sentMessage);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
   
 
+    
+
   const handleTyping = () => {
     // Emit typing event to the server
-    socket.emit('typing', savedName);
-    setTypingUser(savedName);
+    socket.emit('typing', user.firstName);
+    setTypingUser(user.firstName);
   };
 
   const handleStopTyping = () => {
     // Emit stop typing event to the server
-    socket.emit('stop typing', savedName);
+    socket.emit('stop typing', user.firstName);
     setTypingUser('');
   };
+
+
+  const readMessage = async (receiver_id) => {
+
+    console.log('student read teacher` message' ,  receiver_id, )
+
+    const data = {
+      teacher_id:receiver_id,
+      };
+
+    try {
+      const url = `${BASE_URL}/teacherreadmessage`;
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      };
+
+      const response = await axios.put(url, data, config);
+      if (response.status === 200) setSentMessage(!sentMessage);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
 
 
   return (
@@ -127,21 +241,26 @@ const filteredItems =  useMemo(()=>{
           <div className={styles.mainChatBoxLeftSideBottom}>
 
           {filteredItems.map((teacher, index) => (
-            <div className={styles.mainChatBoxLeftSideChatAreaStudentMain} 
-                           onClick={()=>{setSwitchSides(false); setRightSide(true)}}  key={index}>
+            <div className={teacher.firstMessage.isRead === false || teacher.chatThreads.some(obj=> obj.isRead===false )  ? styles.noReadMessage : styles.mainChatBoxLeftSideChatAreaStudentMain} 
+                           onClick={()=>{setSwitchSides(false); 
+                                         setRightSide(true);
+                                         setSelectedTeacher(teacher);
+                                       if(teacher.firstMessage.isRead === false || teacher.chatThreads.some(obj=> obj.isRead===false ) )  {readMessage(teacher.  receiver_id)}
+                                        
+                                        }
+                                         }  key={index}>
              
              
               <div className={styles.mainChatBoxLeftSideBottomBoxImg}>
                 <div className={styles.mainChatBoxLeftSideBottomBoxImgDIV}>
-                  <img src={process.env.PUBLIC_URL + '/woman.jpg'} alt="" className={styles.mainChatBoxLeftSideBottomBoxImgTag} />
+                  <img src={teacher.receiverImgProfile} alt="" className={styles.mainChatBoxLeftSideBottomBoxImgTag} />
                 </div>
               </div>
               <div className={styles.mainChatBoxLeftSideChatAreaStudent}>
               <p className={styles.mainChatBoxLeftSideBottomBoxName}>
-                {teacher.name}
+                {teacher.receiverFirstName}
                 </p>
-                <p className={styles.mainChatBoxLeftSideChatAreaStudentBoxDate}>   {teacher.date}</p>
-             </div>
+              </div>
            
             </div>
             ))}
@@ -164,37 +283,42 @@ const filteredItems =  useMemo(()=>{
           
           <div className={styles.mainChatBoxRightSideChatArea} ref={chatContainerRef} >
             <div className={styles.mainChatBoxRightSide}>
-              {messages.map((msg, index) => (
-                msg.sender === savedName ? (
-                  <div className={styles.mainChatBoxRightSideChatAreaStudentMain} key={index}>
-                    <div className={styles.mainChatBoxRightSideBottomBoxImg}>
-                      <img src={process.env.PUBLIC_URL + '/man.jpg'} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
-                    </div>
-                    <div className={styles.mainChatBoxRightSideChatAreaStudent}>
-                      <p className={styles.mainChatBoxRightSideBottomBoxDate}>24.6.2023</p>
-                      <p className={styles.mainChatBoxRightSideChatAreaStudentPtag}>
-                        {msg.sender} wrote: {msg.message}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={styles.mainChatBoxRightSideChatAreaTeacherMain} key={index}>
-                    <div className={styles.mainChatBoxRightSideBottomBoxImg}>
-                      <img src={process.env.PUBLIC_URL + '/woman.jpg'} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
-                    </div>
-                    <div className={styles.mainChatBoxRightSideChatAreaTeacher}>
-                      <p className={styles.mainChatBoxRightSideBottomBoxDate}>23.6.2023</p>
-                      <p className={styles.mainChatBoxRightSideChatAreaTeacherPtag}>
-                        {msg.sender} wrote: {msg.message}
-                      </p>
-                    </div>
-                  </div>
-                )
-              ))}
-              {isTyping && typingUser !== '' && (
+
+            {selectedTeacher?.chatThreads.map((msg, index) => (
+        
+        msg.sender !== user.firstName? (
+          <div className={styles.mainChatBoxRightSideChatAreaStudentMain} key={index}>
+             <div className={styles.mainChatBoxRightSideBottomBoxImg}>
+              <img src={selectedTeacher.receiverImgProfile} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
+            </div>
+            <div className={styles.mainChatBoxRightSideChatAreaStudent}>
+              <p className={styles.mainChatBoxRightSideBottomBoxDate}>{moment(msg.createdAt).format('dddd, MMMM HH:mm')}</p>
+              <p className={styles.mainChatBoxRightSideChatAreaStudentPtag}>
+                {msg.sender} wrote: {msg.message}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.mainChatBoxRightSideChatAreaTeacherMain} key={index}>
+            <div className={styles.mainChatBoxRightSideBottomBoxImg}>
+              <img src={selectedTeacher.senderImgProfile} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
+            </div>
+            <div className={styles.mainChatBoxRightSideChatAreaTeacher}>
+              <p className={styles.mainChatBoxRightSideBottomBoxDate}>{moment(msg.createdAt).format('dddd, MMMM HH:mm')}</p>
+              <p className={styles.mainChatBoxRightSideChatAreaTeacherPtag}>
+                {msg.sender} wrote: {msg.message}
+              </p>
+            </div>
+          </div>
+        )
+      ))}
+
+
+              {isTyping && typingUser === selectedTeacher?.receiverFirstName ? (
                 <div className={styles.typing}>
                   <h5>{typingUser} is typing...</h5>
                 </div>
+              ) : (null
               )}
             </div>
           </div>

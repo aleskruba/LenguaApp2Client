@@ -3,17 +3,22 @@ import { io } from 'socket.io-client';
 import styles from './teacherchat.module.css';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import BASE_URL from "../../config";
+import useAuth from '../../hooks/useAuth';
+import axios from 'axios'
+import moment from 'moment'
 
 const socket = io('http://localhost:4000');
 
 const TeacherChat = () => {
 
-  const [savedName,setSavedName] = useState('Ales')    
+  const { user} = useAuth();
+  
   const [message, setMessage] = useState();
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [typingUser, setTypingUser] = useState('');
-
+  const [myStudents,setMyStudents] = useState([])
  
   const chatContainerRef = useRef(null);
 
@@ -22,22 +27,47 @@ const TeacherChat = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
 
-  const [myTeachers,setMyTeachers] = useState([
-    {name:'Emily',
-     date:'25.6.2023'},
-    {name:'Jan',
-     date:'24.6.2023'},
-   {name:'Dan',
-     date:'23.6.2023'},
-  ]) 
+  const [sentMessage,setSentMessage] = useState(false)
+
+
+  const [selectedStudent,setSelectedStudent] = useState(null)
+
+  useEffect(()=>{
+
+  
+    const fetchTeachers = async () =>  {
+    try {
+      const url = `${BASE_URL}/getchatstudents`;
+  
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Set the withCredentials option to true
+      };
+  
+      const response = await axios.get(url, config);
+      const responseData = response.data;
+      setMyStudents(responseData.students)  
+
+
+     
+    } catch (err) {
+           console.log(err)
+      }
+    }
+    fetchTeachers()
+  },[sentMessage,switchSides])
+
+
 
 
 
 const filteredItems =  useMemo(()=>{  
-    return myTeachers.filter(item => {
-        return item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    return myStudents.filter(item => {
+        return item.senderFirstName.toLowerCase().includes(searchQuery.toLowerCase())
   })
-},[myTeachers,searchQuery])
+},[myStudents,searchQuery,selectedStudent,sentMessage])
 
 
   useEffect(() => {
@@ -52,11 +82,25 @@ const filteredItems =  useMemo(()=>{
     // Listen for chat messages from the server
     socket.on('chat message', (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
+
+      const newChatThread = {
+        sender: data.sender,
+        message: data.message,
+        createdAt: new Date(),
+        isRead: false,
+      };
+
+      console.log(data)
+      console.log(selectedStudent)
+
+      if (selectedStudent){
+      setSelectedStudent({...selectedStudent,chatThreads: [...selectedStudent.chatThreads, newChatThread]});
+    }
     });
 
     // Listen for typing events from the server
     socket.on('typing', (username) => {
-      if (username !== savedName) {
+      if (username !== user.firstName) {
         setIsTyping(true);
         setTypingUser(username);
       }
@@ -64,46 +108,132 @@ const filteredItems =  useMemo(()=>{
 
     // Listen for stop typing events from the server
     socket.on('stop typing', (username) => {
-      if (username !== savedName) {
+      if (username !== user.firstName) {
         setIsTyping(false);
         setTypingUser('');
       }
     });
 
     // Emit a message to the server to join the chat room
-    socket.emit('join room', savedName);
+    socket.emit('join room', user.firstName);
 
     // Clean up the socket connection when component unmounts
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [selectedStudent]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (message && message.trim() !== '') {
       // Emit the chat message to the server
       const data = {
-        sender: savedName,
+        student_id:selectedStudent.sender_id,
         message: message,
       };
-      
+  
       socket.emit('chat message', data);
       setMessage('');
+  
+      // Create a new chat thread object
+      const newChatThread = {
+        sender: user.firstName,
+        message: message,
+        createdAt: new Date(),
+        isRead: false,
+      };
+  
+      setSelectedStudent({...selectedStudent,chatThreads: [...selectedStudent.chatThreads, newChatThread]});
+  
+      try {
+        const url = `${BASE_URL}/teachermessage`;
+  
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        };
+  
+        const response = await axios.put(url, data, config);
+        if (response.status === 200) setSentMessage(!sentMessage);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
+  
   
 
   const handleTyping = () => {
     // Emit typing event to the server
-    socket.emit('typing', savedName);
-    setTypingUser(savedName);
+    socket.emit('typing', user.firstName);
+    setTypingUser(user.firstName);
   };
 
   const handleStopTyping = () => {
     // Emit stop typing event to the server
-    socket.emit('stop typing', savedName);
+    socket.emit('stop typing', user.firstName);
     setTypingUser('');
   };
+
+
+
+  const readMessage = async (sender_id,student) => {
+    console.log('teacher read studend ` message')
+
+    console.log(sender_id == sender_id )
+    console.log(student.receiver_id === user._id)
+
+    const newValue = myStudents.map(element => {
+      if (element.sender_id === sender_id && element.receiver_id === user._id) {
+        const updatedElement = {
+          ...element,
+          firstMessage: {
+            ...element.firstMessage,
+            isRead: true
+          }
+        };
+    
+        if (updatedElement.chatThreads && updatedElement.chatThreads.some(thread => !thread.isRead)) {
+          updatedElement.chatThreads = updatedElement.chatThreads.map(thread => ({
+            ...thread,
+            isRead: true
+          }));
+        }
+    
+        return updatedElement;
+      }
+      return element;
+    });
+    
+      
+    
+    setMyStudents(newValue);
+
+
+
+    const data = {
+      student_id:sender_id,
+      };
+  
+    try {
+      const url = `${BASE_URL}/studentreadmessage`;
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      };
+
+      const response = await axios.put(url, data, config);
+      if (response.status === 200) setSentMessage(!sentMessage);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
 
 
   return (
@@ -127,21 +257,28 @@ const filteredItems =  useMemo(()=>{
 
           <div className={styles.mainChatBoxLeftSideBottom}>
 
-          {filteredItems.map((teacher, index) => (
-            <div className={styles.mainChatBoxLeftSideChatAreaStudentMain} 
-                           onClick={()=>{setSwitchSides(false); setRightSide(true)}}  key={index}>
+          {filteredItems.map((student, index) => (
+            <div className={student.firstMessage.isRead === false || student.chatThreads.some(obj=> obj.isRead===false )  ? styles.noReadMessage :  styles.mainChatBoxLeftSideChatAreaStudentMain} 
+                           onClick={()=>{setSwitchSides(false); 
+                                         setRightSide(true);
+                                         setSelectedStudent(student);
+                                     if (student.firstMessage.isRead === false || student.chatThreads && student.chatThreads.some(obj=> obj.isRead===false ))   
+                                          { 
+                                            readMessage(student.sender_id,student)}
+                                        }}  
+                                         
+                                         key={index}>
              
-             
-              <div className={styles.mainChatBoxLeftSideBottomBoxImg}>
+                <div className={styles.mainChatBoxLeftSideBottomBoxImg}>
                 <div className={styles.mainChatBoxLeftSideBottomBoxImgDIV}>
-                  <img src={process.env.PUBLIC_URL + '/woman.jpg'} alt="" className={styles.mainChatBoxLeftSideBottomBoxImgTag} />
+                  <img src={student.senderImgProfile} alt="" className={styles.mainChatBoxLeftSideBottomBoxImgTag} />
                 </div>
               </div>
               <div className={styles.mainChatBoxLeftSideChatAreaStudent}>
               <p className={styles.mainChatBoxLeftSideBottomBoxName}>
-                {teacher.name}
+                {student.senderFirstName}
                 </p>
-                <p className={styles.mainChatBoxLeftSideChatAreaStudentBoxDate}>   {teacher.date}</p>
+         
              </div>
            
             </div>
@@ -165,14 +302,52 @@ const filteredItems =  useMemo(()=>{
           
           <div className={styles.mainChatBoxRightSideChatArea} ref={chatContainerRef} >
             <div className={styles.mainChatBoxRightSide}>
-              {messages.map((msg, index) => (
-                msg.sender === savedName ? (
-                  <div className={styles.mainChatBoxRightSideChatAreaStudentMain} key={index}>
+       
+           { selectedStudent ? 
+                    selectedStudent.receiverFirstName === user.firstName && (
+                  <div className={styles.mainChatBoxRightSideChatAreaStudentMain} >
                     <div className={styles.mainChatBoxRightSideBottomBoxImg}>
-                      <img src={process.env.PUBLIC_URL + '/man.jpg'} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
+                      <img src={selectedStudent.senderImgProfile} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
                     </div>
                     <div className={styles.mainChatBoxRightSideChatAreaStudent}>
-                      <p className={styles.mainChatBoxRightSideBottomBoxDate}>24.6.2023</p>
+                      <p className={styles.mainChatBoxRightSideBottomBoxDate}>{moment(selectedStudent.firstMessage.createdAt).format('dddd, MMMM HH:mm')}</p>
+                      
+                      <div className={styles.firstMessageQuestionary}>
+                      <p className={styles.mainChatBoxRightSideChatAreaStudentPtag}>
+                       language : {selectedStudent.language}
+                      </p>
+                      <p className={styles.mainChatBoxRightSideChatAreaStudentPtag}>
+                        level : {selectedStudent.level}
+                      </p>
+                      <p className={styles.mainChatBoxRightSideChatAreaStudentPtag}>
+                         {selectedStudent.purpose}
+                      </p>
+                      </div>
+                      <p className={styles.mainChatBoxRightSideChatAreaStudentPtag}>
+                        {selectedStudent.senderFirstName} wrote: {selectedStudent.firstMessage.message}
+                      </p>
+                      
+
+                    </div>
+                  </div>
+                ) 
+                :
+                null
+           }
+              
+
+
+
+
+              {selectedStudent?.chatThreads.map((msg, index) => (
+        
+                msg.sender !== user.firstName? (
+                  <div className={styles.mainChatBoxRightSideChatAreaStudentMain} key={index}>
+                     <div className={styles.mainChatBoxRightSideBottomBoxImg}>
+                      <img src={selectedStudent.senderImgProfile} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
+                    </div>
+                    <div className={styles.mainChatBoxRightSideChatAreaStudent}>
+                      <p className={styles.mainChatBoxRightSideBottomBoxDate}>{moment(msg.createdAt).format('dddd, MMMM HH:mm')}</p>
                       <p className={styles.mainChatBoxRightSideChatAreaStudentPtag}>
                         {msg.sender} wrote: {msg.message}
                       </p>
@@ -181,10 +356,10 @@ const filteredItems =  useMemo(()=>{
                 ) : (
                   <div className={styles.mainChatBoxRightSideChatAreaTeacherMain} key={index}>
                     <div className={styles.mainChatBoxRightSideBottomBoxImg}>
-                      <img src={process.env.PUBLIC_URL + '/woman.jpg'} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
+                      <img src={selectedStudent.receiverImgProfile} alt="" className={styles.mainChatBoxRightSideBottomBoxImgTag} />
                     </div>
                     <div className={styles.mainChatBoxRightSideChatAreaTeacher}>
-                      <p className={styles.mainChatBoxRightSideBottomBoxDate}>23.6.2023</p>
+                      <p className={styles.mainChatBoxRightSideBottomBoxDate}>{moment(msg.createdAt).format('dddd, MMMM HH:mm')}</p>
                       <p className={styles.mainChatBoxRightSideChatAreaTeacherPtag}>
                         {msg.sender} wrote: {msg.message}
                       </p>
@@ -192,7 +367,10 @@ const filteredItems =  useMemo(()=>{
                   </div>
                 )
               ))}
-              {isTyping && typingUser !== '' && (
+
+
+              
+              {isTyping && selectedStudent.senderFirstName && (
                 <div className={styles.typing}>
                   <h5>{typingUser} is typing...</h5>
                 </div>

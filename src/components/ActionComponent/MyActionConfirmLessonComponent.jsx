@@ -70,7 +70,7 @@ const handleChangeFunction = (e) =>{
       setConfirmRejectState(!confirmRejectState)
       removeFromDisplayedLessons(ID)
       setLoadingConfirm(false)
-        if (totalElements <= 1) {
+        if (totalElements < 1) {
         setActionNotice(true)
         navigate('/')
 
