@@ -1,9 +1,10 @@
-import React, { useState, useEffect,useRef  } from 'react';
+import React, { useState, useEffect,useRef ,useContext } from 'react';
 import styles from './teacherprofile.module.css';
 import { Link,useParams,useNavigate,useLocation } from 'react-router-dom';
 import ReviewBoxComponent from '../../components/FindTeacher/ReviewBoxComponent';
 import Modal from 'react-modal';
 import FirstMessageComponent from '../../components/FirstMessage/FirstMessageComponent';
+import AuthContext from '../../context/AuthProvider';
 
 Modal.setAppElement('#root');
 
@@ -12,12 +13,29 @@ function TeacherProfile() {
   const reviewsRef = useRef(null); // Step 2: Create a ref
   const availabilityRef = useRef(null); // Step 2: Create a ref
   const aboutMeRef = useRef(null); // Step 2: Create a ref
-  
-  const location = useLocation();
+   const location = useLocation();
   const { teacher,lessons } = location.state; 
+
+  const navigate = useNavigate()
 
   let { idTeacher } = useParams();
 
+  const {myTeachers} = useContext(AuthContext)
+
+  
+
+  const contactTeacherFunction = () => {
+
+    myTeachers.forEach(teacher=>{
+      if (teacher.receiver_id === idTeacher){ 
+          navigate('/studentmessages' )
+      }
+      else {
+        setIsOpen(true)
+      }
+    })
+
+}
   
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to the top of the page when the component mounts
@@ -77,7 +95,7 @@ function TeacherProfile() {
     window.scrollTo({ top: offsetTop, behavior: 'smooth' });
   };
 
-const navigate = useNavigate()
+
   const goBackToTeachers = () => {
     navigate('/findteachers', { state: { teacher, lessons } })
   };
@@ -162,7 +180,7 @@ const navigate = useNavigate()
 
                   
  
-          <div className={styles.bookButton} onClick={()=> setIsOpen(true)}>Contact Teacher</div>
+          <div className={styles.bookButton} onClick={contactTeacherFunction}>Contact Teacher</div>
         
           <Link to={`/findteachers/${idTeacher}/schedulestudent`}>
           <div className={styles.bookButton} >Book lesson</div>

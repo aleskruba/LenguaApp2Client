@@ -83,12 +83,12 @@ const filteredItems =  useMemo(()=>{
     // Listen for chat messages from the server
     socket.on('chat message', (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
-  
-      if (data.student_id === user._id) {
+
+      
       
        const updatedMyTeacher = myTeachers.map(element => {
-        if (!selectedTeacher || selectedTeacher?.receiver_id !== data.sender_ID  && element.receiver_id === data.sender_ID && element.sender_id === user._id) {
-          console.log('not selected')
+        if (selectedTeacher?.receiver_id !== data.sender_ID  && element.receiver_id === data.sender_ID && element.sender_id === user._id) {
+    
           const updatedChatThreads = [
             ...element.chatThreads,
             {
@@ -106,9 +106,9 @@ const filteredItems =  useMemo(()=>{
         return element;
       });
   
-      console.log('not selected',updatedMyTeacher)
+      
        setMyTeachers(updatedMyTeacher); 
-   
+
 
 
 
@@ -123,12 +123,10 @@ const filteredItems =  useMemo(()=>{
 
       if (selectedTeacher && selectedTeacher.receiver_id === data.sender_ID ){
         setSelectedTeacher({...selectedTeacher,chatThreads: [...selectedTeacher.chatThreads, newChatThread]});
-
-        console.log('selected')
         
       const updatedMyTeacher = myTeachers.map(element => {
         if (element.receiver_id === data.sender_ID && element.sender_id === user._id) {
-    
+          console.log(element)
     
           const updatedChatThreads = [
             ...element.chatThreads,
@@ -149,15 +147,11 @@ const filteredItems =  useMemo(()=>{
   
       
         setMyTeachers(updatedMyTeacher); 
-           
-       setTimeout(() => {
         readMessage(selectedTeacher.receiver_id )
-        console.log('read message run')
-      }, 2000); 
     } 
 
  
-  }
+
  
     });
 
@@ -279,8 +273,8 @@ const filteredItems =  useMemo(()=>{
       };
 
       const response = await axios.put(url, data, config);
-      console.log(response)
-      if (response.status===201) setSentMessage(!sentMessage);
+      console.log(response.status)
+       setSentMessage(!sentMessage);
     } catch (err) {
       console.log(err);
     }
@@ -309,8 +303,8 @@ const filteredItems =  useMemo(()=>{
           <div className={styles.mainChatBoxLeftSideBottom}>
 
           {filteredItems?.map((teacher, index) => (
-            <div className={  (teacher.firstMessage.isRead === false ) ||  (teacher.chatThreads.some(obj=> obj.isRead===false  && obj.sender_ID !== user._id ))   ? styles.noReadMessage : styles.mainChatBoxLeftSideChatAreaStudentMain} 
-                  
+            <div className={teacher.firstMessage.isRead === false ||  teacher.chatThreads.some(obj=> obj.isRead===false )? styles.noReadMessage : styles.mainChatBoxLeftSideChatAreaStudentMain} 
+                         
             onClick={()=>{setSwitchSides(false); 
                                          setRightSide(true);
                                          setSelectedTeacher(teacher);
@@ -425,24 +419,21 @@ const filteredItems =  useMemo(()=>{
               )}
             </div>
           </div>
-        
           <div className={styles.chatInputButton}>
             <textarea
               className={styles.chatInput}
               name=""
               id=""
               maxLength="500"
-              disabled = {selectedTeacher? false : true  }
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleTyping}
               onKeyUp={handleStopTyping}
-              placeholder={selectedTeacher? 'Write some message ....' : null  }
+              placeholder='Write some message ....'
             ></textarea>
-              {selectedTeacher && 
             <button onClick={handleSendMessage} className={styles.sendChat}>
               Send
-            </button>}
+            </button>
           </div>
         </div>
       </div>

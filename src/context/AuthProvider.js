@@ -309,6 +309,40 @@ const confirmNotification = async (id) => {
   }
   };
 
+  const [myTeachers, setMyTeachers] = useState(null)
+
+  useEffect(()=>{
+    if (userDataFetched) {
+  
+    const fetchTeachers = async () =>  {
+    try {
+      const url = `${BASE_URL}/getchatteachers`;
+  
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true, // Set the withCredentials option to true
+      };
+
+
+      const response = await axios.get(url, config);
+      const responseData = response.data;
+  
+      setMyTeachers(responseData.teachers)
+
+      console.log('useEffect runs')
+
+     
+    } catch (err) {
+           console.log(err)
+      }
+    }
+    fetchTeachers()
+  }
+  },[userDataFetched])
+
+  
 
   return (
     <AuthContext.Provider value={{ auth, 
@@ -347,7 +381,8 @@ const confirmNotification = async (id) => {
                                   isLoading,setIsLoading,isLoading1,
                                   fetchedTotalEarning,setFetchedTotalEarnig,
                                   confirmNotification,confirmCancelLessonNotification,
-                                  teachersAreLoading,homelanguages,notificationIsLoading
+                                  teachersAreLoading,homelanguages,notificationIsLoading,
+                                  myTeachers
                                                                                         
                                   }}>
       {children}
