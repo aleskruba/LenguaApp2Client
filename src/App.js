@@ -1,4 +1,4 @@
-import React,{useEffect,useContext} from 'react';
+import React,{useEffect} from 'react';
 import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import Profile from './pages/Profile/Profile';
@@ -36,18 +36,6 @@ export default  function App() {
 
   
 
-
-  // Inside your main JavaScript file (e.g., index.js)
-/* if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./service-worker.js') // Replace with the correct path to your service worker file
-    .then((registration) => {
-      console.log('Service Worker registered with scope:', registration.scope);
-    })
-    .catch((error) => {
-      console.error('Service Worker registration failed:', error);
-    });
-}
- */
   const navigate = useNavigate();
 
   const checkAuthentication = () => {
