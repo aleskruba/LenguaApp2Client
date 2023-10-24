@@ -47,7 +47,8 @@ export default function CheckoutForm({setCredits,credits}) {
         elements,
         confirmParams: {
           // Make sure to change this to your payment completion page
-          return_url: `${window.location.origin}/completion`,
+         // return_url: `${window.location.origin}/completion`,
+          return_url: `${BASE_URL}/completion`,
         },
       });
   
