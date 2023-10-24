@@ -48,7 +48,7 @@ export default function CheckoutForm({setCredits,credits}) {
         confirmParams: {
           // Make sure to change this to your payment completion page
          // return_url: `${window.location.origin}/completion`,
-          return_url: `https://lenguaapp2client.onrender.com/completion`,
+          return_url: `${BASE_URL}/completion`,
         },
       });
   
