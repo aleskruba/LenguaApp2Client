@@ -6,6 +6,7 @@ import { Elements } from "@stripe/react-stripe-js";
 
 
 function BuyCredit(props) {
+
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
 
@@ -13,7 +14,7 @@ function BuyCredit(props) {
   
   const creditsToBuy = [50,100,150,200,250,300]
 
-  useEffect(() => {
+ /*  useEffect(() => {
     fetch("http://localhost:5252/config").then(async (r) => {
       const { publishableKey } = await r.json();
       setStripePromise(loadStripe(publishableKey));
@@ -24,6 +25,31 @@ function BuyCredit(props) {
 
   useEffect(() => {
     fetch("http://localhost:5252/create-payment-intent", {
+      method: "POST",
+      body: JSON.stringify({}),
+    }).then(async (result) => {
+      var { clientSecret } = await result.json();
+      setClientSecret(clientSecret);
+     
+    });
+  }, []);
+
+
+  useEffect(()=>{
+
+  },[credits]) */
+
+  useEffect(() => {
+    fetch("https://lenguaapp2server.onrender.com/config").then(async (r) => {
+      const { publishableKey } = await r.json();
+      setStripePromise(loadStripe(publishableKey));
+
+   
+    });
+  }, []);
+
+  useEffect(() => {
+    fetch("https://lenguaapp2server.onrender.com/create-payment-intent", {
       method: "POST",
       body: JSON.stringify({}),
     }).then(async (result) => {
