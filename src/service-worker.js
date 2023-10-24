@@ -1,4 +1,4 @@
-// Inside your service worker file (e.g., service-worker.js)
+/* // Inside your service worker file (e.g., service-worker.js)
 self.addEventListener('activate', (event) => {
     event.waitUntil(
       Promise.all([
@@ -7,4 +7,4 @@ self.addEventListener('activate', (event) => {
       ])
     );
   });
-  
+   */
