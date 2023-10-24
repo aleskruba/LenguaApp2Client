@@ -23,7 +23,7 @@ function TeacherProfileLanguageUpate({
   const handleSubmit = () => {
     setBackendError('');
     if (JSON.stringify(selectedLanguages) !== JSON.stringify(previousSelectedLanguagesRef.current)) {
-      console.log(selectedLanguages);
+    //  console.log(selectedLanguages);
     }
     closeDialog();
   };
@@ -33,7 +33,7 @@ function TeacherProfileLanguageUpate({
     setUpdateLanguageButton(false);
   };
 
-
+if (backendError) {console.log(backendError)}
   return (
     <Modal isOpen={isOpen} onRequestClose={closeDialog}>
 

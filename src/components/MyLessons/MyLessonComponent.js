@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './mylessoncomponent.module.css';
 import moment from 'moment';
 import BASE_URL from '../../config';
@@ -31,7 +31,7 @@ function MyLessonComponent({ element,updatedLesson,setUpdatedLesson,lesson,items
       if (response.status === 201) {   setUpdatedLesson(!updatedLesson)}        
 
     } catch (err) {
-      if (err.message == 'Network Error') {setBackendError(err.message) }
+      if (err.message === 'Network Error') {setBackendError(err.message) }
       setUpdatedLesson(!updatedLesson)
 
     }
@@ -111,7 +111,7 @@ function MyLessonComponent({ element,updatedLesson,setUpdatedLesson,lesson,items
               return (
                 <div className={styles.buttons} key={index}>
                   <button className={styles.CancelBtn} onClick={()=>cancelLessonFunction(element._id,element.billedPrice)}>Cancel Lesson</button>
-                  <button className={styles.RebookBtn}>Rebook Lesson</button>
+             {/*      <button className={styles.RebookBtn}>Rebook Lesson</button> */}
                 </div>
               );
             }

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import styles from './firstmessagecomponent.module.css';
 import axios from 'axios'
 import BASE_URL from "../../config";
+import AuthContext from '../../context/AuthProvider';
 
 
 const validationSchema = Yup.object({
@@ -29,15 +30,14 @@ const validationSchema = Yup.object({
   const levels = ['A1','A2','B1','B2','C1','C2']
   
 
-function FirstMessageComponent({setIsOpen,isOpen,openTestModal,closeDialog,idTeacher}) {
+function FirstMessageComponent({closeDialog,idTeacher}) {
     
     const [backendError, setBackendError] = useState('');
 
-    const navigate = useNavigate();
+    const {setSentMessageStudent,sentMessageStudent} = useContext(AuthContext)
 
+ 
     const onSubmit = async (values) => {
-      console.log(values)
-      closeDialog()
 
 
 
@@ -52,13 +52,15 @@ function FirstMessageComponent({setIsOpen,isOpen,openTestModal,closeDialog,idTea
           withCredentials: true, // Set the withCredentials option to true
         };
     
-        const response = await axios.post(url, data, config);
-        const responseData = response.data;
-        console.log(responseData)
-        navigate('/studentmessages')
-  
+         await axios.post(url, data, config);
+        //const responseData = response.data;
+        setSentMessageStudent(!sentMessageStudent)    
+        closeDialog()   
+
+     
       } catch (err) {
              console.log(err)
+             setBackendError(err.message)
         }
      };
 

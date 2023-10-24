@@ -96,8 +96,8 @@ const handleChangeFunction = (e) =>{
         withCredentials: true,
       };
 
-      const response =  await axios.put(url, data, config);
-      console.log(response)
+       await axios.put(url, data, config);
+  
  
       // Remove the confirmed lesson from the displayed lessons
       //removeFromDisplayedLessons(ID);

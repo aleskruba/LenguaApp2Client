@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState,useContext } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './myteachercomponent.module.css';
-import AuthContext from '../../context/AuthProvider';
 import { Link } from 'react-router-dom';
 
 function MyTeacherComponent({ element ,countCompletedLessons,userTeachers}) {

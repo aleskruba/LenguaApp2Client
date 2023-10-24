@@ -1,19 +1,13 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styles from './flagcomponent.module.css';
 import AuthContext from '../../context/AuthProvider';
-import axios from 'axios';
-import BASE_URL from '../../config';
-
-
-
 
 
 
 const MyComponent = () => {
 
   const {homelanguages} = useContext(AuthContext)
-  
-  const [isDragging, setIsDragging] = useState(false);
+   const [isDragging, setIsDragging] = useState(false);
   const [showLeftIcon, setShowLeftIcon] = useState(false);
   const [showRightIcon, setShowRightIcon] = useState(true);
   const flagsRef = useRef(null);

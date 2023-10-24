@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef, useMemo, Fragment } from 'react';
+import React, { useEffect, useState,useRef, useMemo, useContext } from 'react';
 import { io } from 'socket.io-client';
 import styles from './chat.module.css';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -7,6 +7,7 @@ import axios from 'axios'
 import BASE_URL from "../../config";
 import useAuth from '../../hooks/useAuth';
 import moment from 'moment'
+import AuthContext from '../../context/AuthProvider';
 
 const socket = io('http://localhost:4000');
 
@@ -14,52 +15,17 @@ const Chat = () => {
 
 
   const { user} = useAuth();
+  const {myTeachers,selectedTeacher,setSelectedTeacher,messages, 
+    sentMessageStudent,setSentMessageStudent,isTyping, typingUser, setTypingUser,readMessagefromTeacher,
+    switchSides,setSwitchSides,sentMessage,fetchedTeacherChat } = useContext(AuthContext)
   
   const [message, setMessage] = useState();
-  const [messages, setMessages] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [typingUser, setTypingUser] = useState('');
-  const [myTeachers,setMyTeachers] = useState([])
+
   const chatContainerRef = useRef(null);
 
-  const [switchSides,setSwitchSides] = useState(false)
+
   const [rightSide,setRightSide] = useState(true)
   const [searchQuery, setSearchQuery] = useState('');
-
-  const [sentMessage,setSentMessage] = useState(false)
-
-  const [selectedTeacher,setSelectedTeacher] = useState(null)
-
-
-  useEffect(()=>{
-  
-
-    const fetchTeachers = async () =>  {
-    try {
-      const url = `${BASE_URL}/getchatteachers`;
-  
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true, // Set the withCredentials option to true
-      };
-
-
-      const response = await axios.get(url, config);
-      const responseData = response.data;
-  
-      setMyTeachers(responseData.teachers)
-
-      console.log('useEffect runs')
-
-     
-    } catch (err) {
-           console.log(err)
-      }
-    }
-    fetchTeachers()
-  },[switchSides,selectedTeacher,sentMessage])
 
 
 
@@ -68,7 +34,8 @@ const filteredItems =  useMemo(()=>{
     return myTeachers?.filter(item => {
         return item.senderFirstName.toLowerCase().includes(searchQuery.toLowerCase())
   })
-},[myTeachers,searchQuery,messages])
+},[myTeachers,searchQuery,messages,sentMessage,fetchedTeacherChat])
+
 
 
   useEffect(() => {
@@ -77,114 +44,6 @@ const filteredItems =  useMemo(()=>{
   }, [messages,switchSides,rightSide]);
 
   
-
-  useEffect(() => {
-    const socket = io('http://localhost:4000');
-    // Listen for chat messages from the server
-    socket.on('chat message', (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
-  
-      if (data.student_id === user._id) {
-      
-       const updatedMyTeacher = myTeachers.map(element => {
-        if (!selectedTeacher || selectedTeacher?.receiver_id !== data.sender_ID  && element.receiver_id === data.sender_ID && element.sender_id === user._id) {
-          console.log('not selected')
-          const updatedChatThreads = [
-            ...element.chatThreads,
-            {
-              sender_ID: data.sender_ID,
-              sender: data.sender,
-              message: data.message,
-              createdAt: new Date(),
-              isRead: false,
-            },
-          ];
-  
-          // Create a new element with the updated chatThreads array
-          return { ...element, chatThreads: updatedChatThreads };
-        }
-        return element;
-      });
-  
-      console.log('not selected',updatedMyTeacher)
-       setMyTeachers(updatedMyTeacher); 
-   
-
-
-
-
-       const newChatThread = {
-        sender_ID:data.sender_ID,
-        sender: data.sender,
-        message: data.message,
-        createdAt: new Date(),
-        isRead: true,
-      };
-
-      if (selectedTeacher && selectedTeacher.receiver_id === data.sender_ID ){
-        setSelectedTeacher({...selectedTeacher,chatThreads: [...selectedTeacher.chatThreads, newChatThread]});
-
-        console.log('selected')
-        
-      const updatedMyTeacher = myTeachers.map(element => {
-        if (element.receiver_id === data.sender_ID && element.sender_id === user._id) {
-    
-    
-          const updatedChatThreads = [
-            ...element.chatThreads,
-            {
-              sender_ID: data.sender_ID,
-              sender: data.sender,
-              message: data.message,
-              createdAt: new Date(),
-              isRead: true,
-            },
-          ];
-  
-          // Create a new element with the updated chatThreads array
-          return { ...element, chatThreads: updatedChatThreads };
-        }
-        return element;
-      });
-  
-      
-        setMyTeachers(updatedMyTeacher); 
-           
-       setTimeout(() => {
-        readMessage(selectedTeacher.receiver_id )
-        console.log('read message run')
-      }, 2000); 
-    } 
-
- 
-  }
- 
-    });
-
-    // Listen for typing events from the server
-    socket.on('typing', (typing_user) => {
-      if ((typing_user.typing_user_id !== user._id) &&  typing_user.receiver_id === selectedTeacher?.receiver_id) {
-        setIsTyping(true);
-        setTypingUser(typing_user.typing_user_name);
-      }
-    });
-
-    // Listen for stop typing events from the server
-    socket.on('stop typing', (typing_user) => {
-      if (typing_user.typing_user_id !== user._id) {
-        setIsTyping(false);
-        setTypingUser('');
-      }
-    });
-
-    // Emit a message to the server to join the chat room
-    socket.emit('join room', user.firstName);
-
-    // Clean up the socket connection when component unmounts
-    return () => {
-      socket.disconnect();
-    };
-  }, [selectedTeacher,myTeachers]);
 
 
 
@@ -225,7 +84,7 @@ const filteredItems =  useMemo(()=>{
         };
   
         const response = await axios.put(url, data, config);
-        if (response.status === 200) setSentMessage(!sentMessage);
+        if (response.status === 200) setSentMessageStudent(!sentMessageStudent);
       } catch (err) {
         console.log(err);
       }
@@ -260,31 +119,6 @@ const filteredItems =  useMemo(()=>{
   };
 
 
-  const readMessage = async (receiver_id) => {
-
-    console.log('student read teacher` message' ,  receiver_id, )
-
-    const data = {
-      teacher_id:receiver_id,
-      };
-
-    try {
-      const url = `${BASE_URL}/studentreadmessageofteacher`;
-
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      };
-
-      const response = await axios.put(url, data, config);
-      console.log(response)
-      if (response.status===201) setSentMessage(!sentMessage);
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
 
   return (
@@ -309,16 +143,20 @@ const filteredItems =  useMemo(()=>{
           <div className={styles.mainChatBoxLeftSideBottom}>
 
           {filteredItems?.map((teacher, index) => (
-            <div className={  (teacher.firstMessage.isRead === false ) ||  (teacher.chatThreads.some(obj=> obj.isRead===false  && obj.sender_ID !== user._id ))   ? styles.noReadMessage : styles.mainChatBoxLeftSideChatAreaStudentMain} 
+            <div className={  (teacher.firstMessage.isRead === false && teacher.sender_id !== user._id ) ||  (teacher.chatThreads.some(obj=> obj.isRead===false && obj.sender_ID === teacher.receiver_id ))   ? styles.noReadMessage : styles.mainChatBoxLeftSideChatAreaStudentMain} 
                   
+
             onClick={()=>{setSwitchSides(false); 
                                          setRightSide(true);
                                          setSelectedTeacher(teacher);
-                                       if(teacher.firstMessage.isRead === false || teacher.chatThreads.some(obj=> obj.isRead===false ) )  {readMessage(teacher.receiver_id)}
+                                       if(teacher.firstMessage.isRead === false || teacher.chatThreads.some(obj=> obj.isRead===false ) || teacher.receiver_id === selectedTeacher?.receiver_id )  {
+                                        readMessagefromTeacher(teacher.receiver_id)}
                                         
                                         }
                                          }  key={index}>
              
+
+
                         <div className={styles.mainChatBoxLeftSideBottomBoxImg}>
                 <div className={styles.mainChatBoxLeftSideBottomBoxImgDIV}>
                   <img src={teacher.receiverImgProfile} alt="" className={styles.mainChatBoxLeftSideBottomBoxImgTag} />
@@ -395,7 +233,7 @@ const filteredItems =  useMemo(()=>{
                 <div className={styles.mainChatBoxRightSideChatAreaStudent}>
                   <p className={styles.mainChatBoxRightSideBottomBoxDate}>{moment(msg.createdAt).format('dddd, MMMM HH:mm')}</p>
                   <p className={styles.mainChatBoxRightSideChatAreaStudentPtag}>
-                    {msg.sender} wrote: {msg.message}
+                     {msg.message}
                   </p>
                 </div>
               </div>
@@ -407,7 +245,7 @@ const filteredItems =  useMemo(()=>{
                 <div className={styles.mainChatBoxRightSideChatAreaTeacher}>
                   <p className={styles.mainChatBoxRightSideBottomBoxDate}>{moment(msg.createdAt).format('dddd, MMMM HH:mm')}</p>
                   <p className={styles.mainChatBoxRightSideChatAreaTeacherPtag}>
-                    {msg.sender} wrote: {msg.message}
+                     {msg.message}
                   </p>
                 </div>
               </div>
@@ -417,16 +255,17 @@ const filteredItems =  useMemo(()=>{
           ))}
 
 
-              {isTyping && typingUser === selectedTeacher?.receiverFirstName ? (
+           
+            </div>
+          </div>
+        
+          <div className={styles.chatInputButton}>
+          {isTyping && typingUser === selectedTeacher?.receiverFirstName ? (
                 <div className={styles.typing}>
                   <h5>{typingUser} is typing...</h5>
                 </div>
               ) : (null
               )}
-            </div>
-          </div>
-        
-          <div className={styles.chatInputButton}>
             <textarea
               className={styles.chatInput}
               name=""

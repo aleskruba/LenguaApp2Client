@@ -1,10 +1,14 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import BASE_URL from '../config';
+import { io } from 'socket.io-client';
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
+
+
+
   const [auth, setAuth] = useState({ user: null, tokens: null });
   const [key, setKey] = useState(Date.now()); // Add a key to force re-render
   const [savedSlot,setSavedSlot] = useState([])
@@ -34,11 +38,11 @@ export const AuthProvider = ({ children }) => {
   //find teacher
   const [teachersArray, setTeachersArray] = useState([]);
   const [lessons, setLessons] = useState(null);
-const [teachersAreLoading,setTeachersAreLoading] = useState (true)
-const [homelanguages,setHomeLanguages] = useState([])
+  const [teachersAreLoading,setTeachersAreLoading] = useState (true)
+  const [homelanguages,setHomeLanguages] = useState([])
+  const [notificationIsLoading,setNotificationIsLoading] = useState(true)
 
-const [isLoadingLogin,setIsLoadingLogin] = useState(true)
-const [notificationIsLoading,setNotificationIsLoading] = useState(true)
+
 
   useEffect(() => {
 
@@ -138,7 +142,7 @@ const [notificationIsLoading,setNotificationIsLoading] = useState(true)
         console.log('Error fetching user data:', err);
         setAuth({ user: null, tokens: null });
       } finally {
-        // Set isLoading to false once the user data is fetched or failed to fetch
+        // Set isLoading to false once the user data is fetchedStudentChat or failed to fetch
       }
     };
 
@@ -309,40 +313,470 @@ const confirmNotification = async (id) => {
   }
   };
 
-  const [myTeachers, setMyTeachers] = useState(null)
+  //mesages teacher
+  const [myStudents, setMyStudents] = useState(null)
+  const [selectedStudent,setSelectedStudent] = useState(null)
+  const [messagesTeacher, setMessagesTeacher] = useState([]);
+  const [sentMessage,setSentMessage] = useState(false)
+  const [isTypingStudent, setIsTypingStudent] = useState(false);
+  const [typingUserStudent, setTypingUserStudent] = useState('');
+  const [switchSidesTeacher,setSwitchSidesTeacher] = useState(true)
+  //const [readMessagefromStudentState,setReadMessagefromStudentState]= useState(false)
 
-  useEffect(()=>{
-    if (userDataFetched) {
   
-    const fetchTeachers = async () =>  {
+  //mesages student
+  const [myTeachers, setMyTeachers] = useState(null)
+  const [selectedTeacher,setSelectedTeacher] = useState(null)
+  const [messages, setMessages] = useState([]);
+  const [sentMessageStudent,setSentMessageStudent] = useState(false)
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingUser, setTypingUser] = useState('');
+  const [switchSides,setSwitchSides] = useState(true)
+  //const [readMessagefromTeacherState,setReadMessagefromTeacherState]= useState(false)
+
+  // messages counter
+
+  const [totalMessagesFromStudents ,setTotalMessagesFromStudents] = useState(0);
+  const [totalMessagesFromTeachers ,setTotalMessagesFromTeachers] = useState(0);
+
+  const [fetchedStudentChat,setFetchedStudentChat] = useState(false)
+  const [fetchedTeacherChat,setFetchedTeacherChat] = useState(false)
+
+
+
+  const readMessage = async (sender_id) => {    
+
+    const data = {
+      student_id:sender_id,
+      };
+  
     try {
-      const url = `${BASE_URL}/getchatteachers`;
-  
+      const url = `${BASE_URL}/teacherreadmessageofstudent`;
+    
+      myStudents.forEach(student => {
+        if (student.sender_id === sender_id && student.firstMessage.isRead === false) {
+          setTotalMessagesFromStudents(prev => prev - 1);
+        }
+      });
+       
+
       const config = {
         headers: {
           'Content-Type': 'application/json',
         },
-        withCredentials: true, // Set the withCredentials option to true
+        withCredentials: true,
       };
 
-
-      const response = await axios.get(url, config);
-      const responseData = response.data;
-  
-      setMyTeachers(responseData.teachers)
-
-      console.log('useEffect runs')
-
-     
+      const response = await axios.put(url, data, config);
+      if (response.status===200) {
+          setSentMessageStudent(!sentMessageStudent)    
+                                         
+            }
     } catch (err) {
-           console.log(err)
-      }
+      console.log(err);
     }
-    fetchTeachers()
   }
-  },[userDataFetched])
 
   
+  
+
+  // mesaages to a teacher 
+
+  useEffect(() => {
+
+    if (userDataFetched) {
+
+    const socket = io('http://localhost:4000');
+    // Listen for chat messagesTeacher from the server
+    socket.on('chat message', (data) => {
+
+      if (data.teacher_id === auth.user._id) {
+
+         
+      setMessagesTeacher((prevMessages) => [...prevMessages, data]);
+
+    
+        
+      if (!selectedStudent ||  (selectedStudent.sender_id !== data.sender_ID && data.teacher_id === auth.user._id) ) {
+
+        setTotalMessagesFromStudents(prev=>prev+1)
+
+      const updatedMyStudent = myStudents.map(element => {
+        if (element.receiver_id === auth.user._id) {
+
+          const updatedChatThreads = [
+            ...element.chatThreads,
+            {
+              sender_ID: data.sender_ID,
+              sender: data.sender,
+              message: data.message,
+              createdAt: new Date(),
+              isRead: false,
+            },
+          ];
+  
+          // Create a new element with the updated chatThreads array
+          return { ...element, chatThreads: updatedChatThreads };
+        }
+        return element;
+      });
+  
+       setMyStudents(updatedMyStudent); 
+
+    }
+  
+      const newChatThread = {
+        sender_ID:data.sender_ID,
+        sender: data.sender,
+        message: data.message,
+        createdAt: new Date(),
+        isRead: false,
+      };
+
+      if (selectedStudent && selectedStudent?.sender_id === data.sender_ID){
+      setSelectedStudent({...selectedStudent,chatThreads: [...selectedStudent.chatThreads, newChatThread]});
+      //setTotalMessagesFromStudents(prev=>prev+1)
+
+      const updatedMyStudent = myStudents.map(element => {
+        if (element.sender_id === data.sender_ID && element.receiver_id === auth.user._id) {
+ 
+          
+          const updatedChatThreads = [
+            ...element.chatThreads,
+            {
+              sender_ID: data.sender_ID,
+              sender: data.sender,
+              message: data.message,
+              createdAt: new Date(),
+              isRead: true,
+            },
+          ];
+  
+          // Create a new element with the updated chatThreads array
+          return { ...element, chatThreads: updatedChatThreads };
+        }
+        return element;
+      });
+  
+    
+        setMyStudents(updatedMyStudent); 
+       
+       setTimeout(() => {
+        readMessage(selectedStudent.sender_id)
+
+       }, 2000); 
+
+    }
+  
+      }
+    
+    });
+
+
+    // Listen for typing events from the server
+    socket.on('typing', (typing_user) => {
+      if ( !(typing_user.typing_user_id === auth.user._id) && typing_user.receiver_id === auth.user._id )  {
+        setIsTypingStudent(true);
+        setTypingUserStudent(typing_user.typing_user_name);
+      }
+    });
+
+    // Listen for stop typing events from the server
+    socket.on('stop typing', (typing_user) => {
+      if ((typing_user.typing_user_id !== auth.user._id) && typing_user.receiver_id === auth.user._id ) {
+        setIsTypingStudent(false);
+        setTypingUserStudent('');
+      }
+    });
+
+    // Emit a message to the server to join the chat room
+    socket.emit('join room', auth.user.firstName);
+
+    // Clean up the socket connection when component unmounts
+    return () => {
+      socket.disconnect();
+    };
+  }
+}, [selectedStudent,myStudents,sentMessage]);
+
+
+
+
+
+const readMessagefromTeacher = async (receiver_id) => {
+
+  const data = {
+    teacher_id:receiver_id,
+    };
+
+  try {
+    const url = `${BASE_URL}/studentreadmessageofteacher`;
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    };
+
+    const response = await axios.put(url, data, config);
+
+    if (response.status===200) { 
+       setTotalMessagesFromTeachers(0)  
+      setSentMessage(!sentMessage)
+
+
+    };
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+
+// mesaages to a student
+useEffect(() => {
+
+  if (userDataFetched) {
+  const socket = io('http://localhost:4000');
+
+
+
+  // Listen for chat messages from the server
+  socket.on('chat message', (data) => {
+
+
+      if (data.student_id === auth.user._id) {
+      
+
+    setMessages((prevMessages) => [...prevMessages, data]);
+
+    if (data.student_id === auth.user._id) {
+  
+      setTotalMessagesFromTeachers(prev=>prev+1)
+      
+     const updatedMyTeacher = myTeachers.map(element => {
+      if (selectedTeacher?.receiver_id !== data.sender_ID  && element.receiver_id === data.sender_ID && element.sender_id === auth.user._id) {
+
+        const updatedChatThreads = [
+          ...element.chatThreads,
+          {
+            sender_ID: data.sender_ID,
+            sender: data.sender,
+            message: data.message,
+            createdAt: new Date(),
+            isRead: false,
+          },
+        ];
+
+        // Create a new element with the updated chatThreads array
+        return { ...element, chatThreads: updatedChatThreads };
+      }
+      return element;
+    });
+
+       setMyTeachers(updatedMyTeacher); 
+
+     const newChatThread = {
+      sender_ID:data.sender_ID,
+      sender: data.sender,
+      message: data.message,
+      createdAt: new Date(),
+      isRead: true,
+    };
+
+    if (selectedTeacher && selectedTeacher.receiver_id === data.sender_ID ){
+      setSelectedTeacher({...selectedTeacher,chatThreads: [...selectedTeacher.chatThreads, newChatThread]});
+    //  setTotalMessagesFromTeachers(prev=>prev+1)
+      
+    const updatedMyTeacher = myTeachers.map(element => {
+      if (element.receiver_id === data.sender_ID && element.sender_id === auth.user._id) {
+  
+  
+        const updatedChatThreads = [
+          ...element.chatThreads,
+          {
+            sender_ID: data.sender_ID,
+            sender: data.sender,
+            message: data.message,
+            createdAt: new Date(),
+            isRead: true,
+          },
+        ];
+
+        // Create a new element with the updated chatThreads array
+        return { ...element, chatThreads: updatedChatThreads };
+      }
+      return element;
+    });
+
+    
+      setMyTeachers(updatedMyTeacher); 
+         
+     setTimeout(() => {
+      readMessagefromTeacher(selectedTeacher.receiver_id )
+    }, 2000); 
+  } 
+
+    }
+}
+
+  });
+
+  // Listen for typing events from the server
+  socket.on('typing', (typing_user) => {
+    if ((typing_user.typing_user_id !== auth.user._id) &&  typing_user.receiver_id === selectedTeacher?.receiver_id) {
+      setIsTyping(true);
+      setTypingUser(typing_user.typing_user_name);
+    }
+  });
+
+  // Listen for stop typing events from the server
+  socket.on('stop typing', (typing_user) => {
+    if (typing_user.typing_user_id !== auth.user._id) {
+      setIsTyping(false);
+      setTypingUser('');
+    }
+  });
+
+  // Emit a message to the server to join the chat room
+  socket.emit('join room', auth.firstName);
+
+  // Clean up the socket connection when component unmounts
+  return () => {
+    socket.disconnect();
+  };
+}
+}, [selectedTeacher,myTeachers,sentMessageStudent]);
+
+
+useEffect(()=>{
+  
+  if (userDataFetched) {
+
+  const fetchTeachers = async () =>  {
+  try {
+    const url = `${BASE_URL}/getchatteachers`;
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true, // Set the withCredentials option to true
+    };
+
+
+    const response = await axios.get(url, config);
+    const responseData = response.data;
+
+    setMyTeachers(responseData.teachers)
+    setFetchedTeacherChat(true)
+   
+  } catch (err) {
+         console.log(err)
+    }
+  }
+  fetchTeachers()
+}
+
+},[sentMessageStudent, switchSides,selectedTeacher,userDataFetched,sentMessage])
+
+//readMessagefromStudentState
+
+
+useEffect(()=>{
+
+  if (userDataFetched ) {
+
+
+
+  const fetchStudents = async () =>  {
+  try {
+    const url = `${BASE_URL}/getchatstudents`;
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true, // Set the withCredentials option to true
+    };
+
+    const response = await axios.get(url, config);
+    const responseData = response.data;
+    setMyStudents(responseData.students)  
+    setFetchedStudentChat(true)
+   
+  } catch (err) {
+         console.log(err)
+    }
+  }
+  fetchStudents()
+}
+},[sentMessage,selectedStudent,switchSidesTeacher,userDataFetched,sentMessageStudent])
+//readMessagefromTeacherState
+
+ useEffect(()=>{
+
+  if (fetchedStudentChat) {
+
+  const arr = new Set(); 
+
+myStudents?.forEach((student) => {
+  if (student.receiver_id === auth.user._id) {
+    if (student.firstMessage.isRead === true) {
+      // Use a Set to store unique objects in the 'arr' array
+      student.chatThreads.forEach((obj) => {
+ 
+        if (obj.isRead === false && obj._id !== undefined) {
+          arr.add(obj);
+        }
+      });
+    }
+    if (student.firstMessage.isRead === false )  { arr.add(student.firstMessage);}
+  }
+});
+
+const uniqueArr = Array.from(arr);
+
+  //setTotalMessagesFromStudents(arr.length)
+  setTotalMessagesFromStudents(uniqueArr.length)
+  
+  }
+
+},[fetchedStudentChat,sentMessageStudent])
+
+
+useEffect(()=>{
+
+  if (fetchedTeacherChat) {
+
+  const arr = new Set(); 
+
+myTeachers?.forEach((teacher) => {
+  if (teacher.sender_id === auth.user._id) {
+    if (teacher.firstMessage.isRead === true) {
+      // Use a Set to store unique objects in the 'arr' array
+      teacher.chatThreads.forEach((obj) => {
+ 
+        if (obj.isRead === false && obj._id !== undefined) {
+          arr.add(obj);
+        }
+      });
+    }
+   if (teacher.firstMessage.isRead === false )  { arr.add(teacher.firstMessage);}
+   
+  }
+});
+
+const uniqueArr = Array.from(arr);
+
+
+  setTotalMessagesFromTeachers(uniqueArr.length)
+  
+  }
+
+},[fetchedTeacherChat,sentMessage])
+
 
   return (
     <AuthContext.Provider value={{ auth, 
@@ -373,7 +807,7 @@ const confirmNotification = async (id) => {
                                   setCompletedLessons,
                                   setUpcommingLessons,
                                   setReadCancelLessonConfirmation,
-                                  userDataFetched,setUserDataFetched,
+                                  userDataFetched,setUserDataFetched,setIsLoading1,
                                   //teacherzone
                                   myFinishedLessonsNumber,setMyFinishedLessonsNumber,
                                   myUpcomingLessonsNumber,setMyUpcomingLessonsNumber,
@@ -382,7 +816,14 @@ const confirmNotification = async (id) => {
                                   fetchedTotalEarning,setFetchedTotalEarnig,
                                   confirmNotification,confirmCancelLessonNotification,
                                   teachersAreLoading,homelanguages,notificationIsLoading,
-                                  myTeachers
+                                  myTeachers,setMyTeachers,myStudents, setMyStudents,
+                                  selectedStudent,setSelectedStudent,messagesTeacher, setMessagesTeacher,
+                                  sentMessage,setSentMessage,isTypingStudent, setIsTypingStudent,typingUserStudent, setTypingUserStudent,
+                                  readMessage,selectedTeacher,setSelectedTeacher,messages, setMessages,sentMessageStudent,setSentMessageStudent,
+                                  isTyping, setIsTyping,typingUser, setTypingUser,readMessagefromTeacher,
+                                  switchSidesTeacher,setSwitchSidesTeacher,switchSides,setSwitchSides,
+                                  totalMessagesFromStudents ,setTotalMessagesFromStudents,totalMessagesFromTeachers ,setTotalMessagesFromTeachers,
+                                  fetchedStudentChat,fetchedTeacherChat
                                                                                         
                                   }}>
       {children}

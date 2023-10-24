@@ -6,11 +6,11 @@ import axios from 'axios';
 import AuthContext from '../../context/AuthProvider';
 import { useNavigate  } from 'react-router-dom';
 
-function MyActionComponent({ element, countCompletedLessons, removeFromDisplayedLessons,loading,loadingConfirm,setLoadingConfirm }) {
+function MyActionComponent({ element,removeFromDisplayedLessons,loading,loadingConfirm,setLoadingConfirm }) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const observerRef = useRef(null);
   const elementRef = useRef(null);
-  const  {confirmRejectState,setConfirmRejectState,totalElements,setActionNotice} = useContext(AuthContext)
+  const  {totalElements,setActionNotice} = useContext(AuthContext)
 
 
 const navigate = useNavigate ()

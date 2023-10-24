@@ -16,7 +16,7 @@ export default function LimitTags() {
     try {
 
 
-      if (values.length === 0) {console.log('empty')}
+     // if (values.length === 0) {console.log('empty')}
       const url = `${BASE_URL}/updateteachinglanguages`;
 
       const config = {
@@ -44,7 +44,7 @@ export default function LimitTags() {
     try {
 
 
-      if (updatedLanguages.length === 0) {console.log('empty')}
+    //  if (updatedLanguages.length === 0) {console.log('empty')}
       const url = `${BASE_URL}/updateteachinglanguages`;
 
       const config = {

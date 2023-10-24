@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef, useMemo, Fragment } from 'react';
+import React, { useEffect, useState,useRef, useMemo, useContext } from 'react';
 import { io } from 'socket.io-client';
 import styles from './chat.module.css';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -7,6 +7,7 @@ import axios from 'axios'
 import BASE_URL from "../../config";
 import useAuth from '../../hooks/useAuth';
 import moment from 'moment'
+import AuthContext from '../../context/AuthProvider';
 
 const socket = io('http://localhost:4000');
 
@@ -14,12 +15,13 @@ const Chat = () => {
 
 
   const { user} = useAuth();
+  const {myTeachers,setMyTeachers} = useContext(AuthContext)
   
   const [message, setMessage] = useState();
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [typingUser, setTypingUser] = useState('');
-  const [myTeachers,setMyTeachers] = useState([])
+
   const chatContainerRef = useRef(null);
 
   const [switchSides,setSwitchSides] = useState(false)
@@ -83,12 +85,12 @@ const filteredItems =  useMemo(()=>{
     // Listen for chat messages from the server
     socket.on('chat message', (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
-
-      
+  
+      if (data.student_id === user._id) {
       
        const updatedMyTeacher = myTeachers.map(element => {
-        if (selectedTeacher?.receiver_id !== data.sender_ID  && element.receiver_id === data.sender_ID && element.sender_id === user._id) {
-    
+        if (!selectedTeacher || selectedTeacher?.receiver_id !== data.sender_ID  && element.receiver_id === data.sender_ID && element.sender_id === user._id) {
+          console.log('not selected')
           const updatedChatThreads = [
             ...element.chatThreads,
             {
@@ -106,9 +108,9 @@ const filteredItems =  useMemo(()=>{
         return element;
       });
   
-      
+      console.log('not selected',updatedMyTeacher)
        setMyTeachers(updatedMyTeacher); 
-
+   
 
 
 
@@ -123,10 +125,12 @@ const filteredItems =  useMemo(()=>{
 
       if (selectedTeacher && selectedTeacher.receiver_id === data.sender_ID ){
         setSelectedTeacher({...selectedTeacher,chatThreads: [...selectedTeacher.chatThreads, newChatThread]});
+
+        console.log('selected')
         
       const updatedMyTeacher = myTeachers.map(element => {
         if (element.receiver_id === data.sender_ID && element.sender_id === user._id) {
-          console.log(element)
+    
     
           const updatedChatThreads = [
             ...element.chatThreads,
@@ -147,11 +151,15 @@ const filteredItems =  useMemo(()=>{
   
       
         setMyTeachers(updatedMyTeacher); 
+           
+       setTimeout(() => {
         readMessage(selectedTeacher.receiver_id )
+        console.log('read message run')
+      }, 2000); 
     } 
 
  
-
+  }
  
     });
 
@@ -273,8 +281,8 @@ const filteredItems =  useMemo(()=>{
       };
 
       const response = await axios.put(url, data, config);
-      console.log(response.status)
-       setSentMessage(!sentMessage);
+      console.log(response)
+      if (response.status===201) setSentMessage(!sentMessage);
     } catch (err) {
       console.log(err);
     }
@@ -303,8 +311,9 @@ const filteredItems =  useMemo(()=>{
           <div className={styles.mainChatBoxLeftSideBottom}>
 
           {filteredItems?.map((teacher, index) => (
-            <div className={teacher.firstMessage.isRead === false ||  teacher.chatThreads.some(obj=> obj.isRead===false )? styles.noReadMessage : styles.mainChatBoxLeftSideChatAreaStudentMain} 
-                         
+            <div className={  (teacher.firstMessage.isRead === false && teacher.sender_id !== user._id ) ||  (teacher.chatThreads.some(obj=> obj.isRead===false  && obj.sender_ID !== user._id && obj.sender_ID === teacher.receiver_id ))   ? styles.noReadMessage : styles.mainChatBoxLeftSideChatAreaStudentMain} 
+                  
+
             onClick={()=>{setSwitchSides(false); 
                                          setRightSide(true);
                                          setSelectedTeacher(teacher);
@@ -313,6 +322,8 @@ const filteredItems =  useMemo(()=>{
                                         }
                                          }  key={index}>
              
+
+
                         <div className={styles.mainChatBoxLeftSideBottomBoxImg}>
                 <div className={styles.mainChatBoxLeftSideBottomBoxImgDIV}>
                   <img src={teacher.receiverImgProfile} alt="" className={styles.mainChatBoxLeftSideBottomBoxImgTag} />
@@ -419,21 +430,24 @@ const filteredItems =  useMemo(()=>{
               )}
             </div>
           </div>
+        
           <div className={styles.chatInputButton}>
             <textarea
               className={styles.chatInput}
               name=""
               id=""
               maxLength="500"
+              disabled = {selectedTeacher? false : true  }
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleTyping}
               onKeyUp={handleStopTyping}
-              placeholder='Write some message ....'
+              placeholder={selectedTeacher? 'Write some message ....' : null  }
             ></textarea>
+              {selectedTeacher && 
             <button onClick={handleSendMessage} className={styles.sendChat}>
               Send
-            </button>
+            </button>}
           </div>
         </div>
       </div>

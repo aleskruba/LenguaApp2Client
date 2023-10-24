@@ -26,14 +26,17 @@ function TeacherProfile() {
 
   const contactTeacherFunction = () => {
 
-    myTeachers.forEach(teacher=>{
+    myTeachers.length > 0 ?  myTeachers.forEach(teacher=>{
       if (teacher.receiver_id === idTeacher){ 
           navigate('/studentmessages' )
-      }
+    
+        }
       else {
+  
         setIsOpen(true)
+   
       }
-    })
+    })  :   setIsOpen(true) 
 
 }
   

@@ -14,9 +14,15 @@ function Header() {
   const ulRef = useRef(null);
 
   const {totalElements,actionNotice,readConfirmation,readCancelLessonConfirmation,confirmNotification,
-                                            confirmCancelLessonNotification } = useContext(AuthContext)
+    confirmCancelLessonNotification,
+    totalMessagesFromStudents ,totalMessagesFromTeachers 
+  } = useContext(AuthContext)
 
-  useEffect(() => {
+
+
+
+  
+useEffect(() => {
     setCheckboxChecked(false); // Uncheck the checkbox on route change
   }, [location]);
 
@@ -46,6 +52,11 @@ function Header() {
 
 
 
+ 
+
+ 
+
+
   return (
     <div className={styles.header}>
       <nav className={styles.navbar}>
@@ -70,7 +81,7 @@ function Header() {
               <ChatIcon />
             </div>
             <div className={styles.chatIconNumber}>
-                  2
+                  {totalMessagesFromStudents}
             </div>
             </Link>
           </li> :null }
@@ -98,7 +109,7 @@ function Header() {
                  <div className={styles.chatUserIcon}>
                     <ChatIcon />
                     <div className={styles.chatUserIconNumber}>
-                        2
+                    {totalMessagesFromTeachers}
                     </div>
                 </div>
             </Link>

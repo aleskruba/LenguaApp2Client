@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
 import styles from './findTeacherComponent.module.css';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-function FindTeacherComponent({ teacher, lessons, lastElement,teachersArray,index,GoUpFunction }) {
+function FindTeacherComponent({ teacher, lessons, lastElement,index }) {
 
 
   let count = 0;

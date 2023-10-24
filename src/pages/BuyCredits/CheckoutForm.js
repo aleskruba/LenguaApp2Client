@@ -11,7 +11,7 @@ export default function CheckoutForm({setCredits,credits}) {
 
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const bankTax = 2
+  //const bankTax = 2
 
 
 
@@ -31,9 +31,9 @@ export default function CheckoutForm({setCredits,credits}) {
         withCredentials: true, // Set the withCredentials option to true
       };
   
-      const response = await axios.put(url, data, config);
-      const responseData = response.data;
-      console.log(responseData);
+       await axios.put(url, data, config);
+      //const responseData = response.data;
+   
   
       if (!stripe || !elements) {
         // Stripe.js has not yet loaded.

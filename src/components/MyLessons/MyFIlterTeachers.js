@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './myfilterteachers.module.css';
-import { Link } from 'react-router-dom';
 
 function MyFIlterTeachers({element,setFilteredTeacher,arr,setIsTeacherSelected}) {
 
