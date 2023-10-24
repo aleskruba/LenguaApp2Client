@@ -65,7 +65,7 @@ export default  function App() {
 
     <Route path='/' element={<Layout />}>  
     <Route index element={<Home />}/> 
-    <Route path='/completion' element={<Completion/>} /> 
+
     <Route path='/resetpassword' element= {<ResetPassword/>} canActivate={checkAuthentication} /> 
     <Route path='/testpage' element={<TestPage/>}  />
     <Route path='/findteachers' element={<FindTeachers />}/>
