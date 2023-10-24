@@ -9,7 +9,8 @@ import useAuth from '../../hooks/useAuth';
 import moment from 'moment'
 import AuthContext from '../../context/AuthProvider';
 
-const socket = io('http://localhost:4000');
+//const socket = io('http://localhost:4000');
+const socket = io('https://leanguaappsocket.onrender.com');
 
 const Chat = () => {
 

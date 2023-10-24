@@ -386,7 +386,9 @@ const confirmNotification = async (id) => {
 
     if (userDataFetched) {
 
-    const socket = io('http://localhost:4000');
+    //const socket = io('http://localhost:4000');
+
+    const socket = io('https://leanguaappsocket.onrender.com');
     // Listen for chat messagesTeacher from the server
     socket.on('chat message', (data) => {
 
@@ -538,8 +540,8 @@ const readMessagefromTeacher = async (receiver_id) => {
 useEffect(() => {
 
   if (userDataFetched) {
-  const socket = io('http://localhost:4000');
-
+    //const socket = io('http://localhost:4000');
+  const socket = io('https://leanguaappsocket.onrender.com');
 
 
   // Listen for chat messages from the server
