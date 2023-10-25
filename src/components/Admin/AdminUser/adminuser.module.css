@@ -1,0 +1,213 @@
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainbox{ width: 400px}
+
+.box{
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    
+}
+
+.buttons{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    gap:50px
+
+}
+.updateProfile{
+    width: 120px;
+    height: 30px;
+    font-size: 12px;
+    font-weight: 300;
+    border-radius: 10px;
+    background-color: red;
+    color: white;
+}
+
+.updateProfile:hover{
+    background-color: lightcoral;
+    color: black;
+}
+.changePassword{
+    font-size: 12px;
+    font-weight: 300;
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: purple;
+    color: white;
+}
+
+.changePassword:hover{
+    background-color: rgb(215, 111, 215);
+    color: black;
+}
+
+
+
+.cancelBtn{
+    font-size: 12px;
+    font-weight: 300;
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: gray;
+    color: white;
+}
+
+.cancelBtn:hover{
+
+    background-color: lightgray;
+    color: black;
+}
+
+
+
+.passwordMainDiv{
+    background-color: white;
+    padding: 10px;
+    width: 400px;
+}
+.btn {
+    margin-top: 1rem;
+    display: inline-block;
+    padding: .8rem 3rem;
+    font-size: 1.7rem;
+    border-radius: .5rem;
+    border: .2rem solid var(--black);
+    color: var(--black);
+    cursor:pointer;
+}
+
+.btn:hover{
+    background: var(--orange);
+    color: #fff;
+}
+
+.btn {
+    display: block;
+    text-align: center;
+    margin: 1rem;
+}
+
+
+.loginForm{
+    position: absolute;
+    left: 50%; /* Move the left edge to the horizontal center */
+    transform: translateX(-50%); 
+    display: none;
+    width: 50rem;
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+    border-radius: .5rem;
+    background: #fff;
+    text-align: center;
+}
+
+.loginForm.active{
+    right: 2rem;
+    display: block;
+    transition: .4s linear;
+    width: 50rem;
+}
+
+.loginFormH3{
+    font-size:2.5rem;
+    text-transform: uppercase;
+    color: var(--black);
+}
+
+.inputBox{
+    width: 100%;
+    margin: .7rem 0;
+    background: #eee;
+    border-radius: .5rem ;
+    padding: 1rem;
+    font-size: 1.6rem;
+    color: var(--black);
+    text-transform: none;
+}
+
+.inputBoxButton{
+  
+    width: 100%;
+   margin-top: 3rem;
+   margin-bottom: 0.7rem;
+   background: lightgreen;
+    border-radius: .5rem ;
+    padding: 1rem;
+    font-size: 1.6rem;
+    color: var(--black);
+    text-transform: none;
+}
+.inputBoxButton:hover{
+  
+   background: green;
+   color: var(--black);
+   color: white;
+}
+
+.inputBoxCancelButton{
+    text-align: center;
+    width: 100%;
+   margin-top: 3rem;
+   margin-bottom: 0.7rem;
+   background: lightgray;
+    border-radius: .5rem ;
+    padding: 1rem;
+    font-size: 1.6rem;
+    color: var(--black);
+    color: black;
+    text-transform: none;
+}
+
+.inputBoxCancelButton:hover{
+    background: gray;
+    color: white;
+ }
+ 
+
+.inputBoxPtag{
+    font-size: 1.4rem;
+    padding: .5rem 0;
+    color: var(--light-color);
+}
+
+.inputBoxAtag{
+    color: var(--orange);
+    text-decoration: underline;
+}
+
+.success{
+    text-align: center;
+    color: green;
+    font-size: 15px;
+}
+
+.notSuccess{
+    text-align: center;
+    color: red;
+    font-size: 15px;
+}
+
+.mainDiv{
+    max-height: 100vh;
+  
+}
+
+
+.buttons{
+    display: flex;
+    gap:20px;
+    justify-content: space-between;
+}

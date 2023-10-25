@@ -18,9 +18,6 @@ function Header() {
     totalMessagesFromStudents ,totalMessagesFromTeachers 
   } = useContext(AuthContext)
 
-
-
-
   
 useEffect(() => {
     setCheckboxChecked(false); // Uncheck the checkbox on route change
@@ -73,6 +70,10 @@ useEffect(() => {
             <Link to="/test">Test</Link>
           </li>
 
+    {user?.admin &&  <li className={styles.testLi}>
+            <Link to="/admin">Admin</Link>
+          </li>
+}
       {user && user.teacherState ? 
           <li className={styles.teacherzone}>
             <Link to="/teacherzone">Teacher Zone</Link>

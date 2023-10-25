@@ -31,6 +31,10 @@ import MyTeachingUpcomingLessons from './pages/MyTeachingUpcomingLessons/MyTeach
 import Action from './pages/Action/Action';
 import FindTeachersPagination from './pages/FindTeachers/FindTeacherPagination';
 import Withdraw from './pages/Withdraw/Withdraw';
+import Admin from './components/Admin/Admin';
+import AdminUser from './components/Admin/AdminUser/AdminUser';
+import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
+import { RequireAdminAuth } from './components/RequireAuth/RequireAdminAuth';
 
 export default  function App() {
 
@@ -97,6 +101,12 @@ export default  function App() {
         <Route path="/findteachers/:idTeacher/schedulestudent" element={<ScheduleStudent/>}  />
 
         <Route path='/action' element={<Action/>}  />
+       
+      <Route element={<RequireAdminAuth />}>
+          <Route path='/admin' element={<Admin/>}  />
+          <Route path='/admin/adminusers' element={<AdminUsers/>}  />
+          <Route path="/admin/adminusers/:id"  element={<AdminUser/>}/> 
+       </Route>
 
     </Route>
 
