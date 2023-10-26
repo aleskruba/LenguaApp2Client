@@ -14,7 +14,7 @@ function Withdraw(props) {
   const creditsToBuy = [50,100,150,200,250,300]
 
   useEffect(() => {
-    fetch("http://localhost:5252/config").then(async (r) => {
+    fetch("https://lenguaapp2server.onrender.com/config").then(async (r) => {
       const { publishableKey } = await r.json();
       setStripePromise(loadStripe(publishableKey));
 
@@ -23,7 +23,7 @@ function Withdraw(props) {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:5252/create-payment-intent", {
+    fetch("https://lenguaapp2server.onrender.com/create-payment-intent", {
       method: "POST",
       body: JSON.stringify({}),
     }).then(async (result) => {
