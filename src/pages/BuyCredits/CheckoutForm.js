@@ -4,6 +4,7 @@ import { useStripe, useElements } from "@stripe/react-stripe-js";
 import styles from './buycredit.module.css';
 import axios from 'axios';
 import BASE_URL from "../../config";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckoutForm({setCredits,credits}) {
   const stripe = useStripe();
@@ -13,7 +14,7 @@ export default function CheckoutForm({setCredits,credits}) {
   const [isProcessing, setIsProcessing] = useState(false);
   //const bankTax = 2
 
-
+const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +49,7 @@ export default function CheckoutForm({setCredits,credits}) {
         confirmParams: {
           // Make sure to change this to your payment completion page
          // return_url: `${window.location.origin}/completion`,
-          return_url: `https://lenguaapp2client.onrender.com/completion`,
+          return_url: navigate(`../completion`),
         },
       });
   

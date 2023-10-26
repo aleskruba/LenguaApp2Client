@@ -14,7 +14,7 @@ function BuyCredit(props) {
   
   const creditsToBuy = [50,100,150,200,250,300]
 
- /*  useEffect(() => {
+   useEffect(() => {
     fetch("http://localhost:5252/config").then(async (r) => {
       const { publishableKey } = await r.json();
       setStripePromise(loadStripe(publishableKey));
@@ -34,11 +34,7 @@ function BuyCredit(props) {
     });
   }, []);
 
-
-  useEffect(()=>{
-
-  },[credits]) */
-
+/*
   useEffect(() => {
     fetch("https://lenguaapp2server.onrender.com/config").then(async (r) => {
       const { publishableKey } = await r.json();
@@ -58,7 +54,7 @@ function BuyCredit(props) {
      
     });
   }, []);
-
+ */
 
   useEffect(()=>{
 
